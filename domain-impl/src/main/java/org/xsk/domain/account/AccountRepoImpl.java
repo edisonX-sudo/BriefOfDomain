@@ -1,0 +1,124 @@
+package org.xsk.domain.account;
+
+import cn.hutool.core.map.BiMap;
+import org.xsk.domain.account.exception.AccountNotFound;
+import org.xsk.domain.common.DomainException;
+import org.xsk.infra.db.po.AccountPo;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class AccountRepoImpl extends AccountRepo {
+    final static BiMap<AccountStatus, String> ACCOUNT_STATUS_2_FILED_MAP = new BiMap<>(new HashMap<AccountStatus, String>() {
+        {
+            put(AccountStatus.DISABLE, "DISABLE");
+            put(AccountStatus.ENABLE, "ENABLE");
+        }
+    });
+
+    @Override
+    public Account find(String loginName) {
+        AccountPo byLoginName = findByLoginName(loginName);
+        if (byLoginName == null)
+            return null;
+        return convert2Entity(byLoginName);
+    }
+
+    @Override
+    public List<Account> findAccountGroup(AccountId mainAccountId) {
+        List<AccountPo> byLoginName = findByParentAccountId(mainAccountId);
+        return byLoginName.stream()
+                .map(this::convert2Entity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void saveAll(Set<Account> accounts) {
+        // TODO: 2023/4/18  
+    }
+
+    private List<AccountPo> findByParentAccountId(AccountId parentAccountId) {
+        // TODO: 2023/4/14 sql find by parentAccountId
+        return Collections.emptyList();
+    }
+
+
+    private AccountPo findByLoginName(String loginName) {
+        // TODO: 2023/4/14 sql find by loginName
+        return null;
+    }
+
+    @Override
+    public Account find(AccountId id) {
+        AccountPo byId = findById(id);
+        if (byId == null)
+            return null;
+        return convert2Entity(byId);
+    }
+
+    private AccountPo findById(AccountId id) {
+        // TODO: 2023/4/14 sql find by id
+        return null;
+    }
+
+    @Override
+    public void save(Account entity) {
+        AccountPo accountPo = convert2po(entity);
+        if (entity.isNew()) {
+            insertPo(accountPo);
+            entity.accountId = new AccountId(accountPo.getId());
+        } else {
+            updatePo(accountPo);
+        }
+    }
+
+    private void insertPo(AccountPo accountPo) {
+        // TODO: 2023/4/14 sql insert
+    }
+
+    private void updatePo(AccountPo accountPo) {
+        // TODO: 2023/4/14 sql update
+    }
+
+    @Override
+    protected DomainException notFoundException() {
+        return new AccountNotFound();
+    }
+
+
+    private Account convert2Entity(AccountPo po) {
+        return new Account(
+                new AccountId(po.getId()),
+                ACCOUNT_STATUS_2_FILED_MAP.getInverse().get(po.getStatus()),
+                po.getName(),
+                po.getLoginName(),
+                po.getPassword(),
+                new Contact(po.getPhone(), po.getEmail()),
+                new PhysicalAddress(po.getCountry(), po.getCity(), po.getStreet()),
+                new AccountId(po.getParentAccountId()),
+                po.getCreateAt(),
+                po.getModifiedAt()
+        );
+    }
+
+    private AccountPo convert2po(Account entity) {
+        AccountPo po = new AccountPo();
+        po.setId(entity.isNew() ? null : entity.accountId.value());
+        po.setStatus(ACCOUNT_STATUS_2_FILED_MAP.get(entity.status));
+        po.setName(entity.name);
+        po.setLoginName(entity.loginName);
+        po.setPassword(entity.password);
+        po.setPhone(entity.contact.phone);
+        po.setEmail(entity.contact.email);
+        po.setCountry(entity.address.country);
+        po.setCity(entity.address.city);
+        po.setStreet(entity.address.street);
+        po.setParentAccountId(entity.parentAccountId.value());
+        po.setCreateAt(entity.createAt());
+        po.setModifiedAt(entity.modifiedAt());
+        return po;
+    }
+}
