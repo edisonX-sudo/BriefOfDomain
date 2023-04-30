@@ -6,7 +6,7 @@ public abstract class DomainPolicy {
         return SubscribePoint.BEFORE_DATA_COMMIT;
     }
 
-    enum SubscribePoint {
+    public enum SubscribePoint {
         BEFORE_DATA_COMMIT, AFTER_DATA_COMMIT, ASYNC
     }
 }
