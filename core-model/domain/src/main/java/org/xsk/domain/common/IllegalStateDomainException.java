@@ -38,7 +38,7 @@ public class IllegalStateDomainException extends DomainException {
         private String condition;
         private String object;
 
-        public ObjectBuilder(String subject, String condition) {
+        private ObjectBuilder(String subject, String condition) {
             this.subject = subject;
             this.condition = condition;
         }
