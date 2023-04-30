@@ -1,6 +1,10 @@
 package org.xsk.domain.common;
 
-public interface DomainSpecificationValidator<T> {
+public abstract class DomainSpecificationValidator<T> {
 
-    void validSpecification(T object);
+    public abstract void validSpecification(T object);
+
+    protected IllegalStateDomainException.Builder newIllegalStateExceptionBuilder() {
+        return new IllegalStateDomainException.Builder();
+    }
 }

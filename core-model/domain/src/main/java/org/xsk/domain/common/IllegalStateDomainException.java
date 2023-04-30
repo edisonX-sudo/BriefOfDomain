@@ -1,11 +1,13 @@
 package org.xsk.domain.common;
 
+import lombok.NonNull;
+
 public class IllegalStateDomainException extends DomainException {
     protected IllegalStateDomainException(String message) {
         super(message);
     }
 
-    public static Builder newBuilder() {
+    static Builder newBuilder() {
         return new Builder();
     }
 
@@ -14,17 +16,20 @@ public class IllegalStateDomainException extends DomainException {
         private String operator;
         private Object object;
 
-        public Builder subject(String subject) {
+        Builder() {
+        }
+
+        public Builder subject(@NonNull String subject) {
             this.subject = subject;
             return this;
         }
 
-        public Builder operator(String operator) {
+        public Builder operator(@NonNull String operator) {
             this.operator = operator;
             return this;
         }
 
-        public Builder object(Object object) {
+        public Builder object(@NonNull Object object) {
             this.object = object;
             return this;
         }
@@ -33,7 +38,7 @@ public class IllegalStateDomainException extends DomainException {
             return new IllegalStateDomainException(subject.trim() + " " + operator.trim() + " " + object.toString().trim());
         }
 
-        public void throwException() throws IllegalStateDomainException{
+        public void throwException() throws IllegalStateDomainException {
             throw build();
         }
     }

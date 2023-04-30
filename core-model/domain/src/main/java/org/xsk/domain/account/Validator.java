@@ -1,16 +1,14 @@
 package org.xsk.domain.account;
 
-import org.xsk.domain.account.exception.IllegalAccountStateException;
 import org.xsk.domain.common.DomainSpecificationValidator;
-import org.xsk.domain.common.IllegalStateDomainException;
 
 class Validator {
-    static class AccountSpecificationValidator implements DomainSpecificationValidator<Account> {
+    static class AccountSpecificationValidator extends DomainSpecificationValidator<Account> {
 
         @Override
         public void validSpecification(Account account) {
             if (account.name.length() > 50) {
-                IllegalStateDomainException.newBuilder()
+                newIllegalStateExceptionBuilder()
                         .object("account name length")
                         .operator("cant be greater than")
                         .object(50)
@@ -19,19 +17,19 @@ class Validator {
         }
     }
 
-    static class ContactSpecificationValidator implements DomainSpecificationValidator<Contact> {
+    static class ContactSpecificationValidator extends DomainSpecificationValidator<Contact> {
 
         @Override
         public void validSpecification(Contact contact) {
             if (contact.email.length() > 50) {
-                IllegalStateDomainException.newBuilder()
+                newIllegalStateExceptionBuilder()
                         .object("contact email length")
                         .operator("cant be greater than")
                         .object(50)
                         .throwException();
             }
             if (contact.phone.length() > 50) {
-                IllegalStateDomainException.newBuilder()
+                newIllegalStateExceptionBuilder()
                         .object("contact phone length")
                         .operator("cant be greater than")
                         .object(50)
