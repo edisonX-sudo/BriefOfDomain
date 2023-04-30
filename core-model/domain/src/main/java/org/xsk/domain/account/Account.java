@@ -75,6 +75,19 @@ public class Account extends Entity<AccountId> {
         markAsModified();
     }
 
+    public void update(
+            AccountStatus status, String name, String loginName,
+            Contact contact, PhysicalAddress address, AccountId parentAccountId
+    ){
+        this.status = status;
+        this.name = name;
+        this.loginName = loginName;
+        this.contact = contact;
+        this.address = address;
+        this.parentAccountId = parentAccountId;
+        new Validator.AccountSpecificationValidator().validSpecification(this);
+        markAsModified();
+    }
 
     @Override
     public AccountId id() {
