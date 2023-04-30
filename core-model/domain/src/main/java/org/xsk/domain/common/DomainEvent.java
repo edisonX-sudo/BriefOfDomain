@@ -16,7 +16,7 @@ public abstract class DomainEvent {
         return RecordStatus.NONE;
     }
 
-    enum RecordStatus {
+    public enum RecordStatus {
         NONE,
         TSDB,
     }
