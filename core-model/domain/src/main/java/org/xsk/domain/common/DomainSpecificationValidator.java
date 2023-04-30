@@ -4,7 +4,7 @@ public abstract class DomainSpecificationValidator<T> {
 
     public abstract void validSpecification(T object);
 
-    protected IllegalStateDomainException.Builder newIllegalStateExceptionBuilder() {
+    protected IllegalStateDomainException.SubjectBuilder newIllegalStateExceptionBuilder() {
         return IllegalStateDomainException.newBuilder();
     }
 }
