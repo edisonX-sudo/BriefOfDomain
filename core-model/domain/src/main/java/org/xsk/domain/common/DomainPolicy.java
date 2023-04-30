@@ -8,8 +8,8 @@ public abstract class DomainPolicy {
 
     //订阅触发节点
     public enum SubscribePoint {
-        BEFORE_DATA_COMMIT,//数据事务提交前
-        AFTER_DATA_COMMIT,//数据事务提交后
-        ASYNC,//事件提交时异步执行
+        BEFORE_DATA_COMMIT,//执行在数据事务提交前
+        AFTER_DATA_COMMIT,//执行在数据事务提交后
+        ASYNC,//事件触发时马上异步执行
     }
 }
