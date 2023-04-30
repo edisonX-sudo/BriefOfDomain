@@ -1,11 +1,11 @@
 package org.xsk.domain.account;
 
-import org.xsk.domain.common.Repository;
+import org.xsk.domain.common.DomainRepository;
 
 import java.util.List;
 import java.util.Set;
 
-public abstract class AccountRepo extends Repository<Account, AccountId> {
+public abstract class AccountRepo extends DomainRepository<Account, AccountId> {
 
     public abstract Account find(String loginName);
 

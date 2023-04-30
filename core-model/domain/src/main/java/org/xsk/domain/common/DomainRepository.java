@@ -1,6 +1,6 @@
 package org.xsk.domain.common;
 
-public abstract class Repository<E extends Entity<I>, I extends Id<?>> {
+public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
 
     public abstract E find(I id);
 
