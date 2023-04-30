@@ -1,7 +1,5 @@
 package org.xsk.domain.common;
 
-import java.util.Date;
-
 public abstract class DomainEvent {
 
     private final long occurredAt;
@@ -14,11 +12,11 @@ public abstract class DomainEvent {
         return occurredAt;
     }
 
-    public RecordInfo recordInfo() {
-        return RecordInfo.NONE;
+    public RecordStatus recordInfo() {
+        return RecordStatus.NONE;
     }
 
-    enum RecordInfo {
+    enum RecordStatus {
         NONE,
         TSDB,
     }
