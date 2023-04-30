@@ -16,7 +16,7 @@ public class IllegalStateDomainException extends DomainException {
         private String operator;
         private Object object;
 
-        Builder() {
+        private Builder() {
         }
 
         public Builder subject(@NonNull String subject) {
