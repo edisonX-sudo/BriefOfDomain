@@ -14,7 +14,7 @@
 # 本项目采用思想
 ## 基于六边形结构
 ![ideology_1.png](img/ideology_1.png)
-## 依赖流向
+## 依赖流向(核心模块的依赖倒置)
 ![ideology_2.png](img/ideology_2.png)
 ## 领域战术
 ![ideology_3.png](img/ideology_3.png)

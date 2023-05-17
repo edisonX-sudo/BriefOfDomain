@@ -11,4 +11,12 @@ public class Contact extends ValueObject {
         this.email = email;
         new Validator.ContactSpecificationValidator().validSpecification(this);
     }
+
+    public String phone() {
+        return phone;
+    }
+
+    public String email() {
+        return email;
+    }
 }

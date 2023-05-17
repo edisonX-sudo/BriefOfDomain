@@ -13,4 +13,16 @@ public class PhysicalAddress extends ValueObject {
         this.city = city;
         this.street = street;
     }
+
+    public String country() {
+        return country;
+    }
+
+    public String city() {
+        return city;
+    }
+
+    public String street() {
+        return street;
+    }
 }
