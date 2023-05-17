@@ -18,7 +18,7 @@
 ![ideology_2.png](img/ideology_2.png)
 ## 领域战术
 ![ideology_3.png](img/ideology_3.png)
-# 主要模块
+# 本项目主要模块
 ## 写模块
 ![main_write_mod_related.png](img/main_write_mod_related.png)
 ## 读模块
