@@ -11,17 +11,17 @@
     * 内含(内聚)业务复杂度: 业务约束,概念
   * 外层技术层
     * 内含技术复杂度: 领域概念和技术pojo转换,mysql,redis等具体实现
-# Key Ideology
+# 本项目采用思想
 ## 基于六边形结构
 ![ideology_1.png](img/ideology_1.png)
 ## 依赖流向
 ![ideology_2.png](img/ideology_2.png)
 ## 领域战术
 ![ideology_3.png](img/ideology_3.png)
-# Main Mod
-## write mod
+# 主要模块
+## 写模块
 ![main_write_mod_related.png](img/main_write_mod_related.png)
-## read mod
+## 读模块
 ![main_read_mod_related.png](img/main_read_mod_related.png)
 ## Q&A
 ### 核心模块中实体耦合jpa框架的优劣?  
