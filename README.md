@@ -32,7 +32,8 @@
 ![ideology_1.png](img/ideology_1.png)
 
 ## 依赖流向(核心模块的依赖倒置)
-![ideology_2.png](img/ideology_2.png)
+![ideology_2.png](img/ideology_2.png)  
+ps: 可以沿着上图箭头顺序快速走读代码
 ## 领域战术
 ![ideology_3.png](img/ideology_3.png)
 
