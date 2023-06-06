@@ -90,6 +90,7 @@
         LocalTime permitDayTimeEnd;//发送时段结束
       
         public PermitReceiveTime(Set<DayOfWeek> permitWeekDays, LocalTime permitDayTimeBegin, LocalTime permitDayTimeEnd) {
+            //业务约束: permitDayTimeBegin要先于permitDayTimeEnd
             if (permitDayTimeEnd.isBefore(permitDayTimeBegin)) {
                 throw new IllegalArgumentException("permitDayTimeEnd cant be before permitDayTimeBegin");
             }
