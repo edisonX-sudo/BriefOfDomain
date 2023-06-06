@@ -72,8 +72,99 @@
 * todo...
 
 ## 其他感知
-### 使用ddd战术概念带来的测试优势
-* todo...
+### 使用ddd战术概念valueObject带来的测试优势
+* 让我们假设一个业务场景,我们有一个消息发送系统可以给不同用户发送消息,其中消息的发送有时间限制
+  ```
+      发送周天: [x]周一 [x]周二 []周三 []周四 []周五 []周六 [x]周日
+      发送时段: 10:00:00 ~ 20:59:59
+  ```
+  出于接口的需要我们要计算出发送消息的时间的下一个可用时间的时间戳.让我们取上方场景,用户指定周一,周二,周日,在10:00:00 ~ 20:59:59时段可以发送信息,
+  如果消息触发的时间是周五,那么计算出来的时间戳应该是顺延最近周日10:00:00的时间戳.
+  假设这段场景被设计为一个valueObject,那么可以如下设计  
+  __定义代码__
+  ```java
+    public class PermitReceiveTime {
+        List<DayOfWeek> permitWeekDays;//发送周天
+        LocalTime permitDayTimeBegin;//发送时段开始
+        LocalTime permitDayTimeEnd;//发送时段结束
+      
+        public PermitReceiveTime(Set<DayOfWeek> permitWeekDays, LocalTime permitDayTimeBegin, LocalTime permitDayTimeEnd) {
+            if (permitDayTimeEnd.isBefore(permitDayTimeBegin)) {
+                throw new IllegalArgumentException("permitDayTimeEnd cant be before permitDayTimeBegin");
+            }
+            this.permitWeekDays = permitWeekDays.stream().sorted(Comparator.comparingInt(DayOfWeek::getValue)).collect(Collectors.toList());
+            this.permitDayTimeBegin = permitDayTimeBegin;
+            this.permitDayTimeEnd = permitDayTimeEnd;
+        }
+      
+        /**
+         * 计算下一个允许接受信息的时间点的时间戳,单位:ms
+         *
+         * @return
+         */
+        public long calcNextPermitTs() {
+            OffsetDateTime now = OffsetDateTime.now();
+            ZoneOffset offset = now.getOffset();
+            //今天是否是允许接受消息的星期的天
+            boolean isTodayPermitWeekDay = permitWeekDays.contains(now.getDayOfWeek());
+            boolean isNowAfterPermitDayTimeBegin = now.toLocalTime().isAfter(permitDayTimeBegin);
+            boolean isNowBeforePermitDayTimeEnd = now.toLocalTime().isBefore(permitDayTimeEnd);
+            //现在是否是在允许接收消息的时段内
+            boolean isNowPermitDayTime = isNowAfterPermitDayTimeBegin && isNowBeforePermitDayTimeEnd;
+            if (isTodayPermitWeekDay && isNowPermitDayTime) {
+                //现在是 允许接受消息的星期的天 和 允许接收消息的时段内 直接返回当前Ts
+                return System.currentTimeMillis();
+            }
+            //下一个允许接受信息的weekday距离输入参数now的间隔天数
+            int nextPermitWeekDays = calcNextPermitWeekDays(now.getDayOfWeek(), now.toLocalTime());
+            return permitDayTimeBegin.atDate(now.toLocalDate().plusDays(nextPermitWeekDays)).toInstant(offset).toEpochMilli();
+        }
+      
+        /**
+         * 计算下一个允许接受信息的weekday距离输入参数now的间隔天数
+         *
+         * @param todayOfWeek
+         * @param todayLocalTime
+         * @return
+         */
+        int calcNextPermitWeekDays(DayOfWeek todayOfWeek, LocalTime todayLocalTime) {
+            for (DayOfWeek permitWeekDay : permitWeekDays) {
+                int res = permitWeekDay.getValue() - todayOfWeek.getValue();
+                if (res == 0 && todayLocalTime.isAfter(permitDayTimeEnd)) {
+                    continue;
+                }
+                if (res >= 0) {
+                    return res;
+                }
+            }
+            int weekDayCount = DayOfWeek.values().length;
+            for (DayOfWeek permitWeekDay : permitWeekDays) {
+                int res = permitWeekDay.getValue() + weekDayCount - todayOfWeek.getValue();
+                if (res >= 0) {
+                    return res;
+                }
+            }
+            throw new IllegalStateException("cant calculate nextPermitWeekDays");
+        }
+    }
+  ```
+  __测试代码__  
+  ```java
+    class PermitReceiveTimeTest {
+      @org.junit.jupiter.api.Test
+      void calcNextPermitTs() {
+          PermitReceiveTime permitReceiveTime = new PermitReceiveTime(
+                  Stream.of(DayOfWeek.TUESDAY, DayOfWeek.MONDAY, DayOfWeek.FRIDAY).collect(Collectors.toSet()),
+                  LocalTime.parse("00:00:01"),
+                  LocalTime.parse("01:59:59")
+          );
+          long ts = permitReceiveTime.calcNextPermitTs();
+          Date date = new Date(ts);
+          System.out.println(date);
+      }
+    }
+  ```
+  从代码中我们可以感知,valueObject的创建成本很低,不用启动容器,连接db就能实例化,valueObject内含完整的业务逻辑,我们可以非常方便的对业务逻辑进行测试.而这种测试在三层架构中往往非常重型,需要启动整个容器或者对关键组件进行mock,即便拉起了服务进行测试也很难针对性的对某业务逻辑进行测试(因为测试的服务的方法中可能还有很多其他的业务逻辑)
 ### 从复杂度角度看待3层架构
 * 3层架构分controller/service/dao,从复杂度的角度他分离了控制器框架的复杂度和数据库访问的复杂度
   (这两者是web开发的常见复杂度部分),然而service的复杂度里面仍然包含其他技术复杂度(概念/功能)和领域复杂度(概念,约束),
