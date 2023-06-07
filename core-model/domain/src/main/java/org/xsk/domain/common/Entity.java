@@ -14,7 +14,7 @@ public abstract class Entity<T extends Id<?>> {
         return id() == null;
     }
 
-    protected void markAsCreate() {
+    void markAsCreate() {
         //may be auto in jpa
         createAt = System.currentTimeMillis();
     }
@@ -23,7 +23,7 @@ public abstract class Entity<T extends Id<?>> {
         return createAt;
     }
 
-    protected void markAsModified() {
+    void markAsModified() {
         //may be auto in jpa
         modifiedAt = System.currentTimeMillis();
     }

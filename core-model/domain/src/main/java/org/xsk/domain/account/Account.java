@@ -44,7 +44,6 @@ public class Account extends Entity<AccountId> {
 
     static Account newAccount(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
         Account account = new Account(status, name, loginName, password, contact, address, parentAccountId);
-        account.markAsCreate();
         return account;
     }
 
@@ -72,7 +71,6 @@ public class Account extends Entity<AccountId> {
             throw new AccountPasswordNotCorrect();
         }
         password = newPassword;
-        markAsModified();
     }
 
     public void update(
@@ -86,7 +84,6 @@ public class Account extends Entity<AccountId> {
         this.address = address;
         this.parentAccountId = parentAccountId;
         new Validator.AccountSpecificationValidator().validSpecification(this);
-        markAsModified();
     }
 
     @Override

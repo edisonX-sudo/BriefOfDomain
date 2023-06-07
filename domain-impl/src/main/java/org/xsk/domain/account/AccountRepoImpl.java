@@ -65,7 +65,7 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     @Override
-    public void save(Account entity) {
+    public void saveInternal(Account entity) {
         AccountPo accountPo = convert2po(entity);
         if (entity.isNew()) {
             insertPo(accountPo);
