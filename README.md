@@ -10,7 +10,7 @@
   * 将内聚业务划分壁垒(可以利用`包/maven模块/jar/进程`做壁垒),防止过多纠葛(多条复杂度如毛线般纠缠),从而限制复杂度发散
 * 领域战术设计
   * 抽象领域中存在的共性概念,相应职责的类向其靠近,避免复杂度发散,具体战术概念如下:  
-  实体(entity), 值对象(value object), 领域服务(domain service), 领域工厂(domain factory), 领域策略(domain policy), 
+  聚合(aggregate), 实体(entity), 值对象(value object), 领域服务(domain service), 领域工厂(domain factory), 领域策略(domain policy), 
   领域仓储(domain repository), 领域事件(domain event), 领域异常(domain exception)等
 * 利用六边形架构的内外层分割(分割了业务复杂度和技术复杂度,防止过度纠葛,限制复杂度发散)
   * 内层领域层

@@ -1,5 +1,7 @@
 package org.xsk.domain.common;
 
+import java.util.List;
+
 public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
 
     public abstract E find(I id);
@@ -9,17 +11,31 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
         saveInternal(entity);
     }
 
+    protected abstract void saveInternal(E entity);
+
+    public void saveAll(List<E> entities) {
+        entities.forEach(this::refreshEntityTs);
+        saveAllInternal(entities);
+    }
+
+    protected void saveAllInternal(List<E> entities) {
+        throw new UnsupportedOperationException();
+    }
+
     protected void refreshEntityTs(E entity) {
         EntityTsRefresher.refreshTs(entity);
     }
 
-    public abstract void saveInternal(E entity);
-
-    protected E findExclusive(I id) {
+    /**
+     * 独占性的查询(如mysql内利用select for update,一般用不到)
+     * @param id
+     * @return
+     */
+    public E findExclusive(I id) {
         throw new UnsupportedOperationException();
     }
 
-    protected void delete(I id) {
+    public void delete(I id) {
         throw new UnsupportedOperationException();
     }
 
