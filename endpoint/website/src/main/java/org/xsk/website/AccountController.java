@@ -2,6 +2,7 @@ package org.xsk.website;
 
 import cn.hutool.core.map.BiMap;
 import org.xsk.application.AccountApplication;
+import org.xsk.infra.db.po.AccountPo;
 import org.xsk.infra.endpoint.cmd.CreateAccountCmd;
 import org.xsk.infra.endpoint.cmd.CreateSubAccountCmd;
 import org.xsk.infra.endpoint.dto.ListAccountDto;
@@ -34,6 +35,7 @@ public class AccountController {
     //cmd below
     @PostMapping
     public long createAccount(CreateAccountCmd cmd) {
+        AccountPo accountPo = new AccountPo();
         AccountId accountId = accountApplication.create(
                 ACCOUNT_STATUS_2_FILED_MAP.getInverse().get(cmd.getStatus()),
                 cmd.getName(),

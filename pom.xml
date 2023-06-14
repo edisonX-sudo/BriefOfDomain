@@ -14,6 +14,7 @@
         <module>endpoint</module>
         <module>infrastructure</module>
         <module>domain-impl</module>
+        <module>read-model-impl</module>
     </modules>
 
     <dependencies>
