@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AccountReadService implements IAccountReadService {
+    @Override
     public List<ListAccountDto> listAccount(ListAccountQuery query) {
         List<AccountPo> accountPos = readFromDb(query);
         return accountPos.stream()
