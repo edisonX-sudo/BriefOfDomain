@@ -10,7 +10,7 @@ public abstract class Entity<T extends Id<?>> {
     @EqualsAndHashCode.Include
     public abstract T id();
 
-    public boolean isNew() {
+    boolean isNew() {
         return id() == null;
     }
 

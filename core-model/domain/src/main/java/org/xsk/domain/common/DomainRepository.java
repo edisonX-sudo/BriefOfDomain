@@ -22,12 +22,25 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
         throw new UnsupportedOperationException();
     }
 
-    protected void refreshEntityTs(E entity) {
+    void refreshEntityTs(E entity) {
         EntityTsRefresher.refreshTs(entity);
+    }
+
+    protected void putVoMetaData(ValueObject valueObject, Object key, Object val) {
+        valueObject.putMetaData(key, val);
+    }
+
+    protected <T> T getVoMetaData(ValueObject valueObject, Object key, Class<T> valType) {
+        return valueObject.getMetaData(key, valType);
+    }
+
+    protected boolean isNewEntity(Entity<I> entity) {
+        return entity.isNew();
     }
 
     /**
      * 独占性的查询(如mysql内利用select for update,一般用不到)
+     *
      * @param id
      * @return
      */

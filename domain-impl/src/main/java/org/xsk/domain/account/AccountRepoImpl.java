@@ -67,7 +67,7 @@ public class AccountRepoImpl extends AccountRepo {
     @Override
     public void saveInternal(Account entity) {
         AccountPo accountPo = convert2po(entity);
-        if (entity.isNew()) {
+        if (isNewEntity(entity)) {
             insertPo(accountPo);
             entity.accountId = new AccountId(accountPo.getId());
         } else {
@@ -106,7 +106,7 @@ public class AccountRepoImpl extends AccountRepo {
 
     private AccountPo convert2po(Account entity) {
         AccountPo po = new AccountPo();
-        po.setId(entity.isNew() ? null : entity.accountId.value());
+        po.setId(isNewEntity(entity) ? null : entity.accountId.value());
         po.setStatus(ACCOUNT_STATUS_2_FILED_MAP.get(entity.status));
         po.setName(entity.name);
         po.setLoginName(entity.loginName);
