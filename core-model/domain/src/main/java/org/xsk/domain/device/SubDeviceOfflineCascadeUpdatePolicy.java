@@ -15,4 +15,9 @@ public class SubDeviceOfflineCascadeUpdatePolicy extends DomainPolicy<DeviceBeca
         subDevices.forEach(Device::offline);
         deviceRepo.saveAll(subDevices);
     }
+
+    @Override
+    protected Class<DeviceBecameOffline> eventClass() {
+        return DeviceBecameOffline.class;
+    }
 }

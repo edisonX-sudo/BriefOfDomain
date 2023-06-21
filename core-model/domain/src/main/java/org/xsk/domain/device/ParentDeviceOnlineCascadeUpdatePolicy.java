@@ -13,4 +13,8 @@ public class ParentDeviceOnlineCascadeUpdatePolicy extends DomainPolicy<DeviceBe
         parentDevice.online();
         deviceRepo.save(parentDevice);
     }
+
+    protected Class<DeviceBecameOnline> eventClass() {
+        return DeviceBecameOnline.class;
+    }
 }
