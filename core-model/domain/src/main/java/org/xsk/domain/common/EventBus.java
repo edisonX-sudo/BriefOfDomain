@@ -37,8 +37,8 @@ public class EventBus {
     }
 
     private static void triggerEventEmitted(ThreadLocal<Queue<DomainEvent>> afterEventEmittedEventWaitingQueue, DomainPolicy.SubscribePoint afterEventEmitted) {
-        Queue<DomainEvent> domainEvents = afterEventEmittedEventWaitingQueue.get();
         try {
+            Queue<DomainEvent> domainEvents = afterEventEmittedEventWaitingQueue.get();
             while (!domainEvents.isEmpty()) {
                 DomainEvent domainEvent = domainEvents.poll();
                 @SuppressWarnings("unchecked")
