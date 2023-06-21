@@ -14,4 +14,8 @@ public abstract class NotifyAccountBearerPolicy extends DomainPolicy<AccountCrea
 
     protected abstract void notifyBearer(Contact contact);
 
+    @Override
+    protected Class<AccountCreated> eventClass() {
+        return AccountCreated.class;
+    }
 }
