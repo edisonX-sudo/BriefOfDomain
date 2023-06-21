@@ -2,11 +2,11 @@ package org.xsk.domain.account.event;
 
 import org.xsk.domain.account.AccountId;
 import org.xsk.domain.account.Contact;
-import org.xsk.domain.common.EntityCreatedEvent;
+import org.xsk.domain.common.DomainEvent;
 
 import java.util.function.Supplier;
 
-public class AccountCreated extends EntityCreatedEvent<AccountId> {
+public class AccountCreated extends DomainEvent.EntityCreatedEvent<AccountId> {
 
     private final Contact contact;
 

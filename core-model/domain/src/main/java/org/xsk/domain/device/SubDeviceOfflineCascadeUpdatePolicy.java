@@ -5,9 +5,10 @@ import org.xsk.domain.device.event.DeviceBecameOffline;
 
 import java.util.List;
 
-public class SubDeviceOfflineCascadeUpdatePolicy extends DomainPolicy {
+public class SubDeviceOfflineCascadeUpdatePolicy extends DomainPolicy<DeviceBecameOffline> {
     DeviceRepo deviceRepo;
 
+    @Override
     public void subscribe(DeviceBecameOffline event) {
         DeviceId deviceId = event.id();
         List<Device> subDevices = deviceRepo.findSubDevices(deviceId);

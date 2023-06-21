@@ -1,10 +1,12 @@
 package org.xsk.domain.common;
 
-public abstract class DomainPolicy {
+public abstract class DomainPolicy<E extends DomainEvent> {
 
     public SubscribePoint subscribePoint() {
         return SubscribePoint.BEFORE_DATA_COMMIT;
     }
+
+    public abstract void subscribe(E e);
 
     //订阅触发节点
     public enum SubscribePoint {
