@@ -8,11 +8,7 @@ class Validator {
         @Override
         public void validSpecification(Account account) {
             if (account.name.length() > 50) {
-                newIllegalStateExceptionBuilder()
-                        .subject("account name length")
-                        .condition("cant be greater than")
-                        .object(50)
-                        .throwException();
+                throwIllegalStateException("account name length cant be greater than 50");
             }
         }
     }
@@ -22,18 +18,10 @@ class Validator {
         @Override
         public void validSpecification(Contact contact) {
             if (contact.email.length() > 50) {
-                newIllegalStateExceptionBuilder()
-                        .subject("contact email length")
-                        .condition("cant be greater than")
-                        .object(50)
-                        .throwException();
+                throwIllegalStateException("contact email length cant be greater than 50");
             }
             if (contact.phone.length() > 50) {
-                newIllegalStateExceptionBuilder()
-                        .subject("contact phone length")
-                        .condition("cant be greater than")
-                        .object(50)
-                        .throwException();
+                throwIllegalStateException("contact phone length cant be greater than 50");
             }
         }
 
