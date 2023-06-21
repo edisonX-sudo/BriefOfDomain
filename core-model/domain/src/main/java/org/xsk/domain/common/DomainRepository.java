@@ -23,7 +23,11 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     void refreshEntityTs(E entity) {
-        EntityTsRefresher.refreshTs(entity);
+        if (entity.isNew()) {
+            entity.markAsCreate();
+        } else {
+            entity.markAsModified();
+        }
     }
 
     protected void putVoMetaData(ValueObject valueObject, Object key, Object val) {
