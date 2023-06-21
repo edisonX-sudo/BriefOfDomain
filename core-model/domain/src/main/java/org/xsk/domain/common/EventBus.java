@@ -50,7 +50,7 @@ public class EventBus {
         }
     }
 
-    static void cleanEventQueue(){
+    static void cleanEventQueue() {
         BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.remove();
         AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.remove();
     }
@@ -58,6 +58,7 @@ public class EventBus {
     private static <E extends DomainEvent> void executeIfNecessary(E event, DomainPolicy<E> eDomainPolicy, boolean throwException) {
         if (isPolicySubscribeEvent(eDomainPolicy, event)) {
             try {
+                log.info("fire event: {}, invoke policy: {}", event.getClass().getSimpleName(), eDomainPolicy.getClass().getSimpleName());
                 eDomainPolicy.subscribe(event);
             } catch (Exception exception) {
                 log.warn("fire event {} error", event.getClass().getSimpleName(), exception);
