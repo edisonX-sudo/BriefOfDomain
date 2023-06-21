@@ -18,10 +18,10 @@ public class EventBus {
         // : 2023/4/14 实现上根据订阅者DomainPolicy.subscribePoint()的值,
         //  决定事务前(false)投递给哪些订阅者,事务后(true)投递给哪些订阅者,还是马上异步执行
         @SuppressWarnings("unchecked")
-        Set<DomainPolicy<E>> asyncDomainPolicies = (Set) SUBSCRIBE_POINT_SET_CONCURRENT_HASH_MAP.get(DomainPolicy.SubscribePoint.ASYNC);
+        Set<DomainPolicy<E>> asyncDomainPolicies = (Set) SUBSCRIBE_POINT_SET_CONCURRENT_HASH_MAP.get(DomainPolicy.SubscribePoint.ASYNC_IMMEDIATELY);
         asyncDomainPolicies.parallelStream().forEach(eDomainPolicy -> executeIfNecessary(event, eDomainPolicy, false));
         @SuppressWarnings("unchecked")
-        Set<DomainPolicy<E>> sycDomainPolicies = (Set) SUBSCRIBE_POINT_SET_CONCURRENT_HASH_MAP.get(DomainPolicy.SubscribePoint.SYNC);
+        Set<DomainPolicy<E>> sycDomainPolicies = (Set) SUBSCRIBE_POINT_SET_CONCURRENT_HASH_MAP.get(DomainPolicy.SubscribePoint.SYNC_IMMEDIATELY);
         sycDomainPolicies.forEach(eDomainPolicy -> executeIfNecessary(event, eDomainPolicy, true));
         // : 2023/6/21 add event 2 BEFORE_EVENT_EMITTED,AFTER_EVENT_EMITTED policy wait list
         BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.get().add(event);
