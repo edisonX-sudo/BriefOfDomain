@@ -1,7 +1,13 @@
 package org.xsk.domain.common;
 
+import cn.hutool.core.util.TypeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.xsk.domain.device.DeviceId;
+import org.xsk.domain.device.SubDeviceOfflineCascadeUpdatePolicy;
+import org.xsk.domain.device.event.DeviceBecameOffline;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Queue;
@@ -80,8 +86,18 @@ public class EventBus {
         domainPolicies.add(policy);
     }
 
-//    public static void main(String[] args) {
-//        DeviceBecameOffline obj = new DeviceBecameOffline(new DeviceId(1L));
-//        System.out.println(obj.toString());
+//    public static void main(String[] args) throws NoSuchMethodException {
+//        SubDeviceOfflineCascadeUpdatePolicy policy = new SubDeviceOfflineCascadeUpdatePolicy();
+//        Method[] declaredMethods = policy.getClass().getMethods();
+//        for (Method declaredMethod : declaredMethods) {
+//            if ("subscribe".equals(declaredMethod.getName())
+//                    && declaredMethod.getParameterCount() == 1
+//                    && !DomainEvent.class.equals(declaredMethod.getParameterTypes()[0])) {
+//                Type[] paramTypes = TypeUtil.getParamTypes(declaredMethod);
+//                Class<?> aClass = TypeUtil.getClass(paramTypes[0]);
+//                System.out.println(aClass);
+//            }
+//        }
+////        TypeUtil.getParamTypes()
 //    }
 }
