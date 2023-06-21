@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.xsk</groupId>
         <artifactId>infrastructure</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>open</artifactId>
