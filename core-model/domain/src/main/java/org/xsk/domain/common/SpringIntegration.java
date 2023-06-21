@@ -5,7 +5,7 @@ import org.springframework.transaction.support.TransactionSynchronization;
 
 public class SpringIntegration {
     @Component
-    public static class MainProcessCompletionSubscriberPointInvoker implements TransactionSynchronization {
+    public static class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization {
 
         @Override
         public void beforeCommit(boolean readOnly) {
