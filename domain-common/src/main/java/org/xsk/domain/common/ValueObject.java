@@ -17,4 +17,8 @@ public abstract class ValueObject {
     void putMetaData(Object key, Object val) {
         metaData.put(key, val);
     }
+
+    protected Map<Object, Object> metaData() {
+        return new ConcurrentHashMap<>(metaData);
+    }
 }
