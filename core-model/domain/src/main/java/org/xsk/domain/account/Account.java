@@ -31,7 +31,7 @@ public class Account extends Entity<AccountId> {
         new Validator.AccountSpecificationValidator().validSpecification(this);
     }
 
-    private Account(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
+     Account(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
         this.status = status;
         this.name = name;
         this.loginName = loginName;
@@ -40,10 +40,6 @@ public class Account extends Entity<AccountId> {
         this.address = address;
         this.parentAccountId = parentAccountId;
         new Validator.AccountSpecificationValidator().validSpecification(this);
-    }
-
-    static Account newAccount(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
-        return new Account(status, name, loginName, password, contact, address, parentAccountId);
     }
 
     Boolean isMainAccount() {
@@ -56,7 +52,7 @@ public class Account extends Entity<AccountId> {
             throw new OnlyMainAccountOperate();
         }
         //业务知识: 账号创建默认是disable的
-        Account subAccount = newAccount(AccountStatus.DISABLE, name, loginName, password, contact, address, this.parentAccountId);
+        Account subAccount = new Account(AccountStatus.DISABLE, name, loginName, password, contact, address, this.parentAccountId);
         EventBus.fire(new AccountCreated(() -> subAccount.accountId, contact));
         return subAccount;
     }
