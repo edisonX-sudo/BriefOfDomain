@@ -15,6 +15,7 @@
         <module>infrastructure</module>
         <module>domain-impl</module>
         <module>read-model-impl</module>
+        <module>domain-common</module>
     </modules>
 
     <properties>
