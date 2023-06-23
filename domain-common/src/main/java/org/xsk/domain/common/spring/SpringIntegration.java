@@ -4,6 +4,9 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.xsk.domain.common.ComponentIntegration;
 
 public class SpringIntegration extends ComponentIntegration {
+    /**
+     * 事务提交前/后触发事件总线事件(在程序中手动注册为@Bean)
+     */
     public static class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization {
 
         @Override
