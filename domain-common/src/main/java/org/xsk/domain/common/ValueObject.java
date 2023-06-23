@@ -18,11 +18,8 @@ public abstract class ValueObject {
         metaData.put(key, val);
     }
 
-    void mergeMetaData(ValueObject vo) {
+    protected void mergeMetaData(ValueObject vo) {
         metaData.putAll(vo.metaData);
     }
 
-    protected Map<Object, Object> metaData() {
-        return new ConcurrentHashMap<>(metaData);
-    }
 }
