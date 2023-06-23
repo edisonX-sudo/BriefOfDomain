@@ -66,6 +66,7 @@ public class Account extends Entity<AccountId> {
             throw new AccountPasswordNotCorrect();
         }
         password = newPassword;
+        new Validator.AccountSpecificationValidator().validSpecification(this);
     }
 
     public void update(
