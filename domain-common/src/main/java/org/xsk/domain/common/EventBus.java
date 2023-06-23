@@ -80,18 +80,4 @@ public class EventBus {
         domainPolicies.add(policy);
     }
 
-//    public static void main(String[] args) throws NoSuchMethodException {
-//        SubDeviceOfflineCascadeUpdatePolicy policy = new SubDeviceOfflineCascadeUpdatePolicy();
-//        Method[] declaredMethods = policy.getClass().getMethods();
-//        for (Method declaredMethod : declaredMethods) {
-//            if ("subscribe".equals(declaredMethod.getName())
-//                    && declaredMethod.getParameterCount() == 1
-//                    && !DomainEvent.class.equals(declaredMethod.getParameterTypes()[0])) {
-//                Type[] paramTypes = TypeUtil.getParamTypes(declaredMethod);
-//                Class<?> aClass = TypeUtil.getClass(paramTypes[0]);
-//                System.out.println(aClass);
-//            }
-//        }
-////        TypeUtil.getParamTypes()
-//    }
 }
