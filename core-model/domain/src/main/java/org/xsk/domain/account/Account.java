@@ -43,8 +43,7 @@ public class Account extends Entity<AccountId> {
     }
 
     static Account newAccount(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
-        Account account = new Account(status, name, loginName, password, contact, address, parentAccountId);
-        return account;
+        return new Account(status, name, loginName, password, contact, address, parentAccountId);
     }
 
     Boolean isMainAccount() {
