@@ -1,10 +1,12 @@
 package org.xsk.domain.device;
 
+import lombok.AllArgsConstructor;
 import org.xsk.domain.common.DomainPolicy;
 import org.xsk.domain.device.event.DeviceBecameOffline;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class SubDeviceOfflineCascadeUpdatePolicy extends DomainPolicy<DeviceBecameOffline> {
     DeviceRepo deviceRepo;
 

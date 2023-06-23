@@ -1,8 +1,10 @@
 package org.xsk.domain.device;
 
+import lombok.AllArgsConstructor;
 import org.xsk.domain.common.DomainPolicy;
 import org.xsk.domain.device.event.DeviceBecameOnline;
 
+@AllArgsConstructor
 public class ParentDeviceOnlineCascadeUpdatePolicy extends DomainPolicy<DeviceBecameOnline> {
     DeviceRepo deviceRepo;
 
