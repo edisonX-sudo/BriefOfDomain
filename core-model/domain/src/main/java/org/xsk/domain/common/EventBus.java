@@ -67,7 +67,7 @@ public class EventBus {
                 log.info("fire event: {}, invoke policy: {}", event.getClass().getSimpleName(), eDomainPolicy.getClass().getSimpleName());
                 eDomainPolicy.subscribe(event);
             } catch (Exception exception) {
-                log.warn("fire event {} error", event.getClass().getSimpleName(), exception);
+                log.warn(String.format("fire event: %s, error", event.getClass().getSimpleName()), exception);
                 if (throwException)
                     throw exception;
             }
