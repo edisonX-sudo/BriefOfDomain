@@ -1,11 +1,9 @@
 package org.xsk.domain.common.spring;
 
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.xsk.domain.common.ComponentIntegration;
 
 public class SpringIntegration extends ComponentIntegration {
-    @Component
     public static class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization {
 
         @Override
