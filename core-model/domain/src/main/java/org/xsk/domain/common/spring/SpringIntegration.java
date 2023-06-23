@@ -10,7 +10,7 @@ public class SpringIntegration extends ComponentIntegration {
 
         @Override
         public void beforeCommit(boolean readOnly) {
-            triggerEventsBeforeMainProcessCompleted();
+            triggerEventBeforeMainProcessCompleted();
         }
 
         @Override
@@ -19,7 +19,7 @@ public class SpringIntegration extends ComponentIntegration {
                 cleanEventQueue();
                 return;
             }
-            triggerEventsAfterMainProcessCompleted();
+            triggerEventAfterMainProcessCompleted();
         }
     }
 }

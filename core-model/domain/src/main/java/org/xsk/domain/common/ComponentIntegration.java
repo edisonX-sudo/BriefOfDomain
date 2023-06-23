@@ -2,11 +2,11 @@ package org.xsk.domain.common;
 
 public abstract class ComponentIntegration {
 
-    protected static void triggerEventsBeforeMainProcessCompleted() {
+    protected static void triggerEventBeforeMainProcessCompleted() {
         EventBus.triggerBeforeMainProcessCompleted();
     }
 
-    protected static void triggerEventsAfterMainProcessCompleted() {
+    protected static void triggerEventAfterMainProcessCompleted() {
         EventBus.triggerAfterMainProcessCompleted();
     }
 
