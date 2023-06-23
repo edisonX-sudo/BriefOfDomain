@@ -1,6 +1,7 @@
 package org.xsk.domain.account;
 
 import cn.hutool.core.map.BiMap;
+import lombok.AllArgsConstructor;
 import org.xsk.domain.account.exception.AccountNotFound;
 import org.xsk.domain.common.DomainException;
 import org.xsk.infra.db.po.AccountPo;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class AccountRepoImpl extends AccountRepo {
     final static BiMap<AccountStatus, String> ACCOUNT_STATUS_2_FILED_MAP = new BiMap<>(new HashMap<AccountStatus, String>() {
         {
