@@ -1,13 +1,7 @@
 package org.xsk.domain.common;
 
-import cn.hutool.core.util.TypeUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.xsk.domain.device.DeviceId;
-import org.xsk.domain.device.SubDeviceOfflineCascadeUpdatePolicy;
-import org.xsk.domain.device.event.DeviceBecameOffline;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Queue;
