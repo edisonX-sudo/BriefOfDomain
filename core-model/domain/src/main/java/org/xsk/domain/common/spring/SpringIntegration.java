@@ -1,24 +1,25 @@
-package org.xsk.domain.common;
+package org.xsk.domain.common.spring;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionSynchronization;
+import org.xsk.domain.common.ComponentIntegration;
 
-public class SpringIntegration {
+public class SpringIntegration extends ComponentIntegration {
     @Component
     public static class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization {
 
         @Override
         public void beforeCommit(boolean readOnly) {
-            EventBus.triggerBeforeMainProcessCompleted();
+            triggerEventsBeforeMainProcessCompleted();
         }
 
         @Override
         public void afterCompletion(int status) {
             if (STATUS_COMMITTED != status) {
-                EventBus.cleanEventQueue();
+                cleanEventQueue();
                 return;
             }
-            EventBus.triggerAfterMainProcessCompleted();
+            triggerEventsAfterMainProcessCompleted();
         }
     }
 }
