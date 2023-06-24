@@ -2,8 +2,8 @@ package org.xsk.domain.common;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public abstract class Entity<T extends Id<?>> {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public abstract class Entity<T extends Id<?>> extends AggregateComponent{
     protected Long createAt;
     protected Long modifiedAt;
 
