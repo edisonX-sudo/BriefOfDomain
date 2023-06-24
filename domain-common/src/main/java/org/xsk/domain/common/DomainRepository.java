@@ -33,23 +33,6 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
         }
     }
 
-
-    /**
-     * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
-     * subtract([1,2,3,4],[2,3,4,5]) -》 [1]
-     */
-    protected <T extends ValueObject> Collection<T> subtractVo(Collection<T> subjectSet, Collection<T> objectSet) {
-        return CollUtil.subtract(subjectSet, objectSet);
-    }
-
-    protected void putComponentMetaData(AggregateComponent component, Object key, Object val) {
-        component.putMetaData(key, val);
-    }
-
-    protected <T> T getComponentMetaData(AggregateComponent component, Object key, Class<T> valType) {
-        return component.getMetaData(key, valType);
-    }
-
     protected boolean isNewEntity(Entity<I> entity) {
         return entity.isNew();
     }
@@ -76,4 +59,24 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     protected abstract DomainException notFoundException();
+
+    /**
+     * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
+     * subtractVo([1,2,3,4],[2,3,4,5]) -》 [1]
+     */
+    protected <T extends ValueObject> Collection<T> subtractVo(Collection<T> subjectSet, Collection<T> objectSet) {
+        return CollUtil.subtract(subjectSet, objectSet);
+    }
+
+    protected <K extends MetaKey> void putComponentMetaData(AggregateComponent component, Class<K> key, Object val) {
+        component.putMetaData(key, val);
+    }
+
+    protected <K extends MetaKey, V> V getComponentMetaData(AggregateComponent component, Class<K> key, Class<V> valType) {
+        return component.getMetaData(key, valType);
+    }
+
+    protected static abstract class MetaKey {
+    }
+
 }

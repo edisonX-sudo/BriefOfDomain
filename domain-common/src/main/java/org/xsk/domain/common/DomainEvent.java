@@ -24,7 +24,6 @@ public abstract class DomainEvent {
     }
 
     public static abstract class EntityCreatedEvent<T extends Id<?>> extends DomainEvent {
-
         private final Supplier<T> idSupplier;
 
         public EntityCreatedEvent(Supplier<T> idSupplier) {
@@ -34,6 +33,6 @@ public abstract class DomainEvent {
         public T entityId() {
             return idSupplier.get();
         }
-
     }
+
 }
