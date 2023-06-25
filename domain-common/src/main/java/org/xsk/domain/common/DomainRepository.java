@@ -30,7 +30,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
      * @return
      */
     public E findExclusive(I id) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("this method need 2 be override");
     }
 
     protected abstract NotFoundEntityDomainException notFoundException();
@@ -48,7 +48,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     protected void saveAllInternal(Set<E> entities) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("this method need 2 be override");
     }
 
     void refreshEntityTs(E entity) {
@@ -64,7 +64,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     public void delete(I id) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("this method need 2 be override");
     }
 
     /**
