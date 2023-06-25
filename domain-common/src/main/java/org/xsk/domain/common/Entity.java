@@ -28,9 +28,10 @@ public abstract class Entity<T extends Id<?>> extends AggregateComponent {
         return modifiedAt;
     }
 
-//    boolean newEntity = true;
-//
-//    void markAsNotNew() {
-//        newEntity = false;
+//    boolean newEntity = false;//by default
+//    //invoke in factory maybe
+//    void markAsNew() {
+//        newEntity = true;
 //    }
+
 }
