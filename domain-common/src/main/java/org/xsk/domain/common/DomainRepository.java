@@ -64,7 +64,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
      * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
      * subtractVo([1,2,3,4],[2,3,4,5]) -》 [1]
      */
-    protected <T extends ValueObject> Collection<T> subtractVo(Collection<T> subjectSet, Collection<T> objectSet) {
+    protected <T> Collection<T> subtractVo(Collection<T> subjectSet, Collection<T> objectSet) {
         return CollUtil.subtract(subjectSet, objectSet);
     }
 
