@@ -66,13 +66,17 @@ public class EventBus {
         }
     }
 
-    private static <E extends DomainEvent> void executeIfNecessary(E event, DomainPolicy<E> eDomainPolicy, boolean throwException) {
-        if (isPolicySubscribeEvent(eDomainPolicy, event)) {
+    private static <E extends DomainEvent> void executeIfNecessary(E event, DomainPolicy<E> domainPolicy, boolean throwException) {
+        if (isPolicySubscribeEvent(domainPolicy, event)) {
             try {
-                log.info("fire event: {}, invoke policy: {}", event.getClass().getSimpleName(), eDomainPolicy.getClass().getSimpleName());
-                eDomainPolicy.subscribe(event);
+                log.info("fire event: {}, invoke policy: {}", event.getClass().getSimpleName(), domainPolicy.getClass().getSimpleName());
+                domainPolicy.subscribe(event);
             } catch (Exception exception) {
-                log.warn(String.format("error occurred when firing event: %s", event.getClass().getSimpleName()), exception);
+                log.warn(
+                        String.format("error occurred when firing event: %s, domainPolicy: %s, throwException: %s",
+                                event.getClass().getSimpleName(), domainPolicy.getClass().getSimpleName(), throwException)
+                        , exception
+                );
                 if (throwException)
                     throw exception;
             }
