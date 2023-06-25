@@ -3,7 +3,7 @@ package org.xsk.domain.common;
 import cn.hutool.core.collection.CollUtil;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
 
@@ -42,12 +42,12 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
 
     protected abstract void saveInternal(E entity);
 
-    public void saveAll(List<E> entities) {
+    public void saveAll(Set<E> entities) {
         entities.forEach(this::refreshEntityTs);
         saveAllInternal(entities);
     }
 
-    protected void saveAllInternal(List<E> entities) {
+    protected void saveAllInternal(Set<E> entities) {
         throw new UnsupportedOperationException();
     }
 

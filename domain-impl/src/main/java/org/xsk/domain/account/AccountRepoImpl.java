@@ -23,47 +23,46 @@ public class AccountRepoImpl extends AccountRepo {
 
     @Override
     public Account find(String loginName) {
-        AccountPo byLoginName = findByLoginName(loginName);
+        AccountPo byLoginName = findPoByLoginName(loginName);
         if (byLoginName == null)
             return null;
         return convert2Entity(byLoginName);
     }
 
-    @Override
-    public List<Account> findAccountGroup(AccountId mainAccountId) {
-        List<AccountPo> byLoginName = findByParentAccountId(mainAccountId);
-        return byLoginName.stream()
-                .map(this::convert2Entity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void saveAll(Set<Account> accounts) {
-        // TODO: 2023/4/18  
-    }
-
-    private List<AccountPo> findByParentAccountId(AccountId parentAccountId) {
-        // TODO: 2023/4/14 sql find by parentAccountId
-        return Collections.emptyList();
-    }
-
-
-    private AccountPo findByLoginName(String loginName) {
+    private AccountPo findPoByLoginName(String loginName) {
         // TODO: 2023/4/14 sql find by loginName
         return null;
     }
 
     @Override
+    public List<Account> findAccountGroup(AccountId mainAccountId) {
+        List<AccountPo> byLoginName = findPoByMainAccountId(mainAccountId);
+        return byLoginName.stream()
+                .map(this::convert2Entity)
+                .collect(Collectors.toList());
+    }
+
+    private List<AccountPo> findPoByMainAccountId(AccountId mainAccountId) {
+        // TODO: 2023/4/14 sql find by parentAccountId
+        return Collections.emptyList();
+    }
+
+    @Override
     public Account find(AccountId id) {
-        AccountPo byId = findById(id);
+        AccountPo byId = findPoById(id);
         if (byId == null)
             return null;
         return convert2Entity(byId);
     }
 
-    private AccountPo findById(AccountId id) {
+    private AccountPo findPoById(AccountId id) {
         // TODO: 2023/4/14 sql find by id
         return null;
+    }
+
+    @Override
+    protected void saveAllInternal(Set<Account> entities) {
+        // TODO: 2023/6/25
     }
 
     @Override
