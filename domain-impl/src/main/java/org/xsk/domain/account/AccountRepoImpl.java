@@ -89,7 +89,6 @@ public class AccountRepoImpl extends AccountRepo {
         return new AccountNotFound();
     }
 
-
     private Account convert2Entity(AccountPo po) {
         return new Account(
                 new AccountId(po.getId()),
