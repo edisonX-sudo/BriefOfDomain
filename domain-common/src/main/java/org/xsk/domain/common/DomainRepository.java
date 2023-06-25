@@ -16,6 +16,25 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
 
     public abstract E find(I id);
 
+    public E findExclusiveNotNone(I id) {
+        E entity = findExclusive(id);
+        if (entity == null)
+            throw notFoundException();
+        return entity;
+    }
+
+    /**
+     * 独占性的查询(如mysql内利用select for update,一般用不到)
+     *
+     * @param id
+     * @return
+     */
+    public E findExclusive(I id) {
+        throw new UnsupportedOperationException();
+    }
+
+    protected abstract DomainException notFoundException();
+
     public void save(E entity) {
         refreshEntityTs(entity);
         saveInternal(entity);
@@ -44,28 +63,9 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
         return entity.isNew();
     }
 
-    public E findExclusiveNotNone(I id) {
-        E entity = findExclusive(id);
-        if (entity == null)
-            throw notFoundException();
-        return entity;
-    }
-
-    /**
-     * 独占性的查询(如mysql内利用select for update,一般用不到)
-     *
-     * @param id
-     * @return
-     */
-    public E findExclusive(I id) {
-        throw new UnsupportedOperationException();
-    }
-
     public void delete(I id) {
         throw new UnsupportedOperationException();
     }
-
-    protected abstract DomainException notFoundException();
 
     /**
      * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
