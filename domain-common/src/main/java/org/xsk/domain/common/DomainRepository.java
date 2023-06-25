@@ -52,7 +52,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     void refreshEntityTs(E entity) {
-        if (entity.isNew()) {
+        if (isNewEntity(entity)) {
             entity.markAsCreate();
         } else {
             entity.markAsModified();
@@ -60,7 +60,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     protected boolean isNewEntity(Entity<I> entity) {
-        return entity.isNew();
+        return entity.id() == null;
     }
 
     public void delete(I id) {
