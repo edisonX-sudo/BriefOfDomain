@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 @Slf4j
 public class EventBus {
+    static Consumer<DomainEvent> consumeEventNeedRecord;
     final static Map<DomainPolicy.SubscribePoint, Set<DomainPolicy<?>>> SUBSCRIBE_POINT_POLICY_MAP = new ConcurrentHashMap<>();
     final static ThreadLocal<Queue<DomainEvent>> BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
     final static ThreadLocal<Queue<DomainEvent>> AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
@@ -29,14 +31,25 @@ public class EventBus {
     }
 
     static void triggerBeforeMainProcessCompleted() {
-        triggerMainProcessCompleted(BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE, DomainPolicy.SubscribePoint.BEFORE_MAIN_PROCESS_COMPLETED);
+        triggerMainProcessCompleted(
+                BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE,
+                DomainPolicy.SubscribePoint.BEFORE_MAIN_PROCESS_COMPLETED,
+                domainEvent -> {
+                });
     }
 
     static void triggerAfterMainProcessCompleted() {
-        triggerMainProcessCompleted(AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE, DomainPolicy.SubscribePoint.AFTER_MAIN_PROCESS_COMPLETED);
+        triggerMainProcessCompleted(
+                AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE,
+                DomainPolicy.SubscribePoint.AFTER_MAIN_PROCESS_COMPLETED,
+                domainEvent -> {
+                    if (DomainEvent.RecordStatus.DO_RECORD.equals(domainEvent.recordInfo()) && consumeEventNeedRecord != null) {
+                        consumeEventNeedRecord.accept(domainEvent);
+                    }
+                });
     }
 
-    private static void triggerMainProcessCompleted(ThreadLocal<Queue<DomainEvent>> afterEventEmittedEventWaitingQueue, DomainPolicy.SubscribePoint afterEventEmitted) {
+    private static void triggerMainProcessCompleted(ThreadLocal<Queue<DomainEvent>> afterEventEmittedEventWaitingQueue, DomainPolicy.SubscribePoint afterEventEmitted, Consumer<DomainEvent> afterEventConsumed) {
         try {
             Queue<DomainEvent> domainEvents = afterEventEmittedEventWaitingQueue.get();
             while (!domainEvents.isEmpty()) {
@@ -44,6 +57,7 @@ public class EventBus {
                 @SuppressWarnings("unchecked")
                 Set<DomainPolicy<DomainEvent>> domainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.get(afterEventEmitted);
                 domainPolicies.forEach(domainPolicy -> executeIfNecessary(domainEvent, domainPolicy, true));
+                afterEventConsumed.accept(domainEvent);
             }
         } finally {
             afterEventEmittedEventWaitingQueue.remove();

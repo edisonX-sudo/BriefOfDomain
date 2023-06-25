@@ -1,5 +1,7 @@
 package org.xsk.domain.common;
 
+import java.util.function.Consumer;
+
 public abstract class ComponentIntegration {
 
     protected static void triggerEventBeforeMainProcessCompleted() {
@@ -12,5 +14,9 @@ public abstract class ComponentIntegration {
 
     protected static void cleanEventQueue() {
         EventBus.cleanEventQueue();
+    }
+
+    protected static void consumeEventNeedRecord(Consumer<DomainEvent> consumer) {
+        EventBus.consumeEventNeedRecord = consumer;
     }
 }

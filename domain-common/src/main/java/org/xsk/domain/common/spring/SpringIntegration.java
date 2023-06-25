@@ -1,7 +1,11 @@
 package org.xsk.domain.common.spring;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.xsk.domain.common.ComponentIntegration;
+import org.xsk.domain.common.DomainEvent;
+
+import java.util.function.Consumer;
 
 public class SpringIntegration extends ComponentIntegration {
     /**
@@ -21,6 +25,21 @@ public class SpringIntegration extends ComponentIntegration {
                 return;
             }
             triggerEventAfterMainProcessCompleted();
+        }
+    }
+
+    public static class RecordEventConsumer implements InitializingBean {
+
+        private Consumer<DomainEvent> consumer;
+
+        public RecordEventConsumer(Consumer<DomainEvent> consumer) {
+            this.consumer = consumer;
+        }
+
+        @Override
+        public void afterPropertiesSet() throws Exception {
+            if (consumer != null)
+                consumeEventNeedRecord(consumer);
         }
     }
 }
