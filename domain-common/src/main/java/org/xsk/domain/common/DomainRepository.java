@@ -7,6 +7,13 @@ import java.util.List;
 
 public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
 
+    public E findNotNone(I id) {
+        E entity = find(id);
+        if (entity == null)
+            throw notFoundException();
+        return entity;
+    }
+
     public abstract E find(I id);
 
     public void save(E entity) {
@@ -37,6 +44,13 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
         return entity.isNew();
     }
 
+    public E findExclusiveNotNone(I id) {
+        E entity = findExclusive(id);
+        if (entity == null)
+            throw notFoundException();
+        return entity;
+    }
+
     /**
      * 独占性的查询(如mysql内利用select for update,一般用不到)
      *
@@ -49,13 +63,6 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
 
     public void delete(I id) {
         throw new UnsupportedOperationException();
-    }
-
-    public E findNotNone(I id) {
-        E entity = find(id);
-        if (entity == null)
-            throw notFoundException();
-        return entity;
     }
 
     protected abstract DomainException notFoundException();
