@@ -2,7 +2,7 @@ package org.xsk.domain.common;
 
 import java.util.function.Consumer;
 
-public abstract class ComponentIntegration {
+public abstract class FrameworkIntegration {
 
     protected static void triggerEventBeforeMainProcessCompleted() {
         EventBus.triggerBeforeMainProcessCompleted();

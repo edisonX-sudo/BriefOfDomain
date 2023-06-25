@@ -3,7 +3,7 @@ package org.xsk.domain.account;
 import cn.hutool.core.map.BiMap;
 import lombok.AllArgsConstructor;
 import org.xsk.domain.account.exception.AccountNotFound;
-import org.xsk.domain.common.DomainException;
+import org.xsk.domain.common.NotFoundEntityDomainException;
 import org.xsk.infra.db.po.AccountPo;
 
 import java.util.Collections;
@@ -86,7 +86,7 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     @Override
-    protected DomainException notFoundException() {
+    protected NotFoundEntityDomainException notFoundException() {
         return new AccountNotFound();
     }
 

@@ -2,12 +2,12 @@ package org.xsk.domain.common.spring;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.support.TransactionSynchronization;
-import org.xsk.domain.common.ComponentIntegration;
 import org.xsk.domain.common.DomainEvent;
+import org.xsk.domain.common.FrameworkIntegration;
 
 import java.util.function.Consumer;
 
-public class SpringIntegration extends ComponentIntegration {
+public class SpringIntegration extends FrameworkIntegration {
     /**
      * 事务提交前/后触发事件总线事件(在程序中手动注册为@Bean)
      */
@@ -38,8 +38,9 @@ public class SpringIntegration extends ComponentIntegration {
 
         @Override
         public void afterPropertiesSet() throws Exception {
-            if (consumer != null)
-                consumeEventNeedRecord(consumer);
+            if (consumer == null)
+                return;
+            consumeEventNeedRecord(consumer);
         }
     }
 }

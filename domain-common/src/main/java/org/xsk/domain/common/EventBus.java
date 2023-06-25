@@ -34,6 +34,7 @@ public class EventBus {
         triggerMainProcessCompleted(
                 BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE,
                 DomainPolicy.SubscribePoint.BEFORE_MAIN_PROCESS_COMPLETED,
+                true,
                 domainEvent -> {
                 });
     }
@@ -42,6 +43,7 @@ public class EventBus {
         triggerMainProcessCompleted(
                 AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE,
                 DomainPolicy.SubscribePoint.AFTER_MAIN_PROCESS_COMPLETED,
+                false,
                 domainEvent -> {
                     if (DomainEvent.RecordStatus.DO_RECORD.equals(domainEvent.recordInfo()) && consumeEventNeedRecord != null) {
                         consumeEventNeedRecord.accept(domainEvent);
@@ -49,24 +51,19 @@ public class EventBus {
                 });
     }
 
-    private static void triggerMainProcessCompleted(ThreadLocal<Queue<DomainEvent>> afterEventEmittedEventWaitingQueue, DomainPolicy.SubscribePoint afterEventEmitted, Consumer<DomainEvent> afterEventConsumed) {
+    private static void triggerMainProcessCompleted(ThreadLocal<Queue<DomainEvent>> afterEventEmittedEventWaitingQueue, DomainPolicy.SubscribePoint afterEventEmitted, boolean throwWhileForeachEvents, Consumer<DomainEvent> afterEventConsumed) {
         try {
             Queue<DomainEvent> domainEvents = afterEventEmittedEventWaitingQueue.get();
             while (!domainEvents.isEmpty()) {
                 DomainEvent domainEvent = domainEvents.poll();
                 @SuppressWarnings("unchecked")
                 Set<DomainPolicy<DomainEvent>> domainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.get(afterEventEmitted);
-                domainPolicies.forEach(domainPolicy -> executeIfNecessary(domainEvent, domainPolicy, true));
+                domainPolicies.forEach(domainPolicy -> executeIfNecessary(domainEvent, domainPolicy, throwWhileForeachEvents));
                 afterEventConsumed.accept(domainEvent);
             }
         } finally {
             afterEventEmittedEventWaitingQueue.remove();
         }
-    }
-
-    static void cleanEventQueue() {
-        BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.remove();
-        AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.remove();
     }
 
     private static <E extends DomainEvent> void executeIfNecessary(E event, DomainPolicy<E> eDomainPolicy, boolean throwException) {
@@ -84,6 +81,11 @@ public class EventBus {
 
     private static boolean isPolicySubscribeEvent(DomainPolicy<?> policy, DomainEvent event) {
         return policy.eventClass().isInstance(event);
+    }
+
+    static void cleanEventQueue() {
+        BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.remove();
+        AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.remove();
     }
 
     static void registerPolicy(DomainPolicy<?> policy) {

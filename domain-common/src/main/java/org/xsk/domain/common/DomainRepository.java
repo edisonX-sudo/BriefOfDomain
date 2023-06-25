@@ -33,7 +33,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
         throw new UnsupportedOperationException();
     }
 
-    protected abstract DomainException notFoundException();
+    protected abstract NotFoundEntityDomainException notFoundException();
 
     public void save(E entity) {
         refreshEntityTs(entity);
