@@ -11,10 +11,10 @@ import java.util.function.Consumer;
 
 @Slf4j
 public class EventBus {
-    static Consumer<DomainEvent> consumeEventNeedRecord;
     final static Map<DomainPolicy.SubscribePoint, Set<DomainPolicy<?>>> SUBSCRIBE_POINT_POLICY_MAP = new ConcurrentHashMap<>();
     final static ThreadLocal<Queue<DomainEvent>> BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
     final static ThreadLocal<Queue<DomainEvent>> AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
+    static Consumer<DomainEvent> consumeEventNeedRecord;
 
     public static <E extends DomainEvent> void fire(E event) {
         // : 2023/4/14 实现上根据订阅者DomainPolicy.subscribePoint()的值,
