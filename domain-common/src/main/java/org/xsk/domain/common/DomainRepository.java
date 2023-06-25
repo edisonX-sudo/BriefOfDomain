@@ -14,7 +14,11 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
         return entity;
     }
 
-    public abstract E find(I id);
+    public E find(I id) {
+        return findInternal(id);
+    }
+
+    protected abstract E findInternal(I id);
 
     public E findExclusiveNotNone(I id) {
         E entity = findExclusive(id);
@@ -30,6 +34,10 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
      * @return
      */
     public E findExclusive(I id) {
+        return findExclusiveInternal(id);
+    }
+
+    protected E findExclusiveInternal(I id) {
         throw new UnsupportedOperationException("this method need 2 be override");
     }
 
@@ -64,6 +72,10 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     public void delete(I id) {
+        deleteInternal(id);
+    }
+
+    protected void deleteInternal(I id) {
         throw new UnsupportedOperationException("this method need 2 be override");
     }
 

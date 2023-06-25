@@ -48,7 +48,7 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     @Override
-    public Account find(AccountId id) {
+    protected Account findInternal(AccountId id) {
         AccountPo byId = findPoById(id);
         if (byId == null)
             return null;
