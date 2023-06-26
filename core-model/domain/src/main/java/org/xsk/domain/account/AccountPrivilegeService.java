@@ -1,6 +1,7 @@
 package org.xsk.domain.account;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.xsk.domain.account.exception.OnlyMainAccountOperate;
 import org.xsk.domain.common.DomainService;
 
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @AllArgsConstructor
+@Service
 public class AccountPrivilegeService extends DomainService {
     AccountRepo accountRepo;
 

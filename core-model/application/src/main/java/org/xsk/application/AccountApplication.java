@@ -1,7 +1,9 @@
 package org.xsk.application;
 
+import org.springframework.stereotype.Service;
 import org.xsk.domain.account.*;
 
+@Service
 public class AccountApplication {
     AccountFactory accountFactory;
     AccountRepo accountRepo;

@@ -1,6 +1,7 @@
 package org.xsk.readmodel;
 
 import cn.hutool.core.bean.BeanUtil;
+import org.springframework.stereotype.Service;
 import org.xsk.infra.db.po.AccountPo;
 import org.xsk.infra.endpoint.dto.ListAccountDto;
 import org.xsk.infra.endpoint.query.ListAccountQuery;
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class AccountReadService implements IAccountReadService {
     AcctCommonReadService acctCommonReadService;
     @Override

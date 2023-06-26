@@ -14,10 +14,9 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.changyuan.feilun.infra</groupId>
+            <groupId>org.xsk</groupId>
             <artifactId>domain-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 

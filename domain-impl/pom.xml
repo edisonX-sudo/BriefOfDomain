@@ -13,13 +13,13 @@
     <dependencies>
         <dependency>
             <groupId>org.xsk</groupId>
-            <artifactId>open</artifactId>
+            <artifactId>sealed</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.xsk</groupId>
-            <artifactId>sealed</artifactId>
+            <artifactId>open</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
