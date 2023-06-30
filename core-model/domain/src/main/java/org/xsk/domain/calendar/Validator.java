@@ -9,7 +9,6 @@ class Validator {
             super(object);
         }
 
-
         @Override
         public void validSpecification() {
             throwIllegalStateException(object.code == null, "calendar rule code date cant be null");
@@ -21,7 +20,6 @@ class Validator {
         public NatureDaySpecificationValidator(NatureDay object) {
             super(object);
         }
-
 
         @Override
         public void validSpecification() {
