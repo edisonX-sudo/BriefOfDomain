@@ -5,7 +5,11 @@ import cn.hutool.core.collection.CollUtil;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
+public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> extends DomainAbility {
+
+    public DomainRepository() {
+        super(DomainRepository.class);
+    }
 
     public E findNotNone(I id) {
         E entity = find(id);
@@ -68,7 +72,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> {
     }
 
     protected boolean isNewEntity(Entity<I> entity) {
-        return entity.id() == null;
+        return entity.isNew();
     }
 
     public void delete(I id) {

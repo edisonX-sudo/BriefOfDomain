@@ -2,9 +2,10 @@ package org.xsk.application;
 
 import org.springframework.stereotype.Service;
 import org.xsk.domain.account.*;
+import org.xsk.domain.common.DomainApplication;
 
 @Service
-public class AccountApplication {
+public class AccountApplication extends DomainApplication {
     AccountFactory accountFactory;
     AccountRepo accountRepo;
     AccountPrivilegeService accountPrivilegeService;
