@@ -9,7 +9,7 @@ public class Contact extends ValueObject {
     public Contact(String phone, String email) {
         this.phone = phone;
         this.email = email;
-        new Validator.ContactSpecificationValidator().validSpecification(this);
+        new Validator.ContactSpecificationValidator(this).validSpecification();
     }
 
     public String phone() {

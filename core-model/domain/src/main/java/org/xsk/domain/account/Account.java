@@ -28,7 +28,7 @@ public class Account extends Entity<AccountId> {
         this.parentAccountId = parentAccountId;
         this.createAt = createAt;
         this.modifiedAt = modifiedAt;
-        new Validator.AccountSpecificationValidator().validSpecification(this);
+        new Validator.AccountSpecificationValidator(this).validSpecification();
     }
 
      Account(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
@@ -39,7 +39,7 @@ public class Account extends Entity<AccountId> {
         this.contact = contact;
         this.address = address;
         this.parentAccountId = parentAccountId;
-        new Validator.AccountSpecificationValidator().validSpecification(this);
+        new Validator.AccountSpecificationValidator(this).validSpecification();
     }
 
     Boolean isMainAccount() {
@@ -66,7 +66,7 @@ public class Account extends Entity<AccountId> {
             throw new AccountPasswordNotCorrect();
         }
         password = newPassword;
-        new Validator.AccountSpecificationValidator().validSpecification(this);
+        new Validator.AccountSpecificationValidator(this).validSpecification();
     }
 
     public void update(
@@ -79,7 +79,7 @@ public class Account extends Entity<AccountId> {
         this.contact = contact;
         this.address = address;
         this.parentAccountId = parentAccountId;
-        new Validator.AccountSpecificationValidator().validSpecification(this);
+        new Validator.AccountSpecificationValidator(this).validSpecification();
     }
 
     @Override

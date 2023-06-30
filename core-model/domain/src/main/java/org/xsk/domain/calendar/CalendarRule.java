@@ -10,14 +10,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CalendarRule extends Entity<CalendarRuleCode> {
-    private CalendarRuleCode code;
-    public Map<LocalDate, DaySubRule> daySubRules;
+    CalendarRuleCode code;
+    Map<LocalDate, DaySubRule> daySubRules;
     private boolean isNew;
 
     public CalendarRule(CalendarRuleCode code, Map<LocalDate, DaySubRule> daySubRules, boolean isNew) {
         this.code = code;
         this.daySubRules = daySubRules;
         this.isNew = isNew;
+        new Validator.CalendarRuleSpecificationValidator(this).validSpecification();
     }
 
     public Map<RuleAppliedDay, Boolean> produceDayRuleResult(NatureDay natureDayBegin, NatureDay natureDayEnd) {
@@ -54,8 +55,8 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
 
     public void update(Set<DaySubRule> daySubRules) {
         this.daySubRules = DaySubRule.assembleDateRuleMap(daySubRules);
+        new Validator.CalendarRuleSpecificationValidator(this).validSpecification();
     }
-
 
 
     @Override

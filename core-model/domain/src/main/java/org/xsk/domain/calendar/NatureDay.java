@@ -14,6 +14,7 @@ public class NatureDay extends ValueObject {
 
     public NatureDay(LocalDate date) {
         this.date = date;
+        new Validator.NatureDaySpecificationValidator(this).validSpecification();
     }
 
     Boolean isWorkDay() {

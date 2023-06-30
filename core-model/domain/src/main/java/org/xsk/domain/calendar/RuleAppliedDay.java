@@ -11,6 +11,7 @@ public class RuleAppliedDay extends ValueObject {
     public RuleAppliedDay(NatureDay natureDay, RuleAppliedDayType type) {
         this.natureDay = natureDay;
         this.type = type;
+        new Validator.RuleAppliedDaySpecificationValidator(this).validSpecification();
     }
 
     Boolean isWorkDay() {

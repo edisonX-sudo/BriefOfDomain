@@ -16,6 +16,7 @@ public class DaySubRule extends ValueObject {
         this.date = date;
         this.ruleType = ruleType;
         this.description = description;
+        new Validator.DaySubRuleSpecificationValidator(this).validSpecification();
     }
 
     static Map<LocalDate, DaySubRule> assembleDateRuleMap(Set<DaySubRule> daySubRules) {
