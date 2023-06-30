@@ -22,7 +22,7 @@ public class NatureDay extends ValueObject {
     }
 
 
-    static List<NatureDay> range(NatureDay natureDayBegin, NatureDay natureDayEnd) {
+    static List<NatureDay> assembleRangeDays(NatureDay natureDayBegin, NatureDay natureDayEnd) {
         ArrayList<NatureDay> res = new ArrayList<>();
         LocalDate itDate = natureDayBegin.date;
         res.add(new NatureDay(itDate));

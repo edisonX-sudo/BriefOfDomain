@@ -3,6 +3,9 @@ package org.xsk.domain.calendar;
 import org.xsk.domain.common.ValueObject;
 
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DaySubRule extends ValueObject {
     LocalDate date;
@@ -13,5 +16,15 @@ public class DaySubRule extends ValueObject {
         this.date = date;
         this.ruleType = ruleType;
         this.description = description;
+    }
+
+    static Map<LocalDate, DaySubRule> assembleDateRuleMap(Set<DaySubRule> daySubRules) {
+        return daySubRules.stream()
+                .collect(
+                        Collectors.toMap(
+                                daySubRule -> daySubRule.date,
+                                daySubRule -> daySubRule,
+                                (daySubRule, daySubRule2) -> daySubRule)
+                );
     }
 }

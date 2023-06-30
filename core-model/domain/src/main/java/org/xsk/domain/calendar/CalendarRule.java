@@ -33,7 +33,7 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
     }
 
     List<RuleAppliedDay> applyRule(NatureDay natureDayBegin, NatureDay natureDayEnd) {
-        List<NatureDay> rangeNatureDays = NatureDay.range(natureDayBegin, natureDayEnd);
+        List<NatureDay> rangeNatureDays = NatureDay.assembleRangeDays(natureDayBegin, natureDayEnd);
         return rangeNatureDays.stream().map(this::applyRule).collect(Collectors.toList());
     }
 
@@ -53,15 +53,10 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
     }
 
     public void update(Set<DaySubRule> daySubRules) {
-        this.daySubRules =
-                daySubRules.stream()
-                        .collect(
-                                Collectors.toMap(
-                                        daySubRule -> daySubRule.date,
-                                        daySubRule -> daySubRule,
-                                        (daySubRule, daySubRule2) -> daySubRule)
-                        );
+        this.daySubRules = DaySubRule.assembleDateRuleMap(daySubRules);
     }
+
+
 
     @Override
     protected Boolean isNew() {
