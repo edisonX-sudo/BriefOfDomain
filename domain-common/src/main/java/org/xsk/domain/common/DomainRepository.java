@@ -8,7 +8,6 @@ import java.util.Set;
 public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> extends DomainAbility {
 
     public DomainRepository() {
-        super(DomainRepository.class);
     }
 
     public E findNotNone(I id) {
@@ -50,6 +49,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     public void save(E entity) {
         refreshEntityTs(entity);
         saveInternal(entity);
+        refreshEntityAsNotNew(entity);
     }
 
     protected abstract void saveInternal(E entity);
@@ -57,6 +57,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     public void saveAll(Set<E> entities) {
         entities.forEach(this::refreshEntityTs);
         saveAllInternal(entities);
+        entities.forEach(this::refreshEntityAsNotNew);
     }
 
     protected void saveAllInternal(Set<E> entities) {
@@ -69,6 +70,10 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
         } else {
             entity.markAsModified();
         }
+    }
+
+    void refreshEntityAsNotNew(E entity){
+        entity.markAsNotNew();
     }
 
     protected boolean isNewEntity(Entity<I> entity) {

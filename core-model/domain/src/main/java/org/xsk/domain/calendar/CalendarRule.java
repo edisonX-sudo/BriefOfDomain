@@ -65,6 +65,11 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
     }
 
     @Override
+    protected void markAsNotNew() {
+        isNew = false;
+    }
+
+    @Override
     public CalendarRuleCode id() {
         return code;
     }

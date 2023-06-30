@@ -32,6 +32,10 @@ public abstract class Entity<T extends Id<?>> extends AggregateComponent {
     protected Boolean isNew() {
         return id() == null;
     }
+
+    protected void markAsNotNew() {
+
+    }
 //    boolean newEntity = false;//by default
 //    //invoke in factory maybe
 //    void markAsNew() {

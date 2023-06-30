@@ -3,7 +3,6 @@ package org.xsk.domain.common;
 public abstract class DomainPolicy<E extends DomainEvent> extends DomainAbility {
 
     public DomainPolicy() {
-        super(DomainPolicy.class);
         init();
     }
 
