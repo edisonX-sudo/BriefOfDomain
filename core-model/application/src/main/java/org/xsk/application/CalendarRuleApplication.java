@@ -3,7 +3,6 @@ package org.xsk.application;
 import org.xsk.domain.calendar.*;
 import org.xsk.domain.common.DomainApplication;
 
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +22,7 @@ public class CalendarRuleApplication extends DomainApplication {
         calendarRuleRepo.save(calendarRule);
     }
 
-    public Map<LocalDate, Boolean> produceDayRuleResult(CalendarRuleCode code, NatureDay natureDayBegin, NatureDay natureDayEnd) {
+    public Map<RuleAppliedDay, Boolean> produceDayRuleResult(CalendarRuleCode code, NatureDay natureDayBegin, NatureDay natureDayEnd) {
         CalendarRule calendarRule = calendarRuleRepo.findNotNone(code);
         return calendarRule.produceDayRuleResult(natureDayBegin, natureDayEnd);
     }

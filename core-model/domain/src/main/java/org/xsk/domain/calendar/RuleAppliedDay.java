@@ -2,6 +2,8 @@ package org.xsk.domain.calendar;
 
 import org.xsk.domain.common.ValueObject;
 
+import java.time.LocalDate;
+
 public class RuleAppliedDay extends ValueObject {
     NatureDay natureDay;
     RuleAppliedDayType type;
@@ -18,4 +20,9 @@ public class RuleAppliedDay extends ValueObject {
             return natureDay.isWorkDay();
         }
     }
+
+    public LocalDate date() {
+        return natureDay.date;
+    }
+
 }

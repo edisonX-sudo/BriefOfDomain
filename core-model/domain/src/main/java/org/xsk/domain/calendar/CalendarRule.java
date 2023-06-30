@@ -20,12 +20,12 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
         this.isNew = isNew;
     }
 
-    public Map<LocalDate, Boolean> produceDayRuleResult(NatureDay natureDayBegin, NatureDay natureDayEnd) {
+    public Map<RuleAppliedDay, Boolean> produceDayRuleResult(NatureDay natureDayBegin, NatureDay natureDayEnd) {
         List<RuleAppliedDay> ruleAppliedDays = applyRule(natureDayBegin, natureDayEnd);
         return ruleAppliedDays.stream()
                 .collect(
                         Collectors.toMap(
-                                ruleAppliedDay -> ruleAppliedDay.natureDay.date,
+                                ruleAppliedDay -> ruleAppliedDay,
                                 RuleAppliedDay::isWorkDay,
                                 (aBoolean, aBoolean2) -> aBoolean
                         )
