@@ -20,7 +20,19 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
         this.isNew = isNew;
     }
 
-    public List<RuleAppliedDay> applyRule(NatureDay natureDayBegin, NatureDay natureDayEnd) {
+    public Map<LocalDate, Boolean> produceDayRuleResult(NatureDay natureDayBegin, NatureDay natureDayEnd) {
+        List<RuleAppliedDay> ruleAppliedDays = applyRule(natureDayBegin, natureDayEnd);
+        return ruleAppliedDays.stream()
+                .collect(
+                        Collectors.toMap(
+                                ruleAppliedDay -> ruleAppliedDay.natureDay.date,
+                                RuleAppliedDay::isWorkDay,
+                                (aBoolean, aBoolean2) -> aBoolean
+                        )
+                );
+    }
+
+    List<RuleAppliedDay> applyRule(NatureDay natureDayBegin, NatureDay natureDayEnd) {
         List<NatureDay> rangeNatureDays = NatureDay.range(natureDayBegin, natureDayEnd);
         return rangeNatureDays.stream().map(this::applyRule).collect(Collectors.toList());
     }
