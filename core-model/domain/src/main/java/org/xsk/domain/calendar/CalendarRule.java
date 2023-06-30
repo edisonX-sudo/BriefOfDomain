@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class CalendarRule extends Entity<CalendarRuleCode> {
     CalendarRuleCode code;
     Map<LocalDate, DaySubRule> daySubRules;
-    private boolean isNew;
+    private final boolean isNew;
 
     public CalendarRule(CalendarRuleCode code, Map<LocalDate, DaySubRule> daySubRules, boolean isNew) {
         this.code = code;
