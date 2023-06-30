@@ -15,6 +15,7 @@ import org.xsk.domain.common.DomainEvent;
 import org.xsk.domain.common.FrameworkIntegration;
 
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -64,6 +65,13 @@ public class SpringIntegration extends FrameworkIntegration {
                         return;
                     }
                     String simpleClassName = buildSimpleClassName(beanClassName);
+                    if (registry.isBeanNameInUse(simpleClassName)) {
+                        BeanDefinition beanDefinition = registry.getBeanDefinition(simpleClassName);
+                        if (!Objects.equals(beanClassName, beanDefinition.getBeanClassName())) {
+                            throw new IllegalStateException("bean name in used, " + simpleClassName);
+                        }
+                        return;
+                    }
                     registry.registerBeanDefinition(simpleClassName, definition);
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
