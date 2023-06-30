@@ -41,7 +41,14 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
     }
 
     public void update(Set<DaySubRule> daySubRules) {
-        this.daySubRules = CalendarRuleFactory.assembleDaySubRulesMap(daySubRules);
+        this.daySubRules =
+                daySubRules.stream()
+                        .collect(
+                                Collectors.toMap(
+                                        daySubRule -> daySubRule.date,
+                                        daySubRule -> daySubRule,
+                                        (daySubRule, daySubRule2) -> daySubRule)
+                        );
     }
 
     @Override

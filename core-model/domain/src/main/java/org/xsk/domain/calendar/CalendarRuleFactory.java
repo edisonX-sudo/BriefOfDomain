@@ -10,17 +10,18 @@ import java.util.stream.Collectors;
 public abstract class CalendarRuleFactory extends DomainFactory {
 
     public CalendarRule build(CalendarRuleCode code, Set<DaySubRule> daySubRules) {
-        return new CalendarRule(code,
-                assembleDaySubRulesMap(daySubRules), true);
+        return new CalendarRule(code, assembleDaySubRulesMap(daySubRules), true);
     }
 
     static Map<LocalDate, DaySubRule> assembleDaySubRulesMap(Set<DaySubRule> daySubRules) {
-        return daySubRules.stream()
-                .collect(Collectors.toMap(
-                        daySubRule -> daySubRule.date,
-                        daySubRule -> daySubRule,
-                        (daySubRule, daySubRule2) -> daySubRule
-                ));
+        return daySubRules
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                daySubRule -> daySubRule.date,
+                                daySubRule -> daySubRule,
+                                (daySubRule, daySubRule2) -> daySubRule)
+                );
     }
 
 }
