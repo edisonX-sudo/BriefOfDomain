@@ -30,7 +30,7 @@ public class Account extends Entity<AccountId> {
         this.parentAccountId = parentAccountId;
         this.createAt = createAt;
         this.modifiedAt = modifiedAt;
-        new Validator.AccountSpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
      Account(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
