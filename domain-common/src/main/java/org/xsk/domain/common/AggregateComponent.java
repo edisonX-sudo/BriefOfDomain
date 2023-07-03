@@ -38,16 +38,16 @@ public abstract class AggregateComponent {
         validSpecification(null);
     }
 
-    protected void validSpecification(DomainSpecificationValidator<? extends AggregateComponent> specificationValidator) {
+    protected void validSpecification(DomainSpecificationValidator<? extends AggregateComponent> additionalValidator) {
         DomainSpecificationValidator<?> domainSpecificationValidator = specificationValidator();
         if (domainSpecificationValidator == null) {
             throw new UnsupportedOperationException("specificationValidator() suppose 2 be implemented");
         }
         domainSpecificationValidator.validSpecification();
-        if (specificationValidator == null) {
+        if (additionalValidator == null) {
             return;
         }
-        specificationValidator.validSpecification();
+        additionalValidator.validSpecification();
     }
 
 }
