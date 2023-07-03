@@ -29,16 +29,25 @@ public abstract class AggregateComponent {
 
     /**
      * 校验器, 校验字段内容合法性
+     *
      * @return
      */
     protected abstract DomainSpecificationValidator<? extends AggregateComponent> specificationValidator();
 
     protected void validSpecification() {
+        validSpecification(null);
+    }
+
+    protected void validSpecification(DomainSpecificationValidator<? extends AggregateComponent> specificationValidator) {
         DomainSpecificationValidator<?> domainSpecificationValidator = specificationValidator();
         if (domainSpecificationValidator == null) {
             throw new UnsupportedOperationException("specificationValidator() suppose 2 be implemented");
         }
         domainSpecificationValidator.validSpecification();
+        if (specificationValidator == null) {
+            return;
+        }
+        specificationValidator.validSpecification();
     }
 
 }
