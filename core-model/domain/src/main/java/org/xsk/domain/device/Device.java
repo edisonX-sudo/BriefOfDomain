@@ -1,5 +1,7 @@
 package org.xsk.domain.device;
 
+import org.xsk.domain.common.AggregateComponent;
+import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
 import org.xsk.domain.common.EventBus;
 import org.xsk.domain.device.event.DeviceBecameOffline;
@@ -23,5 +25,10 @@ public class Device extends Entity<DeviceId> {
     @Override
     public DeviceId id() {
         return id;
+    }
+
+    @Override
+    protected DomainSpecificationValidator<? extends AggregateComponent> specificationValidator() {
+        return null;
     }
 }

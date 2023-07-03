@@ -1,6 +1,8 @@
 package org.xsk.domain.calendar;
 
 import org.xsk.domain.calendar.exception.NoCompatibleRuleTypeException;
+import org.xsk.domain.common.AggregateComponent;
+import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
 
 import java.time.LocalDate;
@@ -18,7 +20,7 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
         this.code = code;
         this.daySubRules = daySubRules;
         this.isNew = isNew;
-        new Validator.CalendarRuleSpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
     public Map<RuleAppliedDay, Boolean> produceDayRuleResult(NatureDay natureDayBegin, NatureDay natureDayEnd) {
@@ -55,7 +57,7 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
 
     public void update(Set<DaySubRule> daySubRules) {
         this.daySubRules = DaySubRule.assembleDateRuleMap(daySubRules);
-        new Validator.CalendarRuleSpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
 
@@ -74,5 +76,8 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
         return code;
     }
 
-
+    @Override
+    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
+        return new Validator.CalendarRuleSpecificationValidator(this);
+    }
 }

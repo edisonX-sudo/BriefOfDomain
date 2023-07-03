@@ -8,13 +8,13 @@ public abstract class DomainSpecificationValidator<T> {
         this.object = object;
     }
 
-    public abstract void validSpecification();
+    protected abstract void validSpecification();
 
-    protected void throwIllegalStateException(String message) {
+    protected static void throwIllegalStateException(String message) {
         throw new IllegalStateDomainException(message);
     }
 
-    protected void throwIllegalStateException(boolean condition, String message) {
+    protected static void throwIllegalStateException(boolean condition, String message) {
         if (condition) {
             throwIllegalStateException(message);
         }

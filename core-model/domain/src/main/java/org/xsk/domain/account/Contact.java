@@ -1,5 +1,7 @@
 package org.xsk.domain.account;
 
+import org.xsk.domain.common.AggregateComponent;
+import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
 public class Contact extends ValueObject {
@@ -9,7 +11,7 @@ public class Contact extends ValueObject {
     public Contact(String phone, String email) {
         this.phone = phone;
         this.email = email;
-        new Validator.ContactSpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
     public String phone() {
@@ -18,5 +20,10 @@ public class Contact extends ValueObject {
 
     public String email() {
         return email;
+    }
+
+    @Override
+    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
+        return new Validator.ContactSpecificationValidator(this);
     }
 }

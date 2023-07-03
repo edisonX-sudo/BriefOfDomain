@@ -10,7 +10,7 @@ class Validator {
         }
 
         @Override
-        public void validSpecification() {
+        protected void validSpecification() {
             throwIllegalStateException(object.code == null, "calendar rule code date cant be null");
             throwIllegalStateException(object.daySubRules == null, "calendar rule day rule cant be null");
         }
@@ -22,7 +22,7 @@ class Validator {
         }
 
         @Override
-        public void validSpecification() {
+        protected void validSpecification() {
             throwIllegalStateException(object.date == null, "nature day date cant be null");
         }
     }
@@ -34,7 +34,7 @@ class Validator {
         }
 
         @Override
-        public void validSpecification() {
+        protected void validSpecification() {
             throwIllegalStateException(object.natureDay == null, "rule applied day natureDay cant be null");
             throwIllegalStateException(object.type == null, "rule applied day type cant be null");
         }
@@ -46,7 +46,7 @@ class Validator {
         }
 
         @Override
-        public void validSpecification() {
+        protected void validSpecification() {
             throwIllegalStateException(object.date == null, "day sub rule cant be null");
             throwIllegalStateException(object.ruleType == null, "day rule type cant be null");
             throwIllegalStateException(StrUtil.length(object.description) > 50, "day rule description length over limit");
@@ -59,7 +59,7 @@ class Validator {
         }
 
         @Override
-        public void validSpecification() {
+        protected void validSpecification() {
             throwIllegalStateException(StrUtil.isEmpty(object.value()), "rule code cant be empty");
         }
     }

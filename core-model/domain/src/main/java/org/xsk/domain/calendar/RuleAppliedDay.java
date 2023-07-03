@@ -1,5 +1,7 @@
 package org.xsk.domain.calendar;
 
+import org.xsk.domain.common.AggregateComponent;
+import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
 import java.time.LocalDate;
@@ -11,7 +13,7 @@ public class RuleAppliedDay extends ValueObject {
     public RuleAppliedDay(NatureDay natureDay, RuleAppliedDayType type) {
         this.natureDay = natureDay;
         this.type = type;
-        new Validator.RuleAppliedDaySpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
     Boolean isWorkDay() {
@@ -26,4 +28,8 @@ public class RuleAppliedDay extends ValueObject {
         return natureDay.date;
     }
 
+    @Override
+    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
+        return new Validator.RuleAppliedDaySpecificationValidator(this);
+    }
 }

@@ -1,5 +1,6 @@
 package org.xsk.domain.account;
 
+import cn.hutool.core.util.StrUtil;
 import org.xsk.domain.common.DomainSpecificationValidator;
 
 class Validator {
@@ -11,8 +12,8 @@ class Validator {
 
 
         @Override
-        public void validSpecification() {
-            throwIllegalStateException(object.name.length() > 50, "account name length cant be greater than 50");
+        protected void validSpecification() {
+            throwIllegalStateException(StrUtil.length(object.name) > 50, "account name length cant be greater than 50");
         }
     }
 
@@ -23,9 +24,9 @@ class Validator {
         }
 
         @Override
-        public void validSpecification() {
-            throwIllegalStateException(object.email.length() > 50, "contact email length cant be greater than 50");
-            throwIllegalStateException(object.phone.length() > 50, "contact phone length cant be greater than 50");
+        protected void validSpecification() {
+            throwIllegalStateException(StrUtil.length(object.email) > 50, "contact email length cant be greater than 50");
+            throwIllegalStateException(StrUtil.length(object.phone) > 50, "contact phone length cant be greater than 50");
         }
     }
 }

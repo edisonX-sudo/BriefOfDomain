@@ -1,6 +1,6 @@
 package org.xsk.domain.common;
 
-public class Id<T> extends ValueObject{
+public abstract class Id<T> extends ValueObject{
     T id;
 
     public Id(T id) {

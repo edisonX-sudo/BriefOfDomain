@@ -1,5 +1,7 @@
 package org.xsk.domain.calendar;
 
+import org.xsk.domain.common.AggregateComponent;
+import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
 import java.time.DayOfWeek;
@@ -14,7 +16,7 @@ public class NatureDay extends ValueObject {
 
     public NatureDay(LocalDate date) {
         this.date = date;
-        new Validator.NatureDaySpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
     Boolean isWorkDay() {
@@ -32,5 +34,10 @@ public class NatureDay extends ValueObject {
             res.add(new NatureDay(itDate));
         }
         return res;
+    }
+
+    @Override
+    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
+        return new Validator.NatureDaySpecificationValidator(this);
     }
 }

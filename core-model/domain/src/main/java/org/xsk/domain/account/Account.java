@@ -3,6 +3,8 @@ package org.xsk.domain.account;
 import org.xsk.domain.account.event.AccountCreated;
 import org.xsk.domain.account.exception.AccountPasswordNotCorrect;
 import org.xsk.domain.account.exception.OnlyMainAccountOperate;
+import org.xsk.domain.common.AggregateComponent;
+import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
 import org.xsk.domain.common.EventBus;
 
@@ -39,7 +41,7 @@ public class Account extends Entity<AccountId> {
         this.contact = contact;
         this.address = address;
         this.parentAccountId = parentAccountId;
-        new Validator.AccountSpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
     Boolean isMainAccount() {
@@ -66,7 +68,7 @@ public class Account extends Entity<AccountId> {
             throw new AccountPasswordNotCorrect();
         }
         password = newPassword;
-        new Validator.AccountSpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
     public void update(
@@ -79,7 +81,7 @@ public class Account extends Entity<AccountId> {
         this.contact = contact;
         this.address = address;
         this.parentAccountId = parentAccountId;
-        new Validator.AccountSpecificationValidator(this).validSpecification();
+        validSpecification();
     }
 
     @Override
@@ -95,5 +97,10 @@ public class Account extends Entity<AccountId> {
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
+    }
+
+    @Override
+    protected DomainSpecificationValidator<? extends AggregateComponent> specificationValidator() {
+        return new Validator.AccountSpecificationValidator(this);
     }
 }

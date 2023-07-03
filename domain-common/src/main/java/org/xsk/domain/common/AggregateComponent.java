@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 聚合内的组件对象
  */
-public class AggregateComponent {
+public abstract class AggregateComponent {
     /**
      * 用例: 若实体内值对象存储在不同的表,那么在对对象进行restore时可以把值对象对应表的id存入,
      * 方便后面进行实体更新的时候,可以用此找到值对象的表的id来进行更新操作
@@ -25,6 +25,16 @@ public class AggregateComponent {
 
     protected void mergeMetaData(AggregateComponent component) {
         metaData.putAll(component.metaData);
+    }
+
+    protected abstract DomainSpecificationValidator<? extends AggregateComponent> specificationValidator();
+
+    protected void validSpecification() {
+        DomainSpecificationValidator<?> domainSpecificationValidator = specificationValidator();
+        if (domainSpecificationValidator == null) {
+            throw new UnsupportedOperationException("specificationValidator() suppose 2 be implemented");
+        }
+        domainSpecificationValidator.validSpecification();
     }
 
 }
