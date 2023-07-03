@@ -27,6 +27,10 @@ public abstract class AggregateComponent {
         metaData.putAll(component.metaData);
     }
 
+    /**
+     * 校验器, 校验字段内容合法性
+     * @return
+     */
     protected abstract DomainSpecificationValidator<? extends AggregateComponent> specificationValidator();
 
     protected void validSpecification() {
