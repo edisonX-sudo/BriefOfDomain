@@ -7,9 +7,11 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.xsk.domain.common.DomainAbility;
 import org.xsk.domain.common.DomainEvent;
 import org.xsk.domain.common.FrameworkIntegration;
@@ -17,13 +19,31 @@ import org.xsk.domain.common.FrameworkIntegration;
 import java.lang.reflect.Modifier;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public class SpringIntegration extends FrameworkIntegration {
+    private final ApplicationContext applicationContext;
+
+    public SpringIntegration(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    protected <T> T tx(Callable<T> callable) {
+        return this.applicationContext.getBean(TransactionTemplate.class).execute(status -> {
+            try {
+                return callable.call();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     /**
      * 事务提交前/后触发事件总线事件(在程序中手动注册为@Bean)
      */
-    public static class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization {
+    public class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization {
 
         @Override
         public void beforeCommit(boolean readOnly) {
@@ -40,7 +60,7 @@ public class SpringIntegration extends FrameworkIntegration {
         }
     }
 
-    public static class DomainRegistryItemInitialization implements BeanDefinitionRegistryPostProcessor {
+    public class DomainRegistryItemInitialization implements BeanDefinitionRegistryPostProcessor {
         private String basePackage;
 
         public DomainRegistryItemInitialization(String basePackage) {
@@ -93,7 +113,7 @@ public class SpringIntegration extends FrameworkIntegration {
 
     }
 
-    public static class RecordEventConsumer implements InitializingBean {
+    public class RecordEventConsumer implements InitializingBean {
 
         private Consumer<DomainEvent> consumer;
 
@@ -108,4 +128,6 @@ public class SpringIntegration extends FrameworkIntegration {
             consumeEventNeedRecord(consumer);
         }
     }
+
+
 }
