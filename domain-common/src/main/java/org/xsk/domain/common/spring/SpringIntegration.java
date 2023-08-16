@@ -35,7 +35,8 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
     @Override
     protected <T> T tx(Callable<T> callable) {
         MainProcessCompletionSubscriberPointTrigger trigger = applicationContext.getBean(MainProcessCompletionSubscriberPointTrigger.class);
-        return applicationContext.getBean(TransactionTemplate.class).execute(status -> {
+        TransactionTemplate transactionTemplate = applicationContext.getBean(TransactionTemplate.class);
+        return transactionTemplate.execute(status -> {
             try {
                 TransactionSynchronizationManager.registerSynchronization(trigger);
                 return callable.call();
