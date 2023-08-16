@@ -80,10 +80,13 @@ public class AccountRepoImpl extends AccountRepo {
 
     private void insertPo(AccountPo accountPo) {
         // TODO: 2023/4/14 sql insert
+        System.out.println(accountPo);
+        accountPo.setId(1L);
     }
 
     private void updatePo(AccountPo accountPo) {
         // TODO: 2023/4/14 sql update
+        System.out.println(accountPo);
     }
 
     @Override

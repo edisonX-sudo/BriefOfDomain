@@ -2,10 +2,7 @@ package org.xsk.website;
 
 import cn.hutool.core.map.BiMap;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xsk.application.AccountApplication;
 import org.xsk.domain.account.AccountId;
 import org.xsk.domain.account.AccountStatus;
@@ -35,7 +32,7 @@ public class AccountController {
 
     //cmd below
     @PostMapping
-    public long createAccount(CreateAccountCmd cmd) {
+    public long createAccount(@RequestBody CreateAccountCmd cmd) {
         AccountId accountId = accountApplication.create(
                 ACCOUNT_STATUS_2_FILED_MAP.getInverse().get(cmd.getStatus()),
                 cmd.getName(),
@@ -49,7 +46,7 @@ public class AccountController {
     }
 
     @PostMapping("subaccount")
-    public long createSubAccount(CreateSubAccountCmd cmd) {
+    public long createSubAccount(@RequestBody CreateSubAccountCmd cmd) {
         AccountId accountId = accountApplication.createdSubAccount(
                 new AccountId(cmd.getAccountId()),
                 cmd.getName(),

@@ -67,12 +67,11 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     void refreshEntityTs(E entity) {
         if (isNewEntity(entity)) {
             entity.markAsCreate();
-        } else {
-            entity.markAsModified();
         }
+        entity.markAsModified();
     }
 
-    void refreshEntityAsNotNew(E entity){
+    void refreshEntityAsNotNew(E entity) {
         entity.markAsNotNew();
     }
 

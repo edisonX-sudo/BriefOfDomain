@@ -11,18 +11,24 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.xsk.domain.common.DomainAbility;
 import org.xsk.domain.common.DomainEvent;
 import org.xsk.domain.common.FrameworkIntegration;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Modifier;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
-public class SpringIntegration extends FrameworkIntegration {
+public class SpringIntegration extends FrameworkIntegration implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
 
     public SpringIntegration(ApplicationContext applicationContext) {
@@ -31,13 +37,27 @@ public class SpringIntegration extends FrameworkIntegration {
 
     @Override
     protected <T> T tx(Callable<T> callable) {
-        return this.applicationContext.getBean(TransactionTemplate.class).execute(status -> {
+        MainProcessCompletionSubscriberPointTrigger trigger = applicationContext.getBean(MainProcessCompletionSubscriberPointTrigger.class);
+        return applicationContext.getBean(TransactionTemplate.class).execute(status -> {
             try {
+                TransactionSynchronizationManager.registerSynchronization(trigger);
                 return callable.call();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new ResourceCleanInterceptor());
+    }
+
+    public class ResourceCleanInterceptor extends HandlerInterceptorAdapter {
+        @Override
+        public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+            cleanEventQueue();
+        }
     }
 
     /**

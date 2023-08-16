@@ -2,10 +2,7 @@ package org.xsk.domain.common;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayDeque;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -20,10 +17,10 @@ public class EventBus {
         // : 2023/4/14 实现上根据订阅者DomainPolicy.subscribePoint()的值,
         //  决定事务前(false)投递给哪些订阅者,事务后(true)投递给哪些订阅者,还是马上异步执行
         @SuppressWarnings("unchecked")
-        Set<DomainPolicy<E>> asyncDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.get(DomainPolicy.SubscribePoint.ASYNC_IMMEDIATELY);
+        Set<DomainPolicy<E>> asyncDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(DomainPolicy.SubscribePoint.ASYNC_IMMEDIATELY, new HashSet<>());
         asyncDomainPolicies.parallelStream().forEach(eDomainPolicy -> executeIfSubscribe(eDomainPolicy, event, false));
         @SuppressWarnings("unchecked")
-        Set<DomainPolicy<E>> sycDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.get(DomainPolicy.SubscribePoint.SYNC_IMMEDIATELY);
+        Set<DomainPolicy<E>> sycDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(DomainPolicy.SubscribePoint.SYNC_IMMEDIATELY, new HashSet<>());
         sycDomainPolicies.forEach(eDomainPolicy -> executeIfSubscribe(eDomainPolicy, event, true));
         // : 2023/6/21 add event 2 BEFORE_EVENT_EMITTED,AFTER_EVENT_EMITTED policy wait list
         BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.get().add(event);
@@ -57,7 +54,7 @@ public class EventBus {
             while (!domainEvents.isEmpty()) {
                 DomainEvent domainEvent = domainEvents.poll();
                 @SuppressWarnings("unchecked")
-                Set<DomainPolicy<DomainEvent>> domainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.get(afterEventEmitted);
+                Set<DomainPolicy<DomainEvent>> domainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(afterEventEmitted,new HashSet<>());
                 domainPolicies.forEach(domainPolicy -> executeIfSubscribe(domainPolicy, domainEvent, throwWhileForeachEvents));
                 afterEventConsumed.accept(domainEvent);
             }
