@@ -1,22 +1,10 @@
 package org.xsk.domain.common;
 
-public abstract class DomainSpecificationValidator<T> {
+import java.util.function.BiConsumer;
 
-    protected final T object;
 
-    public DomainSpecificationValidator(T object) {
-        this.object = object;
-    }
+public interface DomainSpecificationValidator {
 
-    protected abstract void validSpecification();
+    void validSpecification(BiConsumer<Boolean, String> throwIllegalStateException);
 
-    protected static void throwIllegalStateException(String message) {
-        throw new IllegalStateDomainException(message);
-    }
-
-    protected static void throwIllegalStateException(boolean condition, String message) {
-        if (condition) {
-            throwIllegalStateException(message);
-        }
-    }
 }

@@ -1,6 +1,5 @@
 package org.xsk.domain.account;
 
-import org.xsk.domain.common.AggregateComponent;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Id;
 
@@ -10,7 +9,7 @@ public class AccountId extends Id<Long> {
     }
 
     @Override
-    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
+    protected DomainSpecificationValidator specificationValidator() {
         return null;
     }
 }

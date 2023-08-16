@@ -1,6 +1,5 @@
 package org.xsk.domain.calendar;
 
-import org.xsk.domain.common.AggregateComponent;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
@@ -29,7 +28,11 @@ public class RuleAppliedDay extends ValueObject {
     }
 
     @Override
-    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
-        return new Validator.RuleAppliedDaySpecificationValidator(this);
+    protected DomainSpecificationValidator specificationValidator() {
+        return (throwIllegalStateException) -> {
+            throwIllegalStateException.accept(this.natureDay == null, "rule applied day natureDay cant be null");
+            throwIllegalStateException.accept(this.type == null, "rule applied day type cant be null");
+        };
     }
+
 }

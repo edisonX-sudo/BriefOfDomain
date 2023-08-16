@@ -1,7 +1,6 @@
 package org.xsk.domain.account;
 
 import cn.hutool.core.util.StrUtil;
-import org.xsk.domain.common.AggregateComponent;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
@@ -31,17 +30,14 @@ public class PhysicalAddress extends ValueObject {
     }
 
     @Override
-    protected DomainSpecificationValidator<? extends AggregateComponent> specificationValidator() {
-        return new DomainSpecificationValidator<PhysicalAddress>(this) {
-            @Override
-            protected void validSpecification() {
-                throwIllegalStateException(StrUtil.isEmpty(country), "physical address country cant not be empty");
-                throwIllegalStateException(StrUtil.length(country) > 50, "physical address country content over limit");
-                throwIllegalStateException(StrUtil.isEmpty(city), "physical address city cant not be empty");
-                throwIllegalStateException(StrUtil.length(city) > 50, "physical address city content over limit");
-                throwIllegalStateException(StrUtil.isEmpty(street), "physical address street cant not be empty");
-                throwIllegalStateException(StrUtil.length(street) > 50, "physical address street content over limit");
-            }
+    protected DomainSpecificationValidator specificationValidator() {
+        return throwIllegalStateException -> {
+            throwIllegalStateException.accept(StrUtil.isEmpty(country), "physical address country cant not be empty");
+            throwIllegalStateException.accept(StrUtil.length(country) > 50, "physical address country content over limit");
+            throwIllegalStateException.accept(StrUtil.isEmpty(city), "physical address city cant not be empty");
+            throwIllegalStateException.accept(StrUtil.length(city) > 50, "physical address city content over limit");
+            throwIllegalStateException.accept(StrUtil.isEmpty(street), "physical address street cant not be empty");
+            throwIllegalStateException.accept(StrUtil.length(street) > 50, "physical address street content over limit");
         };
     }
 }

@@ -1,7 +1,6 @@
 package org.xsk.domain.calendar;
 
 import org.xsk.domain.calendar.exception.NoCompatibleRuleTypeException;
-import org.xsk.domain.common.AggregateComponent;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
 
@@ -77,7 +76,10 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
     }
 
     @Override
-    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
-        return new Validator.CalendarRuleSpecificationValidator(this);
+    protected DomainSpecificationValidator specificationValidator() {
+        return (DomainSpecificationValidator) throwIllegalStateException -> {
+            throwIllegalStateException.accept(this.code == null, "calendar rule code date cant be null");
+            throwIllegalStateException.accept(this.daySubRules == null, "calendar rule day rule cant be null");
+        };
     }
 }

@@ -1,6 +1,5 @@
 package org.xsk.domain.device;
 
-import org.xsk.domain.common.AggregateComponent;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
 import org.xsk.domain.common.EventBus;
@@ -28,7 +27,7 @@ public class Device extends Entity<DeviceId> {
     }
 
     @Override
-    protected DomainSpecificationValidator<? extends AggregateComponent> specificationValidator() {
+    protected DomainSpecificationValidator specificationValidator() {
         return null;
     }
 }

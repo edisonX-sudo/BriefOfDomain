@@ -2,6 +2,7 @@ package org.xsk.domain.common;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
 /**
  * 聚合内的组件对象
@@ -32,22 +33,27 @@ public abstract class AggregateComponent {
      *
      * @return
      */
-    protected abstract DomainSpecificationValidator<? extends AggregateComponent> specificationValidator();
+    protected abstract DomainSpecificationValidator specificationValidator();
 
     protected void validSpecification() {
         validSpecification(null);
     }
 
-    protected void validSpecification(DomainSpecificationValidator<? extends AggregateComponent> additionalValidator) {
-        DomainSpecificationValidator<?> domainSpecificationValidator = specificationValidator();
+    protected void validSpecification(DomainSpecificationValidator additionalValidator) {
+        DomainSpecificationValidator domainSpecificationValidator = specificationValidator();
         if (domainSpecificationValidator == null) {
             throw new UnsupportedOperationException("specificationValidator() suppose 2 be implemented");
         }
-        domainSpecificationValidator.validSpecification();
+        BiConsumer<Boolean, String> throwIllegalStateException = (condition, msg) -> {
+            if (condition) {
+                throw new IllegalStateDomainException(msg);
+            }
+        };
+        domainSpecificationValidator.validSpecification(throwIllegalStateException);
         if (additionalValidator == null) {
             return;
         }
-        additionalValidator.validSpecification();
+        additionalValidator.validSpecification(throwIllegalStateException);
     }
 
 }

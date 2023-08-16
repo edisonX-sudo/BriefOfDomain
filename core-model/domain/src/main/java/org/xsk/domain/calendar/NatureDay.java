@@ -1,6 +1,5 @@
 package org.xsk.domain.calendar;
 
-import org.xsk.domain.common.AggregateComponent;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
@@ -37,7 +36,9 @@ public class NatureDay extends ValueObject {
     }
 
     @Override
-    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
-        return new Validator.NatureDaySpecificationValidator(this);
+    protected DomainSpecificationValidator specificationValidator() {
+        return (throwIllegalStateException) -> {
+            throwIllegalStateException.accept(this.date == null, "nature day date cant be null");
+        };
     }
 }

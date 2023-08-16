@@ -1,6 +1,6 @@
 package org.xsk.domain.calendar;
 
-import org.xsk.domain.common.AggregateComponent;
+import cn.hutool.core.util.StrUtil;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
@@ -32,7 +32,11 @@ public class DaySubRule extends ValueObject {
     }
 
     @Override
-    protected DomainSpecificationValidator<? extends AggregateComponent>  specificationValidator() {
-        return new Validator.DaySubRuleSpecificationValidator(this);
+    protected DomainSpecificationValidator specificationValidator() {
+        return throwIllegalStateException -> {
+            throwIllegalStateException.accept(this.date == null, "day sub rule cant be null");
+            throwIllegalStateException.accept(this.ruleType == null, "day rule type cant be null");
+            throwIllegalStateException.accept(StrUtil.length(this.description) > 50, "day rule description length over limit");
+        };
     }
 }
