@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 public class EventBus {
+    private final static Set<DomainPolicy<?>> EMPTY_SET = Collections.emptySet();
     final static Map<DomainPolicy.SubscribePoint, Set<DomainPolicy<?>>> SUBSCRIBE_POINT_POLICY_MAP = new ConcurrentHashMap<>();
     final static ThreadLocal<Queue<DomainEvent>> BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
     final static ThreadLocal<Queue<DomainEvent>> AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
@@ -17,10 +18,10 @@ public class EventBus {
         // : 2023/4/14 实现上根据订阅者DomainPolicy.subscribePoint()的值,
         //  决定事务前(false)投递给哪些订阅者,事务后(true)投递给哪些订阅者,还是马上异步执行
         @SuppressWarnings("unchecked")
-        Set<DomainPolicy<E>> asyncDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(DomainPolicy.SubscribePoint.ASYNC_IMMEDIATELY, new HashSet<>());
+        Set<DomainPolicy<E>> asyncDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(DomainPolicy.SubscribePoint.ASYNC_IMMEDIATELY, EMPTY_SET);
         asyncDomainPolicies.parallelStream().forEach(eDomainPolicy -> executeIfSubscribe(eDomainPolicy, event, false));
         @SuppressWarnings("unchecked")
-        Set<DomainPolicy<E>> sycDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(DomainPolicy.SubscribePoint.SYNC_IMMEDIATELY, new HashSet<>());
+        Set<DomainPolicy<E>> sycDomainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(DomainPolicy.SubscribePoint.SYNC_IMMEDIATELY, EMPTY_SET);
         sycDomainPolicies.forEach(eDomainPolicy -> executeIfSubscribe(eDomainPolicy, event, true));
         // : 2023/6/21 add event 2 BEFORE_EVENT_EMITTED,AFTER_EVENT_EMITTED policy wait list
         BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE.get().add(event);
@@ -54,7 +55,7 @@ public class EventBus {
             while (!domainEvents.isEmpty()) {
                 DomainEvent domainEvent = domainEvents.poll();
                 @SuppressWarnings("unchecked")
-                Set<DomainPolicy<DomainEvent>> domainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(afterEventEmitted,new HashSet<>());
+                Set<DomainPolicy<DomainEvent>> domainPolicies = (Set) SUBSCRIBE_POINT_POLICY_MAP.getOrDefault(afterEventEmitted, EMPTY_SET);
                 domainPolicies.forEach(domainPolicy -> executeIfSubscribe(domainPolicy, domainEvent, throwWhileForeachEvents));
                 afterEventConsumed.accept(domainEvent);
             }
