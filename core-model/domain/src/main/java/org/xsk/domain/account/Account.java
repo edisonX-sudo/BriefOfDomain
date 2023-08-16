@@ -1,5 +1,6 @@
 package org.xsk.domain.account;
 
+import cn.hutool.core.util.StrUtil;
 import org.xsk.domain.account.event.AccountCreated;
 import org.xsk.domain.account.exception.AccountPasswordNotCorrect;
 import org.xsk.domain.account.exception.OnlyMainAccountOperate;
@@ -101,6 +102,12 @@ public class Account extends Entity<AccountId> {
 
     @Override
     protected DomainSpecificationValidator<? extends AggregateComponent> specificationValidator() {
-        return new Validator.AccountSpecificationValidator(this);
+        return new DomainSpecificationValidator<Account>(this) {
+            @Override
+            protected void validSpecification() {
+                throwIllegalStateException(StrUtil.length(object.name) > 50, "account name length cant be greater than 50");
+                throwIllegalStateException(object.status != null, "account status cant be null");
+            }
+        };
     }
 }
