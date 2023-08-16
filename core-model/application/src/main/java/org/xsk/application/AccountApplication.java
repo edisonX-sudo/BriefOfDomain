@@ -1,11 +1,9 @@
 package org.xsk.application;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.xsk.domain.account.*;
 import org.xsk.domain.common.DomainApplication;
 
-@Service
 @RequiredArgsConstructor
 public class AccountApplication extends DomainApplication {
     final AccountFactory accountFactory;

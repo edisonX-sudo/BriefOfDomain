@@ -8,6 +8,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -28,12 +29,8 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
-public class SpringIntegration extends FrameworkIntegration implements WebMvcConfigurer {
-    private final ApplicationContext applicationContext;
-
-    public SpringIntegration(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+public class SpringIntegration extends FrameworkIntegration implements WebMvcConfigurer, ApplicationContextAware {
+    private ApplicationContext applicationContext;
 
     @Override
     protected <T> T tx(Callable<T> callable) {
@@ -51,6 +48,11 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ResourceCleanInterceptor());
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
     public class ResourceCleanInterceptor extends HandlerInterceptorAdapter {
@@ -124,7 +126,7 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
         }
 
         private String buildSimpleClassName(String className) {
-            return StrUtil.lowerFirst(StrUtil.subBefore(className, ".", false));
+            return StrUtil.lowerFirst(StrUtil.subAfter(className, ".", true));
         }
 
         @Override

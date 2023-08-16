@@ -1,9 +1,11 @@
 package org.xsk.domain.account;
 
+import lombok.ToString;
 import org.xsk.domain.common.AggregateComponent;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
+@ToString
 public class Contact extends ValueObject {
     String phone;
     String email;
