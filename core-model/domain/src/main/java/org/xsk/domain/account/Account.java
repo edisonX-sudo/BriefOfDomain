@@ -35,14 +35,7 @@ public class Account extends Entity<AccountId> {
     }
 
     Account(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
-        this.status = status;
-        this.name = name;
-        this.loginName = loginName;
-        this.password = password;
-        this.contact = contact;
-        this.address = address;
-        this.parentAccountId = parentAccountId;
-        validSpecification();
+        this(null, status, name, loginName, password, contact, address, parentAccountId, null, null);
     }
 
     Boolean isMainAccount() {
