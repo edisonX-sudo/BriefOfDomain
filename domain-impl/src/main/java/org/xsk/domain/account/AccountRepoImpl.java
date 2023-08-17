@@ -71,22 +71,10 @@ public class AccountRepoImpl extends AccountRepo {
     @Override
     public void saveInternal(Account entity) {
         AccountPo accountPo = convert2po(entity);
+        accountJpaRepo.save(accountPo);
         if (isNewEntity(entity)) {
-            insertPo(accountPo);
             entity.accountId = new AccountId(accountPo.getId());
-        } else {
-            updatePo(accountPo);
         }
-    }
-
-    private void insertPo(AccountPo accountPo) {
-        // : 2023/4/14 sql insert
-        accountJpaRepo.save(accountPo);
-    }
-
-    private void updatePo(AccountPo accountPo) {
-        // : 2023/4/14 sql update
-        accountJpaRepo.save(accountPo);
     }
 
     @Override
