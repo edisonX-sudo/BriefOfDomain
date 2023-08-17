@@ -77,7 +77,7 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return (DomainSpecificationValidator) throwIllegalStateException -> {
+        return throwIllegalStateException -> {
             throwIllegalStateException.accept(this.code == null, "calendar rule code date cant be null");
             throwIllegalStateException.accept(this.daySubRules == null, "calendar rule day rule cant be null");
         };
