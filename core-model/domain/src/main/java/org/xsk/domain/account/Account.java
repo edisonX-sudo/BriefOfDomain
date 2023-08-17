@@ -7,6 +7,7 @@ import org.xsk.domain.account.exception.OnlyMainAccountOperate;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
 import org.xsk.domain.common.EventBus;
+import org.xsk.domain.common.Id;
 
 public class Account extends Entity<AccountId> {
     AccountId accountId;
@@ -45,7 +46,7 @@ public class Account extends Entity<AccountId> {
     }
 
     Boolean isMainAccount() {
-        return parentAccountId == null || parentAccountId.value() == null;
+        return Id.isEmpty(parentAccountId);
     }
 
     public Account createSubAccount(String name, String loginName, String password, Contact contact, PhysicalAddress address) {
