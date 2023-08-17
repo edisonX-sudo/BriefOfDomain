@@ -17,15 +17,15 @@ public class AccountPrivilegeService extends DomainService {
         }
         AccountId mainAccountId = mainAccount.accountId;
         AccountId subAccountId = subAccount.accountId;
-        accountRepo.validExistence(mainAccountId);
-        accountRepo.validExistence(subAccountId);
+//        accountRepo.validExistence(mainAccountId);
+//        accountRepo.validExistence(subAccountId);
         List<Account> accountGroup = accountRepo.findAccountGroup(mainAccountId);
         accountGroup.forEach(account -> {
             if (account.equals(subAccount)) {
                 account.parentAccountId = null;
                 subAccount.parentAccountId = null;
             } else {
-                account.parentAccountId = subAccount.accountId;
+                account.parentAccountId = subAccountId;
             }
         });
         accountRepo.saveAll(new HashSet<>(accountGroup));
