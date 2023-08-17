@@ -5,6 +5,7 @@ import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
 
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,16 +23,11 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
         validSpecification();
     }
 
-    public Map<RuleAppliedDay, Boolean> produceDayRuleResult(NatureDay natureDayBegin, NatureDay natureDayEnd) {
+    public List<Map.Entry<RuleAppliedDay, Boolean>> produceDayRuleResult(NatureDay natureDayBegin, NatureDay natureDayEnd) {
         List<RuleAppliedDay> ruleAppliedDays = applyRule(natureDayBegin, natureDayEnd);
         return ruleAppliedDays.stream()
-                .collect(
-                        Collectors.toMap(
-                                ruleAppliedDay -> ruleAppliedDay,
-                                RuleAppliedDay::isWorkDay,
-                                (aBoolean, aBoolean2) -> aBoolean
-                        )
-                );
+                .map(ruleAppliedDay -> new AbstractMap.SimpleEntry<>(ruleAppliedDay, ruleAppliedDay.isWorkDay()))
+                .collect(Collectors.toList());
     }
 
     List<RuleAppliedDay> applyRule(NatureDay natureDayBegin, NatureDay natureDayEnd) {
