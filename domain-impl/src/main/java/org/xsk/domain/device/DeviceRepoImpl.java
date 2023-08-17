@@ -21,7 +21,7 @@ public class DeviceRepoImpl extends DeviceRepo{
     }
 
     @Override
-    protected NotFoundEntityDomainException notFoundException() {
+    protected NotFoundEntityDomainException notFoundException(DeviceId id) {
         return null;
     }
 

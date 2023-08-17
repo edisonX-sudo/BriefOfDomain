@@ -9,7 +9,7 @@ public class CalendarRuleRepoImpl extends CalendarRuleRepo{
     }
 
     @Override
-    protected NotFoundEntityDomainException notFoundException() {
+    protected NotFoundEntityDomainException notFoundException(CalendarRuleCode id) {
         return null;
     }
 

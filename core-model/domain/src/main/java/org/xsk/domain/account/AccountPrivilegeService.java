@@ -16,7 +16,9 @@ public class AccountPrivilegeService extends DomainService {
             throw new OnlyMainAccountOperate();
         }
         AccountId mainAccountId = mainAccount.accountId;
+        AccountId subAccountId = subAccount.accountId;
         accountRepo.validExistence(mainAccountId);
+        accountRepo.validExistence(subAccountId);
         List<Account> accountGroup = accountRepo.findAccountGroup(mainAccountId);
         accountGroup.forEach(account -> {
             if (account.equals(subAccount)) {

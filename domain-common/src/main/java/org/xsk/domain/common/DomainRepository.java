@@ -21,7 +21,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     public E findNotNone(I id) {
         E entity = find(id);
         if (entity == null)
-            throw notFoundException();
+            throw notFoundException(id);
         return entity;
     }
 
@@ -34,7 +34,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     public E findExclusiveNotNone(I id) {
         E entity = findExclusive(id);
         if (entity == null)
-            throw notFoundException();
+            throw notFoundException(id);
         return entity;
     }
 
@@ -52,7 +52,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
         throw new UnsupportedOperationException("this method need 2 be implemented");
     }
 
-    protected abstract NotFoundEntityDomainException notFoundException();
+    protected abstract NotFoundEntityDomainException notFoundException(I id);
 
     public void save(E entity) {
         refreshEntityTs(entity);

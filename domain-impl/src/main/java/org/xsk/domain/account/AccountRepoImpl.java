@@ -78,8 +78,8 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     @Override
-    protected NotFoundEntityDomainException notFoundException() {
-        return new AccountNotFound();
+    protected NotFoundEntityDomainException notFoundException(AccountId id) {
+        return new AccountNotFound(id);
     }
 
     private Account convert2Entity(AccountPo po) {
