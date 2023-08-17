@@ -10,6 +10,14 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     public DomainRepository() {
     }
 
+    public void validExistence(I id) {
+        findNotNone(id);
+    }
+
+    public boolean exist(I id) {
+        return find(id) != null;
+    }
+
     public E findNotNone(I id) {
         E entity = find(id);
         if (entity == null)

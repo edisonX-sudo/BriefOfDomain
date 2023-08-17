@@ -1,6 +1,7 @@
 package org.xsk.domain.account;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.EqualsAndHashCode;
 import org.xsk.domain.account.event.AccountCreated;
 import org.xsk.domain.account.exception.AccountPasswordNotCorrect;
 import org.xsk.domain.account.exception.OnlyMainAccountOperate;
@@ -9,7 +10,9 @@ import org.xsk.domain.common.Entity;
 import org.xsk.domain.common.EventBus;
 import org.xsk.domain.common.Id;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Account extends Entity<AccountId> {
+    @EqualsAndHashCode.Include
     AccountId accountId;
     AccountStatus status;
     String name;
@@ -81,16 +84,6 @@ public class Account extends Entity<AccountId> {
     @Override
     public AccountId id() {
         return accountId;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
     }
 
     @Override

@@ -15,12 +15,14 @@ public class AccountPrivilegeService extends DomainService {
         if (!mainAccount.isMainAccount()) {
             throw new OnlyMainAccountOperate();
         }
-        List<Account> accountGroup = accountRepo.findAccountGroup(mainAccount.accountId);
+        AccountId mainAccountId = mainAccount.accountId;
+        accountRepo.validExistence(mainAccountId);
+        List<Account> accountGroup = accountRepo.findAccountGroup(mainAccountId);
         accountGroup.forEach(account -> {
-            if(account.equals(subAccount)){
+            if (account.equals(subAccount)) {
                 account.parentAccountId = null;
                 subAccount.parentAccountId = null;
-            }else {
+            } else {
                 account.parentAccountId = subAccount.accountId;
             }
         });
