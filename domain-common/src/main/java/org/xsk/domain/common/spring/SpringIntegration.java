@@ -3,6 +3,7 @@ package org.xsk.domain.common.spring;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -34,16 +35,26 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
 
     @Override
     protected <T> T tx(Callable<T> callable) {
-        MainProcessCompletionSubscriberPointTrigger trigger = applicationContext.getBean(MainProcessCompletionSubscriberPointTrigger.class);
+        MainProcessCompletionSubscriberPointTrigger trigger = getMainProcessCompletionSubscriberPointTriggerBean();
         TransactionTemplate transactionTemplate = applicationContext.getBean(TransactionTemplate.class);
         return transactionTemplate.execute(status -> {
             try {
-                TransactionSynchronizationManager.registerSynchronization(trigger);
+                if (trigger != null) {
+                    TransactionSynchronizationManager.registerSynchronization(trigger);
+                }
                 return callable.call();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    private MainProcessCompletionSubscriberPointTrigger getMainProcessCompletionSubscriberPointTriggerBean() {
+        try {
+            return applicationContext.getBean(MainProcessCompletionSubscriberPointTrigger.class);
+        } catch (NoSuchBeanDefinitionException ex) {
+            return null;
+        }
     }
 
     @Override
