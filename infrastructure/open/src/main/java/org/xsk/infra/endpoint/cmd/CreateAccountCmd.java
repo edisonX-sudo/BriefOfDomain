@@ -13,5 +13,4 @@ public class CreateAccountCmd {
     String country;
     String city;
     String street;
-    Long parentAccountId;
 }

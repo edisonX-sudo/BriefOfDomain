@@ -10,9 +10,9 @@ public class AccountApplication extends DomainApplication {
     final AccountRepo accountRepo;
     final AccountPrivilegeService accountPrivilegeService;
 
-    public AccountId create(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
+    public AccountId create(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address) {
         return tx(() -> {
-            Account newAccount = accountFactory.build(status, name, loginName, password, contact, address, parentAccountId);
+            Account newAccount = accountFactory.build(status, name, loginName, password, contact, address);
             accountRepo.save(newAccount);
             return newAccount.id();
         });

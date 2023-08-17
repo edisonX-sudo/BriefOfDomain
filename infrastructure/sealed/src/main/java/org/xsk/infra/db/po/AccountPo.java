@@ -1,9 +1,17 @@
 package org.xsk.infra.db.po;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import javax.persistence.*;
+
+@Entity
+@Table(name = "domain_account")
+@Getter
+@Setter
 public class AccountPo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String status;
     String name;

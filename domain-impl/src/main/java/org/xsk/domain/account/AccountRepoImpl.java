@@ -1,18 +1,18 @@
 package org.xsk.domain.account;
 
 import cn.hutool.core.map.BiMap;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.xsk.domain.account.exception.AccountNotFound;
 import org.xsk.domain.common.NotFoundEntityDomainException;
+import org.xsk.infra.db.mapper.AccountJpaRepo;
 import org.xsk.infra.db.po.AccountPo;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AccountRepoImpl extends AccountRepo {
     final static BiMap<AccountStatus, String> ACCOUNT_STATUS_2_FILED_MAP = new BiMap<>(new HashMap<AccountStatus, String>() {
         {
@@ -20,6 +20,7 @@ public class AccountRepoImpl extends AccountRepo {
             put(AccountStatus.ENABLE, "ENABLE");
         }
     });
+    final AccountJpaRepo accountJpaRepo;
 
     @Override
     public Account find(String loginName) {
@@ -30,8 +31,8 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     private AccountPo findPoByLoginName(String loginName) {
-        // TODO: 2023/4/14 sql find by loginName
-        return null;
+        // : 2023/4/14 sql find by loginName
+        return accountJpaRepo.findByLoginName(loginName);
     }
 
     @Override
@@ -43,8 +44,9 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     private List<AccountPo> findPoByMainAccountId(AccountId mainAccountId) {
-        // TODO: 2023/4/14 sql find by parentAccountId
-        return Collections.emptyList();
+        // : 2023/4/14 sql find by parentAccountId
+        Long parentAccountId = mainAccountId == null ? null : mainAccountId.value();
+        return accountJpaRepo.findByParentAccountId(parentAccountId);
     }
 
     @Override
@@ -56,13 +58,14 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     private AccountPo findPoById(AccountId id) {
-        // TODO: 2023/4/14 sql find by id
-        return null;
+        return accountJpaRepo.findById(id.value()).orElse(null);
     }
 
     @Override
     protected void saveAllInternal(Set<Account> entities) {
-        // TODO: 2023/6/25
+        for (Account entity : entities) {
+            saveInternal(entity);
+        }
     }
 
     @Override
@@ -77,14 +80,13 @@ public class AccountRepoImpl extends AccountRepo {
     }
 
     private void insertPo(AccountPo accountPo) {
-        // TODO: 2023/4/14 sql insert
-        System.out.println(accountPo);
-        accountPo.setId(1L);
+        // : 2023/4/14 sql insert
+        accountJpaRepo.save(accountPo);
     }
 
     private void updatePo(AccountPo accountPo) {
-        // TODO: 2023/4/14 sql update
-        System.out.println(accountPo);
+        // : 2023/4/14 sql update
+        accountJpaRepo.save(accountPo);
     }
 
     @Override
@@ -119,7 +121,9 @@ public class AccountRepoImpl extends AccountRepo {
         po.setCountry(entity.address.country);
         po.setCity(entity.address.city);
         po.setStreet(entity.address.street);
-        po.setParentAccountId(entity.parentAccountId.value());
+        AccountId parentAccountId = entity.parentAccountId;
+        if (parentAccountId != null)
+            po.setParentAccountId(parentAccountId.value());
         po.setCreateAt(entity.createAt());
         po.setModifiedAt(entity.modifiedAt());
         return po;

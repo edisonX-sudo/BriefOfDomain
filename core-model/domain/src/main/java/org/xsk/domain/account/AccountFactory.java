@@ -9,8 +9,8 @@ import org.xsk.domain.common.EventBus;
 @AllArgsConstructor
 public class AccountFactory extends DomainFactory {
 
-    public Account build(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address, AccountId parentAccountId) {
-        Account account = new Account(status, name, loginName, password, contact, address, parentAccountId);
+    public Account build(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address) {
+        Account account = new Account(status, name, loginName, password, contact, address, null);
         EventBus.fire(new AccountCreated(() -> account.accountId, contact));
         return account;
     }

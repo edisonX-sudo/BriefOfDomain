@@ -45,7 +45,7 @@ public class Account extends Entity<AccountId> {
     }
 
     Boolean isMainAccount() {
-        return parentAccountId == null;
+        return parentAccountId == null || parentAccountId.value() == null;
     }
 
     public Account createSubAccount(String name, String loginName, String password, Contact contact, PhysicalAddress address) {
@@ -54,7 +54,7 @@ public class Account extends Entity<AccountId> {
             throw new OnlyMainAccountOperate();
         }
         //业务知识: 账号创建默认是disable的
-        Account subAccount = new Account(AccountStatus.DISABLE, name, loginName, password, contact, address, this.parentAccountId);
+        Account subAccount = new Account(AccountStatus.DISABLE, name, loginName, password, contact, address, this.id());
         EventBus.fire(new AccountCreated(() -> subAccount.accountId, contact));
         return subAccount;
     }

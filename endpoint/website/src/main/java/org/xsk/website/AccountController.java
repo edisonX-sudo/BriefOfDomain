@@ -39,8 +39,7 @@ public class AccountController {
                 cmd.getLoginName(),
                 cmd.getPassword(),
                 new Contact(cmd.getPhone(), cmd.getEmail()),
-                new PhysicalAddress(cmd.getCountry(), cmd.getCity(), cmd.getStreet()),
-                new AccountId(cmd.getParentAccountId())
+                new PhysicalAddress(cmd.getCountry(), cmd.getCity(), cmd.getStreet())
         );
         return accountId.value();
     }
