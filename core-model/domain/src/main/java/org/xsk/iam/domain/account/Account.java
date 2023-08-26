@@ -88,14 +88,14 @@ public class Account extends Entity<AppUidUniqueKey> {
         login(account -> account.credential.comparePassword(plaintextPass));
     }
 
-    void login(Predicate<Account> predicate) {
+    void login(Predicate<Account> loginSuccessCondition) {
         if (!acctStatus.loginAvailable) {
             throw new AcctCantLoginException();
         }
         if (activityRecord.isUnavailableDue2LoginFailed()) {
             throw new AcctLoginFailedOverTimesException();
         }
-        if (predicate.test(this)) {
+        if (loginSuccessCondition.test(this)) {
             activityRecord.recordLoginSuccess();
         } else {
             activityRecord.recordLoginFailed();

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class AcctSiteScopeAssignService extends DomainService {
     SiteConfigService siteConfigService;
 
-    public void assignSiteScope(Account account, Set<SiteCode> siteCodes, Lang lang) {
+    void assignSiteScope(Account account, Set<SiteCode> siteCodes, Lang lang) {
         HashSet<SiteCode> siteScope = new HashSet<>(account.siteScope);
         siteScope.addAll(siteCodes);
         account.siteScope = siteScope;
@@ -26,7 +26,7 @@ public class AcctSiteScopeAssignService extends DomainService {
         account.accountSiteProfiles = accountSiteProfiles;
     }
 
-    public void removeSiteScope(Account account, Set<SiteCode> siteCodes) {
+    void removeSiteScope(Account account, Set<SiteCode> siteCodes) {
         HashSet<SiteCode> siteScope = new HashSet<>(account.siteScope);
         siteScope.removeAll(siteCodes);
         account.siteScope = siteScope;
