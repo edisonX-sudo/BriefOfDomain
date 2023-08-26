@@ -65,7 +65,17 @@
 
     </dependencies>
 
-    <repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://packages.aliyun.com/maven/repository/2222068-snapshot-EqD0qx/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </snapshotRepository>
         <repository>
             <id>rdc-releases</id>
             <url>https://packages.aliyun.com/maven/repository/2222068-release-12WfNm/</url>
@@ -76,22 +86,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>rdc-snapshots</id>
-            <url>https://packages.aliyun.com/maven/repository/2222068-snapshot-EqD0qx/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>aliyun-nexus</id>
-            <name>aliyun</name>
-            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
+    </distributionManagement>
 
     <build>
         <pluginManagement>

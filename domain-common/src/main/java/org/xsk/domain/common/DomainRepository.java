@@ -26,7 +26,9 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     }
 
     public E find(I id) {
-        return findInternal(id);
+        E internal = findInternal(id);
+        refreshEntityAsNotNew(internal);
+        return internal;
     }
 
     protected abstract E findInternal(I id);
@@ -45,7 +47,9 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
      * @return
      */
     public E findExclusive(I id) {
-        return findExclusiveInternal(id);
+        E exclusiveInternal = findExclusiveInternal(id);
+        refreshEntityAsNotNew(exclusiveInternal);
+        return exclusiveInternal;
     }
 
     protected E findExclusiveInternal(I id) {
@@ -55,7 +59,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     protected abstract NotFoundEntityDomainException notFoundException(I id);
 
     public void save(E entity) {
-        refreshEntityTs(entity);
+        refreshEntityModifiedTs(entity);
         saveInternal(entity);
         refreshEntityAsNotNew(entity);
     }
@@ -63,7 +67,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
     protected abstract void saveInternal(E entity);
 
     public void saveAll(Set<E> entities) {
-        entities.forEach(this::refreshEntityTs);
+        entities.forEach(this::refreshEntityModifiedTs);
         saveAllInternal(entities);
         entities.forEach(this::refreshEntityAsNotNew);
     }
@@ -72,14 +76,14 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
         throw new UnsupportedOperationException("this method need 2 be implemented");
     }
 
-    void refreshEntityTs(E entity) {
+    void refreshEntityModifiedTs(E entity) {
         if (isNewEntity(entity)) {
             entity.markAsCreate();
         }
         entity.markAsModified();
     }
 
-    void refreshEntityAsNotNew(E entity) {
+    protected void refreshEntityAsNotNew(E entity) {
         entity.markAsNotNew();
     }
 

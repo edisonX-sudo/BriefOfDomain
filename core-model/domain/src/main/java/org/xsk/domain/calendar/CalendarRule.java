@@ -14,12 +14,10 @@ import java.util.stream.Collectors;
 public class CalendarRule extends Entity<CalendarRuleCode> {
     CalendarRuleCode code;
     Map<LocalDate, DaySubRule> daySubRules;
-    boolean isNew;
 
-    public CalendarRule(CalendarRuleCode code, Map<LocalDate, DaySubRule> daySubRules, boolean isNew) {
+    public CalendarRule(CalendarRuleCode code, Map<LocalDate, DaySubRule> daySubRules) {
         this.code = code;
         this.daySubRules = daySubRules;
-        this.isNew = isNew;
         validSpecification();
     }
 
@@ -55,16 +53,6 @@ public class CalendarRule extends Entity<CalendarRuleCode> {
         validSpecification();
     }
 
-
-    @Override
-    protected Boolean isNew() {
-        return isNew;
-    }
-
-    @Override
-    protected void markAsNotNew() {
-        isNew = false;
-    }
 
     @Override
     public CalendarRuleCode id() {

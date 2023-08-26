@@ -42,7 +42,7 @@ public class Account extends Entity<AccountId> {
     }
 
     Boolean isMainAccount() {
-        return Id.isEmpty(parentAccountId);
+        return Id.isNullVal(parentAccountId);
     }
 
     public Account createSubAccount(String name, String loginName, String password, Contact contact, PhysicalAddress address) {
