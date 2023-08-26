@@ -30,7 +30,7 @@ public class AccountFactory {
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
         Account account = new Account(
                 mainAcctUniqKey, tenantCode, Uid.emptyUid(), domain, Collections.singleton(curSite),
-                credential, AcctStatus.Normal, nickname, avatar, region,
+                credential, AcctStatus.NORMAL, nickname, avatar, region,
                 needResetPassword, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
         );

@@ -1,12 +1,12 @@
 package org.xsk.iam.domain.account;
 
 public enum AcctStatus {
-    NotActive(false),
-    Normal(true),
-    Disabled(false),
-    Locked(false),
-    Closing(false),
-    Closed(false);
+    NOT_ACTIVE(false),
+    NORMAL(true),
+    DISABLED(false),
+    LOCKED(false),
+    CLOSING(false),
+    CLOSED(false);
 
     final boolean loginAvailable;
 

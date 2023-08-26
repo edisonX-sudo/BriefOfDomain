@@ -108,12 +108,12 @@ public class Account extends Entity<AppUidUniqueKey> {
 
     public void cancelAcct() {
         this.activityRecord.recordCancelAcct();
-        this.acctStatus = AcctStatus.Closing;
+        this.acctStatus = AcctStatus.CLOSING;
     }
 
     public void interruptCancelAcct() {
         this.activityRecord.recordInterruptCancelAcct();
-        this.acctStatus = AcctStatus.Normal;
+        this.acctStatus = AcctStatus.NORMAL;
     }
 
     boolean isMainAcct() {

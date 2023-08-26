@@ -36,7 +36,7 @@ public class SubAcctCreateService extends DomainService {
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
         Account account = new Account(
                 subAcctUniqKey, mainAcct.tenantCode, mainAcctUid, domain, Collections.singleton(curSite),
-                credential, AcctStatus.NotActive, nickname, avatar, region,
+                credential, AcctStatus.NOT_ACTIVE, nickname, avatar, region,
                 true, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
         );
