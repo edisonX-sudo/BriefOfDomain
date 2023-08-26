@@ -7,4 +7,8 @@ public class SiteConfigService extends DomainService {
     public String restoreSiteDomain(SiteCode siteCode) {
         return "";
     }
+
+    public <T> T restoreSiteConfig(SiteCode siteCode, String configKey,T defaultValue){
+        return null;
+    }
 }

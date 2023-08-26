@@ -12,6 +12,7 @@ import org.xsk.iam.domain.site.SiteCode;
 import org.xsk.iam.domain.site.SiteConfigService;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,24 +22,26 @@ public class SubAcctCreateService extends DomainService {
 
     Account createSubAcct(Account mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
                           String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
-                          Set<RoleCode> roles, Map<String, Object> preference) {
+                          Set<RoleCode> roles, Lang lang) {
         if (!mainAcct.isMainAcct()) {
             throw new SubAcctCantCreateAcctException();
         }
         AppCode mainAcctAppCode = mainAcct.appUidKey.value().appCode();
-        Uid mainAcctUid = mainAcct.appUidKey.value().uid();
-        String domain = siteConfigService.restoreSiteDomain(curSite);
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
                 mainAcctAppCode,
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
         );
+        Uid mainAcctUid = mainAcct.appUidKey.value().uid();
+        String domain = siteConfigService.restoreSiteDomain(curSite);
+        Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
         Account account = new Account(
                 subAcctUniqKey, mainAcct.tenantCode, mainAcctUid, domain, Collections.singleton(curSite),
                 credential, AcctStatus.NotActive, nickname, avatar, region,
                 true, extraProps, new AcctActivityRecord(),
-                Collections.singleton(new AccountSiteProfile(curSite, roles, preference))
+                Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
         );
         EventBus.fire(new SubAcctCreatedEvent(subAcctUniqKey));
         return account;
     }
+
 }

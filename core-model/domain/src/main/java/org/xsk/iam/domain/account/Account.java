@@ -3,6 +3,8 @@ package org.xsk.iam.domain.account;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
+import org.xsk.iam.domain.account.exception.AcctCantLoginException;
+import org.xsk.iam.domain.account.exception.AcctLoginFailedOverTimesException;
 import org.xsk.iam.domain.app.TenantCode;
 import org.xsk.iam.domain.role.RoleCode;
 import org.xsk.iam.domain.site.SiteCode;
@@ -29,7 +31,7 @@ public class Account extends Entity<AppUidUniqueKey> {
     AcctActivityRecord activityRecord;
     Set<AccountSiteProfile> accountSiteProfiles;
 
-    public Account(AppUidUniqueKey appUidKey, TenantCode tenantCode, Uid parentUid, String domain, Set<SiteCode> siteScope, Credential credential, AcctStatus acctStatus, String nickname, Avatar avatar, Region region, Boolean needResetPassword, Map<String, Object> extraProps, AcctActivityRecord activityRecord, Set<AccountSiteProfile> accountSiteProfiles) {
+    Account(AppUidUniqueKey appUidKey, TenantCode tenantCode, Uid parentUid, String domain, Set<SiteCode> siteScope, Credential credential, AcctStatus acctStatus, String nickname, Avatar avatar, Region region, Boolean needResetPassword, Map<String, Object> extraProps, AcctActivityRecord activityRecord, Set<AccountSiteProfile> accountSiteProfiles) {
         this.appUidKey = appUidKey;
         this.tenantCode = tenantCode;
         this.parentUid = parentUid;
@@ -50,11 +52,11 @@ public class Account extends Entity<AppUidUniqueKey> {
     public Account createSubAcct(
             SiteCode curSite, Uid subAcctUid, Credential credential,
             String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
-            Set<RoleCode> roles, Map<String, Object> preference, SubAcctCreateService subAcctCreateService
+            Set<RoleCode> roles, Lang lang, SubAcctCreateService subAcctCreateService
     ) {
         return subAcctCreateService.createSubAcct(
                 this, curSite, subAcctUid, credential, nickname,
-                avatar, region, extraProps, roles, preference
+                avatar, region, extraProps, roles, lang
         );
     }
 
@@ -88,10 +90,10 @@ public class Account extends Entity<AppUidUniqueKey> {
 
     void login(Predicate<Account> predicate) {
         if (!acctStatus.loginAvailable) {
-            throw new RuntimeException("账号不可登录");
+            throw new AcctCantLoginException();
         }
         if (activityRecord.isUnavailableDue2LoginFailed()) {
-            throw new RuntimeException("登录失败次数过多");
+            throw new AcctLoginFailedOverTimesException();
         }
         if (predicate.test(this)) {
             activityRecord.recordLoginSuccess();
