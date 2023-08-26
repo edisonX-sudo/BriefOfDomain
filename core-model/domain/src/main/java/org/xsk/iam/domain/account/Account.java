@@ -125,13 +125,13 @@ public class Account extends Entity<AppUidUniqueKey> {
     }
 
     public void enable() {
-        if (this.acctStatus == AcctStatus.DISABLED) {
+        if (!isMainAcct() && this.acctStatus == AcctStatus.DISABLED) {
             this.acctStatus = AcctStatus.NORMAL;
         }
     }
 
     public void disable() {
-        if (this.acctStatus == AcctStatus.NORMAL) {
+        if (!isMainAcct() && this.acctStatus == AcctStatus.NORMAL) {
             this.acctStatus = AcctStatus.DISABLED;
         }
     }
