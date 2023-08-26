@@ -116,6 +116,14 @@ public class Account extends Entity<AppUidUniqueKey> {
         this.acctStatus = AcctStatus.NORMAL;
     }
 
+    public void assignSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
+        acctSiteScopeAssignService.assignSiteScope(this, siteCodes, lang);
+    }
+
+    public void removeSiteScope(Set<SiteCode> siteCodes, AcctSiteScopeAssignService acctSiteScopeAssignService) {
+        acctSiteScopeAssignService.removeSiteScope(this, siteCodes);
+    }
+
     boolean isMainAcct() {
         return Code.isEmptyVal(parentUid);
     }
