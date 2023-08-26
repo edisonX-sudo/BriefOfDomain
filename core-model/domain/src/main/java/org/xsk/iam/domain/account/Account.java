@@ -84,11 +84,11 @@ public class Account extends Entity<AppUidUniqueKey> {
         activityRecord.recordForceLogout();
     }
 
-    public void loginViaPassword(String plaintextPass) {
-        login(account -> account.credential.comparePassword(plaintextPass));
+    public void loginInByPassword(String plaintextPass) {
+        loginIn(account -> account.credential.comparePassword(plaintextPass));
     }
 
-    void login(Predicate<Account> loginSuccessCondition) {
+    void loginIn(Predicate<Account> loginSuccessCondition) {
         if (!acctStatus.loginAvailable) {
             throw new AcctCantLoginException();
         }
@@ -102,7 +102,7 @@ public class Account extends Entity<AppUidUniqueKey> {
         }
     }
 
-    public void loginViaValidationCode(String validationCode, AccountLoginService accountLoginService) {
+    public void loginInByValidationCode(String validationCode, AccountLoginService accountLoginService) {
         accountLoginService.loginViaValidationCode(this, validationCode);
     }
 
