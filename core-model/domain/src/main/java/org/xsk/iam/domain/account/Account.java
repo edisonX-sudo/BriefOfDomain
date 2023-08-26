@@ -124,6 +124,14 @@ public class Account extends Entity<AppUidUniqueKey> {
         acctSiteScopeAssignService.removeSiteScope(this, siteCodes);
     }
 
+    public void enable(){
+        this.acctStatus = AcctStatus.NORMAL;
+    }
+
+    public void disable(){
+        this.acctStatus = AcctStatus.DISABLED;
+    }
+
     boolean isMainAcct() {
         return Code.isEmptyVal(parentUid);
     }
