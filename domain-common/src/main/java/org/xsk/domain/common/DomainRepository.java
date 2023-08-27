@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> extends DomainAbility {
+public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> extends DomainAbility {
 
     public DomainRepository() {
     }
@@ -87,7 +87,7 @@ public abstract class DomainRepository<E extends Entity<I>, I extends Id<?>> ext
         entity.markAsNotNew();
     }
 
-    protected boolean isNewEntity(Entity<I> entity) {
+    protected boolean isNewEntity(E entity) {
         return entity.isNew();
     }
 
