@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 public abstract class Entity<T extends Id<?>> extends AggregateComponent {
     protected Long createAt;
     protected Long modifiedAt;
-    private boolean isNewEntityWithUniqueKey = true;
 
     @EqualsAndHashCode.Include
     public abstract T id();
@@ -33,7 +32,7 @@ public abstract class Entity<T extends Id<?>> extends AggregateComponent {
     protected Boolean isNew() {
         T id = id();
         if (id instanceof UniqueKey) {
-            return isNewEntityWithUniqueKey;
+            return ((UniqueKey<?>) id).isHolderNew;
         } else {
             return id == null;
         }
@@ -42,7 +41,7 @@ public abstract class Entity<T extends Id<?>> extends AggregateComponent {
     protected void markAsNotNew() {
         T id = id();
         if (id instanceof UniqueKey) {
-            isNewEntityWithUniqueKey = false;
+            ((UniqueKey<?>) id).isHolderNew = false;
         }
     }
 //    boolean newEntity = false;//by default

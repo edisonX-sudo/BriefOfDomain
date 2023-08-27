@@ -12,9 +12,8 @@ public class AppUidUniqueKey extends UniqueKey<AppUidUniqueKey.AppUid> {
     }
 
     public AppUidUniqueKey(AppCode appCode, Uid uid) {
-        super(new AppUid(appCode, uid));
+        this(new AppUid(appCode, uid));
     }
-
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
