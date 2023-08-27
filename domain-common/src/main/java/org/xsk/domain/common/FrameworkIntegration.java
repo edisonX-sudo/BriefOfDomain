@@ -1,5 +1,7 @@
 package org.xsk.domain.common;
 
+import cn.hutool.core.util.ObjectUtil;
+
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
@@ -30,4 +32,8 @@ public abstract class FrameworkIntegration {
     }
 
     protected abstract <T> T tx(Callable<T> callable);
+
+    protected static <T extends ValueObject> T cloneValueObject(T valueObject) {
+        return ObjectUtil.clone(valueObject);
+    }
 }
