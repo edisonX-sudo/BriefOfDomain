@@ -36,31 +36,31 @@ public class AcctActivityRecord extends ValueObject {
     }
 
     public AcctActivityRecord recordForceLogout() {
-        AcctActivityRecord acctActivityRecord = cloneObject();
+        AcctActivityRecord acctActivityRecord = cloneObject(this);
         acctActivityRecord.forceLogoutAt = System.currentTimeMillis();
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordPasswordChange() {
-        AcctActivityRecord acctActivityRecord = cloneObject();
+        AcctActivityRecord acctActivityRecord = cloneObject(this);
         acctActivityRecord.passwordChangeAt = System.currentTimeMillis();
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordCancelAcct() {
-        AcctActivityRecord acctActivityRecord = cloneObject();
+        AcctActivityRecord acctActivityRecord = cloneObject(this);
         acctActivityRecord.cancelAccountAt = System.currentTimeMillis();
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordInterruptCancelAcct() {
-        AcctActivityRecord acctActivityRecord = cloneObject();
+        AcctActivityRecord acctActivityRecord = cloneObject(this);
         acctActivityRecord.cancelAccountAt = 0L;
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordLoginSuccess() {
-        AcctActivityRecord acctActivityRecord = cloneObject();
+        AcctActivityRecord acctActivityRecord = cloneObject(this);
         acctActivityRecord.lastLoginAt = System.currentTimeMillis();
         acctActivityRecord.loginFailedTimes = 0;
         acctActivityRecord.recentLoginFailedAt = 0L;
@@ -68,7 +68,7 @@ public class AcctActivityRecord extends ValueObject {
     }
 
     public AcctActivityRecord recordLoginFailed() {
-        AcctActivityRecord acctActivityRecord = cloneObject();
+        AcctActivityRecord acctActivityRecord = cloneObject(this);
         acctActivityRecord.loginFailedTimes = this.loginFailedTimes + 1;
         acctActivityRecord.recentLoginFailedAt = System.currentTimeMillis();
         return acctActivityRecord;

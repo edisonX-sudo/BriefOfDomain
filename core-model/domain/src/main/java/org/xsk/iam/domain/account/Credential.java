@@ -28,15 +28,21 @@ public class Credential extends ValueObject {
     }
 
     public Credential changePassword(String plaintextPass) {
-        return new Credential(loginName, mobile, email, DigestUtil.sha1Hex(plaintextPass));
+        Credential credential = cloneObject(this);
+        credential.cryptPassword = DigestUtil.sha1Hex(plaintextPass);
+        return credential;
     }
 
     public Credential changeEmail(String email) {
-        return new Credential(loginName, mobile, email, cryptPassword);
+        Credential credential = cloneObject(this);
+        credential.email = email;
+        return credential;
     }
 
     public Credential changeMobile(String mobile) {
-        return new Credential(loginName, mobile, email, cryptPassword);
+        Credential credential = cloneObject(this);
+        credential.mobile = mobile;
+        return credential;
     }
 
     @Override
