@@ -81,7 +81,7 @@ public class Account extends Entity<AppUidUniqueKey> {
     }
 
     public void forceLogout() {
-        activityRecord.recordForceLogout();
+        activityRecord = activityRecord.recordForceLogout();
     }
 
     public void loginInByPassword(String plaintextPass) {
@@ -96,9 +96,9 @@ public class Account extends Entity<AppUidUniqueKey> {
             throw new AcctLoginFailedOverTimesException();
         }
         if (loginSuccessCondition.test(this)) {
-            activityRecord.recordLoginSuccess();
+            activityRecord = activityRecord.recordLoginSuccess();
         } else {
-            activityRecord.recordLoginFailed();
+            activityRecord = activityRecord.recordLoginFailed();
         }
     }
 
@@ -108,12 +108,12 @@ public class Account extends Entity<AppUidUniqueKey> {
 
     public void cancelAcct() {
         this.acctStatus = AcctStatus.CLOSING;
-        this.activityRecord.recordCancelAcct();
+        activityRecord = this.activityRecord.recordCancelAcct();
     }
 
     public void interruptCancelAcct() {
         this.acctStatus = AcctStatus.NORMAL;
-        this.activityRecord.recordInterruptCancelAcct();
+        activityRecord = this.activityRecord.recordInterruptCancelAcct();
     }
 
     public void assignSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {

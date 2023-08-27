@@ -35,35 +35,53 @@ public class AcctActivityRecord extends ValueObject {
         return null;
     }
 
-    public void recordForceLogout() {
-        this.forceLogoutAt = System.currentTimeMillis();
+    public AcctActivityRecord recordForceLogout() {
+        AcctActivityRecord acctActivityRecord = cloneObject();
+        acctActivityRecord.forceLogoutAt = System.currentTimeMillis();
+        return acctActivityRecord;
     }
 
-    public void recordPasswordChange() {
-        this.passwordChangeAt = System.currentTimeMillis();
+    public AcctActivityRecord recordPasswordChange() {
+        AcctActivityRecord acctActivityRecord = cloneObject();
+        acctActivityRecord.passwordChangeAt = System.currentTimeMillis();
+        return acctActivityRecord;
     }
 
-    public void recordCancelAcct() {
-        this.cancelAccountAt = System.currentTimeMillis();
+    public AcctActivityRecord recordCancelAcct() {
+        AcctActivityRecord acctActivityRecord = cloneObject();
+        acctActivityRecord.cancelAccountAt = System.currentTimeMillis();
+        return acctActivityRecord;
     }
 
-    public void recordInterruptCancelAcct() {
-        this.cancelAccountAt = 0L;
+    public AcctActivityRecord recordInterruptCancelAcct() {
+        AcctActivityRecord acctActivityRecord = cloneObject();
+        acctActivityRecord.cancelAccountAt = 0L;
+        return acctActivityRecord;
     }
 
-    public void recordLoginSuccess() {
-        this.lastLoginAt = System.currentTimeMillis();
-        this.loginFailedTimes = 0;
-        this.recentLoginFailedAt = 0L;
+    public AcctActivityRecord recordLoginSuccess() {
+        AcctActivityRecord acctActivityRecord = cloneObject();
+        acctActivityRecord.lastLoginAt = System.currentTimeMillis();
+        acctActivityRecord.loginFailedTimes = 0;
+        acctActivityRecord.recentLoginFailedAt = 0L;
+        return acctActivityRecord;
     }
 
-    public void recordLoginFailed() {
-        this.loginFailedTimes = this.loginFailedTimes + 1;
-        this.recentLoginFailedAt = System.currentTimeMillis();
+    public AcctActivityRecord recordLoginFailed() {
+        AcctActivityRecord acctActivityRecord = cloneObject();
+        acctActivityRecord.loginFailedTimes = this.loginFailedTimes + 1;
+        acctActivityRecord.recentLoginFailedAt = System.currentTimeMillis();
+        return acctActivityRecord;
     }
 
     public boolean isUnavailableDue2LoginFailed() {
         boolean loginFailedTsExpired = DateUtil.between(new Date(this.recentLoginFailedAt), new Date(), DateUnit.MINUTE) > 10;
         return !loginFailedTsExpired && this.loginFailedTimes > 10;
     }
+
+//    public static void main(String[] args) {
+//        AcctActivityRecord acctActivityRecord1 = new AcctActivityRecord();
+//        AcctActivityRecord acctActivityRecord = acctActivityRecord1.recordLoginFailed();
+//        System.out.println();
+//    }
 }

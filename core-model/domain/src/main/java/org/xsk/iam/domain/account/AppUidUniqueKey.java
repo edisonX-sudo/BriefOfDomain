@@ -42,4 +42,10 @@ public class AppUidUniqueKey extends UniqueKey<AppUidUniqueKey.AppUid> {
             return uid;
         }
     }
+
+//    public static void main(String[] args) {
+//        AppUidUniqueKey appUidUniqueKey0 = new AppUidUniqueKey(new AppCode("12"), new Uid("23"));
+//        AppUidUniqueKey appUidUniqueKey1 = appUidUniqueKey0.cloneObject();
+//        System.out.println();
+//    }
 }

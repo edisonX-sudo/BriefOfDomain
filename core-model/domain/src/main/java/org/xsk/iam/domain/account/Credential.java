@@ -27,16 +27,16 @@ public class Credential extends ValueObject {
         return new Credential(loginName, mobile, email, DigestUtil.sha1Hex(plainTextPass));
     }
 
-    public void changePassword(String plaintextPass) {
-        this.cryptPassword = DigestUtil.sha1Hex(plaintextPass);
+    public Credential changePassword(String plaintextPass) {
+        return new Credential(loginName, mobile, email, DigestUtil.sha1Hex(plaintextPass));
     }
 
-    public void changeEmail(String email) {
-        this.email = email;
+    public Credential changeEmail(String email) {
+        return new Credential(loginName, mobile, email, cryptPassword);
     }
 
-    public void changeMobile(String mobile) {
-        this.mobile = mobile;
+    public Credential changeMobile(String mobile) {
+        return new Credential(loginName, mobile, email, cryptPassword);
     }
 
     @Override

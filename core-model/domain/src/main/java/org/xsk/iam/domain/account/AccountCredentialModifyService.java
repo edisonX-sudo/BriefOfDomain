@@ -8,17 +8,17 @@ public class AccountCredentialModifyService extends DomainService {
 
     void changeEmail(Account account, String email, String ticket) {
         validationService.validateTicket(ticket);
-        account.credential.changeEmail(email);
+        account.credential = account.credential.changeEmail(email);
     }
 
     void changeMobile(Account account, String mobile, String ticket) {
         validationService.validateTicket(ticket);
-        account.credential.changeMobile(mobile);
+        account.credential = account.credential.changeMobile(mobile);
     }
 
     void changePassword(Account account, String plaintextPass, String ticket) {
         validationService.validateTicket(ticket);
-        account.credential.changePassword(plaintextPass);
-        account.activityRecord.recordPasswordChange();
+        account.credential = account.credential.changePassword(plaintextPass);
+        account.activityRecord = account.activityRecord.recordPasswordChange();
     }
 }
