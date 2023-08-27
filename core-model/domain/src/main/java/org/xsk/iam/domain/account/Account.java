@@ -107,13 +107,13 @@ public class Account extends Entity<AppUidUniqueKey> {
     }
 
     public void cancelAcct() {
-        this.activityRecord.recordCancelAcct();
         this.acctStatus = AcctStatus.CLOSING;
+        this.activityRecord.recordCancelAcct();
     }
 
     public void interruptCancelAcct() {
-        this.activityRecord.recordInterruptCancelAcct();
         this.acctStatus = AcctStatus.NORMAL;
+        this.activityRecord.recordInterruptCancelAcct();
     }
 
     public void assignSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
