@@ -30,6 +30,8 @@ public abstract class FrameworkIntegration {
 
     protected abstract <T> T tx(Callable<T> callable);
 
-    public interface MustInit {
+    public interface InitAble {
+    }
+    public interface MustInit extends InitAble {
     }
 }

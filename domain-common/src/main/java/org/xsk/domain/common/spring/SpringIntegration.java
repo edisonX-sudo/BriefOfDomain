@@ -94,7 +94,7 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
         }
     }
 
-    public class DomainRegistryItemInitialization implements BeanDefinitionRegistryPostProcessor {
+    public class DomainRegistryItemInitialization implements BeanDefinitionRegistryPostProcessor, InitAble {
         private String basePackage;
 
         public DomainRegistryItemInitialization(String basePackage) {
@@ -147,7 +147,7 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
 
     }
 
-    public class RecordEventConsumer implements InitializingBean {
+    public class RecordEventConsumer implements InitializingBean, InitAble {
 
         private EventBus.EventConsumer consumer;
 
