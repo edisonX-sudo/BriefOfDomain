@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.xsk.domain.common.DomainAbility;
-import org.xsk.domain.common.DomainEvent;
+import org.xsk.domain.common.EventBus;
 import org.xsk.domain.common.FrameworkIntegration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,6 @@ import java.lang.reflect.Modifier;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 
 public class SpringIntegration extends FrameworkIntegration implements WebMvcConfigurer, ApplicationContextAware {
     private ApplicationContext applicationContext;
@@ -149,9 +148,9 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
 
     public class RecordEventConsumer implements InitializingBean {
 
-        private Consumer<DomainEvent> consumer;
+        private EventBus.EventConsumer consumer;
 
-        public RecordEventConsumer(Consumer<DomainEvent> consumer) {
+        public RecordEventConsumer(EventBus.EventConsumer consumer) {
             this.consumer = consumer;
         }
 

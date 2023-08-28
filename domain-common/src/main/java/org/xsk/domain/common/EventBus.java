@@ -12,7 +12,7 @@ public class EventBus {
     final static Map<DomainPolicy.SubscribePoint, Set<DomainPolicy<?>>> SUBSCRIBE_POINT_POLICY_MAP = new ConcurrentHashMap<>();
     final static ThreadLocal<Queue<DomainEvent>> BEFORE_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
     final static ThreadLocal<Queue<DomainEvent>> AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
-    static Consumer<DomainEvent> consumeEventNeedRecord;
+    static EventConsumer consumeEventNeedRecord;
 
     public static <E extends DomainEvent> void fire(Entity<?> subject, E event) {
         event.subject = subject;
@@ -103,4 +103,17 @@ public class EventBus {
         domainPolicies.add(policy);
     }
 
+    public interface EventConsumer {
+        void accept(DomainEvent event);
+
+        /**
+         * 可以放入traceId/appVersion等信息
+         * @param event 事件
+         * @param key key
+         * @param val val
+         */
+        default void putEventMeta(DomainEvent event, String key, Object val) {
+            event.putMetaData(key, val);
+        }
+    }
 }

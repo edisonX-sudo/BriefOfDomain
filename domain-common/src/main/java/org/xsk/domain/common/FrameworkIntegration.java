@@ -1,7 +1,6 @@
 package org.xsk.domain.common;
 
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 
 public abstract class FrameworkIntegration {
     volatile static FrameworkIntegration current;
@@ -25,7 +24,7 @@ public abstract class FrameworkIntegration {
         EventBus.cleanEventQueue();
     }
 
-    protected static void consumeEventNeedRecord(Consumer<DomainEvent> consumer) {
+    protected static void consumeEventNeedRecord(EventBus.EventConsumer consumer) {
         EventBus.consumeEventNeedRecord = consumer;
     }
 

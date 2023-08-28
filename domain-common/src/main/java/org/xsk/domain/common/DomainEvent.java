@@ -22,13 +22,7 @@ public abstract class DomainEvent implements Serializable {
         return RecordStatus.DONT_RECORD;
     }
 
-    /**
-     * 可以放入traceId/appVersion等信息
-     *
-     * @param key key
-     * @param obj obj
-     */
-    public void putMetaData(String key, Object obj) {
+    void putMetaData(String key, Object obj) {
         metaData.put(key, obj);
     }
 
