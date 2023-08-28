@@ -15,7 +15,7 @@ public class AcctSiteScopeAssignService extends DomainService {
         siteScope.addAll(siteCodes);
         account.siteScope = siteScope;
 
-        Set<AccountSiteProfile> assignedSiteProfile = siteScope.stream()
+        Set<AccountSiteProfile> assignedSiteProfile = siteCodes.stream()
                 .map(siteCode -> {
                     Map<String, Object> preference = siteConfigService.restoreSiteConfig(siteCode, "default.preference", new HashMap<>());
                     return new AccountSiteProfile(siteCode, Collections.emptySet(), lang, preference);
@@ -33,7 +33,7 @@ public class AcctSiteScopeAssignService extends DomainService {
 
         HashSet<AccountSiteProfile> accountSiteProfiles = new HashSet<>(account.accountSiteProfiles);
         account.accountSiteProfiles = accountSiteProfiles.stream()
-                .filter(accountSiteProfile -> siteCodes.contains(accountSiteProfile.siteCode))
+                .filter(accountSiteProfile -> !siteCodes.contains(accountSiteProfile.siteCode))
                 .collect(Collectors.toSet());
     }
 }

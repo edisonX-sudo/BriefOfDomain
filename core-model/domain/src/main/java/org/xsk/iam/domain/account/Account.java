@@ -3,15 +3,12 @@ package org.xsk.iam.domain.account;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
-import org.xsk.iam.domain.account.exception.AcctCantLoginException;
-import org.xsk.iam.domain.account.exception.AcctLoginFailedOverTimesException;
 import org.xsk.iam.domain.app.TenantCode;
 import org.xsk.iam.domain.role.RoleCode;
 import org.xsk.iam.domain.site.SiteCode;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class Account extends Entity<AppUidUniqueKey> {
     AppUidUniqueKey appUidKey;
@@ -84,26 +81,12 @@ public class Account extends Entity<AppUidUniqueKey> {
         activityRecord = activityRecord.recordForceLogout();
     }
 
-    public void loginInByPassword(String plaintextPass) {
-        loginIn(account -> account.credential.comparePassword(plaintextPass));
-    }
-
-    void loginIn(Predicate<Account> loginSuccessCondition) {
-        if (!acctStatus.loginAvailable) {
-            throw new AcctCantLoginException();
-        }
-        if (activityRecord.isUnavailableDue2LoginFailed()) {
-            throw new AcctLoginFailedOverTimesException();
-        }
-        if (loginSuccessCondition.test(this)) {
-            activityRecord = activityRecord.recordLoginSuccess();
-        } else {
-            activityRecord = activityRecord.recordLoginFailed();
-        }
-    }
-
     public void loginInByValidationCode(String validationCode, AccountLoginService accountLoginService) {
         accountLoginService.loginViaValidationCode(this, validationCode);
+    }
+
+    public void loginInByPassword(String plaintextPass, AccountLoginService accountLoginService) {
+        accountLoginService.loginInByPassword(this, plaintextPass);
     }
 
     public void cancelAcct() {
