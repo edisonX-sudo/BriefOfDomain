@@ -118,8 +118,8 @@ public class EventBus {
             event.putMetaData(key, val);
         }
 
-        default Entity<?> eventSubject(DomainEvent event) {
-            return event.subject();
-        }
+//        default Entity<?> eventSubject(DomainEvent event) {
+//            return event.subject();
+//        }
     }
 }
