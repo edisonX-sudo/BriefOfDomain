@@ -18,12 +18,16 @@ public abstract class DomainEvent implements Serializable {
         return occurredAt;
     }
 
-    public RecordStatus recordInfo() {
-        return RecordStatus.DONT_RECORD;
-    }
-
     void putMetaData(String key, Object obj) {
         metaData.put(key, obj);
+    }
+
+    Entity<?> subject() {
+        return subject;
+    }
+
+    public RecordStatus recordInfo() {
+        return RecordStatus.DONT_RECORD;
     }
 
     public enum RecordStatus {

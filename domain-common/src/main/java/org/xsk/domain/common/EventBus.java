@@ -101,6 +101,7 @@ public class EventBus {
                 k -> ConcurrentHashMap.newKeySet()
         );
         domainPolicies.add(policy);
+
     }
 
     public interface EventConsumer {
@@ -108,12 +109,17 @@ public class EventBus {
 
         /**
          * 可以放入traceId/appVersion等信息
+         *
          * @param event 事件
-         * @param key key
-         * @param val val
+         * @param key   key
+         * @param val   val
          */
         default void putEventMeta(DomainEvent event, String key, Object val) {
             event.putMetaData(key, val);
+        }
+
+        default Entity<?> eventSubject(DomainEvent event) {
+            return event.subject();
         }
     }
 }

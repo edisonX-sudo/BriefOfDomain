@@ -28,7 +28,6 @@ public abstract class Entity<T extends Id<?>> extends AggregateComponent {
         return modifiedAt;
     }
 
-
     protected Boolean isNew() {
         T id = id();
         if (id instanceof UniqueKey) {
@@ -44,10 +43,5 @@ public abstract class Entity<T extends Id<?>> extends AggregateComponent {
             ((UniqueKey<?>) id).isHolderNew = false;
         }
     }
-//    boolean newEntity = false;//by default
-//    //invoke in factory maybe
-//    void markAsNew() {
-//        newEntity = true;
-//    }
 
 }
