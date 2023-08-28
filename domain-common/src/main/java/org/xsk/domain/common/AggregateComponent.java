@@ -19,7 +19,7 @@ public abstract class AggregateComponent implements Serializable {
      * <p>
      * 当然场景不一定要如上,上面只是一种用例,理论上可以用来存储任何需要的数据,做一个场景内不同方法上下文的数据交换
      */
-    Map<Object, Object> metaData = new ConcurrentHashMap<>(2);
+    transient Map<Object, Object> metaData = new ConcurrentHashMap<>(2);
 
     <V> V getMetaData(Object key, Class<V> valType) {
         return valType.cast(metaData.get(key));
