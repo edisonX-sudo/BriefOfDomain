@@ -2,10 +2,15 @@ package org.xsk.domain.common;
 
 import cn.hutool.core.collection.CollUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> extends DomainAbility {
+
+    private static final String META_STORAGE_KEY = "id";
+    private static final String META_VO_STORAGE_KEYS_TEMPLATE = "%s_ids";
 
     public DomainRepository() {
     }
@@ -56,6 +61,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
 
     /**
      * 被find/findNotNone使用,不需要调用refreshEntityAsNotNew()
+     *
      * @param id 领域id
      * @return 领域实体
      */
@@ -88,6 +94,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
 
     /**
      * 被findExclusive/findExclusiveNotNone使用,不需要调用refreshEntityAsNotNew()
+     *
      * @param id 领域id
      * @return 领域实体
      */
@@ -157,15 +164,45 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
         return CollUtil.subtract(subjectSet, objectSet);
     }
 
-    protected <K extends MetaKey> void putComponentMetaData(AggregateComponent component, Class<K> key, Object val) {
-        component.putMetaData(key, val);
+    protected void putEntityStorageId(E entity, Object storageId) {
+        entity.putMetaData(META_STORAGE_KEY, storageId);
     }
 
-    protected <K extends MetaKey, V> V getComponentMetaData(AggregateComponent component, Class<K> key, Class<V> valType) {
-        return component.getMetaData(key, valType);
+    protected void putVoStorageId(E entity, ValueObject vo, Object storageId) {
+        String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, vo.getClass().getName());
+        List<Object> voIds = entity.getMetaData(voIdsKey, List.class);
+        if (voIds == null) {
+            voIds = new ArrayList<>();
+        }
+        entity.putMetaData(voIdsKey, voIds);
+        vo.putMetaData(META_STORAGE_KEY, storageId);
     }
 
-    protected static abstract class MetaKey {
+    protected <V> V restoreEntityStorageId(E entity, Class<V> valType) {
+        return entity.getMetaData(META_STORAGE_KEY, valType);
     }
+
+    protected <V> V restoreVoStorageId(ValueObject vo, Class<V> valType) {
+        return vo.getMetaData(META_STORAGE_KEY, valType);
+    }
+
+    protected <C extends ValueObject, V> List<V> restoreVoStorageIds(E entity, Class<C> voType, Class<V> valType) {
+        String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, voType.getName());
+        return entity.getMetaData(voIdsKey, List.class);
+    }
+
+//    <K extends MetaKey> void putComponentMetaData(AggregateComponent component, Class<K> key, Object val) {
+//        component.putMetaData(key, val);
+//    }
+//
+//    <K extends MetaKey, V> V getComponentMetaData(AggregateComponent component, Class<K> key, Class<V> valType) {
+//        return component.getMetaData(key, valType);
+//    }
+//
+//    protected static abstract class MetaKey {
+//    }
+//
+//    protected static abstract class MetaKeyId extends MetaKey {
+//    }
 
 }

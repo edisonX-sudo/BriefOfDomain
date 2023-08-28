@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 
 /**
  * 聚合内的组件对象
+ * ps: 虽然AggregateComponent实现Serializable,但直接对其进行序列化存储并非常不被推荐(建议用对应pojo进行序列化存储)
  */
 public abstract class AggregateComponent implements Serializable {
     /**
@@ -15,11 +16,11 @@ public abstract class AggregateComponent implements Serializable {
      * 如: 加载附属表记录(id:1,2,3),除vo内metaData挂上对应id,实体也挂上vo_ids:1,2,3,后期经过新增和删除,vo对线剩下:vo1(id:''),vo1(id:1),
      * 则可要保存: (插入: vo1, 更新: vo2), 删除: vos(id:2,3) //DomainRepository.subtractVo([1,2,3],['',1])->[2,3]
      * <p>
-     *    经验上实体的metaData可以存自身id(id:1),延伸表的ids(xx_vo_ids:[2,3]);关联延伸表的Vo上可以存自身id(id:2)
+     * 经验上实体的metaData可以存自身id(id:1),延伸表的ids(xx_vo_ids:[2,3]);关联延伸表的Vo上可以存自身id(id:2)
      * <p>
      * 当然场景不一定要如上,上面只是一种用例,理论上可以用来存储任何需要的数据,做一个场景内不同方法上下文的数据交换
      */
-    transient Map<Object, Object> metaData = new ConcurrentHashMap<>(2);
+    Map<Object, Object> metaData = new ConcurrentHashMap<>(2);
 
     <V> V getMetaData(Object key, Class<V> valType) {
         return valType.cast(metaData.get(key));
