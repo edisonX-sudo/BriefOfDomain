@@ -15,9 +15,9 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.xsk.domain.common.DomainAbility;
 import org.xsk.domain.common.EventBus;
 import org.xsk.domain.common.FrameworkIntegration;
@@ -66,7 +66,8 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
         this.applicationContext = applicationContext;
     }
 
-    public class ResourceCleanInterceptor extends HandlerInterceptorAdapter {
+    //todo 可能能通过spring的AppListener订阅容器启动完毕来检查MustInit是否都被初始化了
+    public class ResourceCleanInterceptor implements HandlerInterceptor, MustInit {
         @Override
         public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
             cleanEventQueue();
@@ -76,7 +77,7 @@ public class SpringIntegration extends FrameworkIntegration implements WebMvcCon
     /**
      * 事务提交前/后触发事件总线事件(在程序中手动注册为@Bean)
      */
-    public class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization {
+    public class MainProcessCompletionSubscriberPointTrigger implements TransactionSynchronization, MustInit {
 
         @Override
         public void beforeCommit(boolean readOnly) {
