@@ -10,14 +10,31 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
     public DomainRepository() {
     }
 
+    /**
+     * 验证是否存在,不存在抛异常
+     *
+     * @param id 领域id
+     */
     public void validExistence(I id) {
         findNotNone(id);
     }
 
+    /**
+     * 验证是否存在
+     *
+     * @param id 领域id
+     * @return 存在为true
+     */
     public boolean exist(I id) {
         return find(id) != null;
     }
 
+    /**
+     * 查找领域实体,不存在抛异常
+     *
+     * @param id 领域id
+     * @return 领域实体
+     */
     public E findNotNone(I id) {
         E entity = find(id);
         if (entity == null)
@@ -25,14 +42,31 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
         return entity;
     }
 
+    /**
+     * 查找领域实体
+     *
+     * @param id 领域id
+     * @return 领域实体
+     */
     public E find(I id) {
         E internal = findInternal(id);
         refreshEntityAsNotNew(internal);
         return internal;
     }
 
+    /**
+     * 被find/findNotNone使用,不需要调用refreshEntityAsNotNew()
+     * @param id 领域id
+     * @return 领域实体
+     */
     protected abstract E findInternal(I id);
 
+    /**
+     * 独占(如mysql内利用select for update,一般用不到)的查找领域实体,不存在抛异常
+     *
+     * @param id 领域id
+     * @return 领域实体
+     */
     public E findExclusiveNotNone(I id) {
         E entity = findExclusive(id);
         if (entity == null)
@@ -41,10 +75,10 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
     }
 
     /**
-     * 独占性的查询(如mysql内利用select for update,一般用不到)
+     * 独占(如mysql内利用select for update,一般用不到)的查找领域实体
      *
-     * @param id
-     * @return
+     * @param id 领域id
+     * @return 领域实体
      */
     public E findExclusive(I id) {
         E exclusiveInternal = findExclusiveInternal(id);
@@ -52,6 +86,11 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
         return exclusiveInternal;
     }
 
+    /**
+     * 被findExclusive/findExclusiveNotNone使用,不需要调用refreshEntityAsNotNew()
+     * @param id 领域id
+     * @return 领域实体
+     */
     protected E findExclusiveInternal(I id) {
         throw new UnsupportedOperationException("this method need 2 be implemented");
     }
@@ -83,10 +122,21 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
         entity.markAsModified();
     }
 
+    /**
+     * 标记领域实体实体是否为新实体,在自定义find方法时基本都会用
+     *
+     * @param entity 领域实体
+     */
     protected void refreshEntityAsNotNew(E entity) {
         entity.markAsNotNew();
     }
 
+    /**
+     * 判断实体是否是新实体
+     *
+     * @param entity 领域实体
+     * @return 是否是新实体
+     */
     protected boolean isNewEntity(E entity) {
         return entity.isNew();
     }
