@@ -10,6 +10,11 @@ public class SubAcctCreationNotifyPolicy extends DomainPolicy<SubAcctCreatedEven
     }
 
     @Override
+    public SubscribePoint subscribePoint() {
+        return SubscribePoint.AFTER_MAIN_PROCESS_COMPLETED;
+    }
+
+    @Override
     protected Class<SubAcctCreatedEvent> eventClass() {
         return null;
     }
