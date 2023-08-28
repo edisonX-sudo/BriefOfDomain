@@ -26,6 +26,7 @@ public class SubAcctService extends DomainService {
     Account createSubAcct(Account mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
                           String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
                           Set<RoleCode> roles, Lang lang) {
+        //createSubAcct是包级方法,不用检查Account的存在(这个包owner会把控调用的上下文)
         if (!mainAcct.isMainAcct()) {
             throw new OnlyMainAcctCanOperateException();
         }
@@ -48,6 +49,7 @@ public class SubAcctService extends DomainService {
     }
 
     public void deleteSubAcct(Account mainAcct, Account subAcct) {
+        //deleteSubAcct是pub级方法,要检查Account的存在,因为外部会调用它
         if (mainAcct == null) {
             throw new AcctNotFoundException();
         }

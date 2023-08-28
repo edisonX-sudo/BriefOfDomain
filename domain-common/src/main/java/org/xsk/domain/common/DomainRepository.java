@@ -177,6 +177,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
         if (voIds == null) {
             voIds = new HashSet<>();
         }
+        voIds.add(storageId);
         entity.putMetaData(voIdsKey, voIds);
         vo.putMetaData(META_STORAGE_KEY, storageId);
     }
