@@ -3,11 +3,9 @@ package org.xsk.iam.domain.account.event;
 import org.xsk.domain.common.DomainEvent;
 import org.xsk.iam.domain.account.AppUidUniqueKey;
 
-public class SubAcctCreatedEvent extends DomainEvent {
+public class SubAcctCreatedEvent extends DomainEvent.EntityCreatedEvent<AppUidUniqueKey> {
 
-    private final AppUidUniqueKey subAcctUniqKey;
-
-    public SubAcctCreatedEvent(AppUidUniqueKey subAcctUniqKey) {
-        this.subAcctUniqKey = subAcctUniqKey;
+    public SubAcctCreatedEvent(AppUidUniqueKey id) {
+        super(id);
     }
 }

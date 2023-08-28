@@ -14,6 +14,11 @@ public class EventBus {
     final static ThreadLocal<Queue<DomainEvent>> AFTER_MAIN_PROCESS_COMPLETED_EVENT_WAITING_QUEUE = ThreadLocal.withInitial(ArrayDeque::new);
     static Consumer<DomainEvent> consumeEventNeedRecord;
 
+    public static <E extends DomainEvent> void fire(Entity<?> subject, E event) {
+        event.subject = subject;
+        fire(event);
+    }
+
     public static <E extends DomainEvent> void fire(E event) {
         // : 2023/4/14 实现上根据订阅者DomainPolicy.subscribePoint()的值,
         //  决定事务前(false)投递给哪些订阅者,事务后(true)投递给哪些订阅者,还是马上异步执行

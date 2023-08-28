@@ -15,6 +15,8 @@ public abstract class AggregateComponent implements Serializable {
      * 如: 加载附属表记录(id:1,2,3),除vo内metaData挂上对应id,实体也挂上vo_ids:1,2,3,后期经过新增和删除,vo对线剩下:vo1(id:''),vo1(id:1),
      * 则可要保存: (插入: vo1, 更新: vo2), 删除: vos(id:2,3) //DomainRepository.subtractVo([1,2,3],['',1])->[2,3]
      * <p>
+     *    经验上实体的metaData可以存自身id(id:1),延伸表的ids(xx_vo_ids:[2,3]);关联延伸表的Vo上可以存自身id(id:2)
+     * <p>
      * 当然场景不一定要如上,上面只是一种用例,理论上可以用来存储任何需要的数据,做一个场景内不同方法上下文的数据交换
      */
     Map<Object, Object> metaData = new ConcurrentHashMap<>(2);

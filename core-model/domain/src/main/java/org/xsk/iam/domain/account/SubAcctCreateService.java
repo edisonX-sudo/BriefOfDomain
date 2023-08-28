@@ -34,14 +34,14 @@ public class SubAcctCreateService extends DomainService {
         Uid mainAcctUid = mainAcct.appUidKey.value().uid();
         String domain = siteConfigService.restoreSiteDomain(curSite);
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
-        Account account = new Account(
+        Account subAccount = new Account(
                 subAcctUniqKey, mainAcct.tenantCode, mainAcctUid, domain, Collections.singleton(curSite),
                 credential, AcctStatus.NOT_ACTIVE, nickname, avatar, region,
                 true, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
         );
         EventBus.fire(new SubAcctCreatedEvent(subAcctUniqKey));
-        return account;
+        return subAccount;
     }
 
 }
