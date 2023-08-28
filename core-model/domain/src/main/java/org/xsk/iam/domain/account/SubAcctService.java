@@ -5,7 +5,8 @@ import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainService;
 import org.xsk.domain.common.EventBus;
 import org.xsk.iam.domain.account.event.SubAcctCreatedEvent;
-import org.xsk.iam.domain.account.exception.SubAcctCantCreateAcctException;
+import org.xsk.iam.domain.account.exception.OnlyMainAcctCanOperateException;
+import org.xsk.iam.domain.account.exception.OnlyParentAcctCanOperateException;
 import org.xsk.iam.domain.app.AppCode;
 import org.xsk.iam.domain.role.RoleCode;
 import org.xsk.iam.domain.site.SiteCode;
@@ -17,14 +18,15 @@ import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
-public class SubAcctCreateService extends DomainService {
+public class SubAcctService extends DomainService {
     SiteConfigService siteConfigService;
+    AccountRepository accountRepository;
 
     Account createSubAcct(Account mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
                           String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
                           Set<RoleCode> roles, Lang lang) {
         if (!mainAcct.isMainAcct()) {
-            throw new SubAcctCantCreateAcctException();
+            throw new OnlyMainAcctCanOperateException();
         }
         AppCode mainAcctAppCode = mainAcct.appUidKey.value().appCode();
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
@@ -42,6 +44,20 @@ public class SubAcctCreateService extends DomainService {
         );
         EventBus.fire(new SubAcctCreatedEvent(subAcctUniqKey));
         return subAccount;
+    }
+
+    void deleteSubAcct(Account mainAcct, Account subAcct) {
+        if (!mainAcct.isMainAcct()) {
+            throw new OnlyMainAcctCanOperateException();
+        }
+        AppCode mainAcctAppCode = mainAcct.appUidKey.value().appCode();
+        AppCode subAcctAppCode = subAcct.appUidKey.value().appCode();
+        Uid mainAcctUid = mainAcct.appUidKey.value().uid();
+        Uid subAcctParentUid = subAcct.parentUid;
+        if (!subAcctAppCode.equals(mainAcctAppCode) || !subAcctParentUid.equals(mainAcctUid)) {
+            throw new OnlyParentAcctCanOperateException();
+        }
+        accountRepository.softDelete(subAcct.appUidKey);
     }
 
 }

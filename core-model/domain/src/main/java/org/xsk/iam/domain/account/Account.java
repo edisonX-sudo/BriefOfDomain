@@ -49,12 +49,16 @@ public class Account extends Entity<AppUidUniqueKey> {
     public Account createSubAcct(
             SiteCode curSite, Uid subAcctUid, Credential credential,
             String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
-            Set<RoleCode> roles, Lang lang, SubAcctCreateService subAcctCreateService
+            Set<RoleCode> roles, Lang lang, SubAcctService subAcctService
     ) {
-        return subAcctCreateService.createSubAcct(
+        return subAcctService.createSubAcct(
                 this, curSite, subAcctUid, credential, nickname,
                 avatar, region, extraProps, roles, lang
         );
+    }
+
+    public void deleteSubAcct(Account subAccount, SubAcctService subAcctService) {
+        subAcctService.deleteSubAcct(this, subAccount);
     }
 
     public void changeNickname(String nickname) {
@@ -90,13 +94,17 @@ public class Account extends Entity<AppUidUniqueKey> {
     }
 
     public void cancelAcct() {
-        this.acctStatus = AcctStatus.CLOSING;
-        activityRecord = this.activityRecord.recordCancelAcct();
+        if (isMainAcct()) {
+            this.acctStatus = AcctStatus.CLOSING;
+            activityRecord = this.activityRecord.recordCancelAcct();
+        }
     }
 
     public void interruptCancelAcct() {
-        this.acctStatus = AcctStatus.NORMAL;
-        activityRecord = this.activityRecord.recordInterruptCancelAcct();
+        if (isMainAcct()) {
+            this.acctStatus = AcctStatus.NORMAL;
+            activityRecord = this.activityRecord.recordInterruptCancelAcct();
+        }
     }
 
     public void assignSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
