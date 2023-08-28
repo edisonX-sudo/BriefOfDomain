@@ -2,7 +2,6 @@ package org.xsk.domain.common;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 /**
@@ -20,10 +19,17 @@ public abstract class AggregateComponent implements Serializable {
      * <p>
      * 当然场景不一定要如上,上面只是一种用例,理论上可以用来存储任何需要的数据,做一个场景内不同方法上下文的数据交换
      */
-    Map<Object, Object> metaData = new ConcurrentHashMap<>(2);
+    final Map<Object, Object> metaData;
+
+    public AggregateComponent(Map<Object, Object> metaData) {
+        this.metaData = metaData;
+    }
 
     <V> V getMetaData(Object key, Class<V> valType) {
-        return valType.cast(metaData.get(key));
+        Object obj = metaData.get(key);
+        if (obj == null)
+            return null;
+        return valType.cast(obj);
     }
 
     void putMetaData(Object key, Object val) {

@@ -2,10 +2,21 @@ package org.xsk.domain.common;
 
 import lombok.EqualsAndHashCode;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public abstract class Entity<T extends Id<?>> extends AggregateComponent {
     protected Long createAt;
     protected Long modifiedAt;
+
+    protected Entity() {
+        super(new ConcurrentHashMap<>(2));
+    }
+
+    protected Entity(Map<Object, Object> metaData) {
+        super(metaData);
+    }
 
     @EqualsAndHashCode.Include
     public abstract T id();

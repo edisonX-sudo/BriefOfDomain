@@ -1,11 +1,9 @@
 package org.xsk.domain.common;
 
-import cn.hutool.core.collection.CollUtil;
-
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> extends DomainAbility {
 
@@ -157,39 +155,99 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
     }
 
     /**
-     * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
-     * subtractVo([1,2,3,4],[2,3,4,5]) -》 [1]
+     * 将entity的数据库id隐式的带入实体, 当entity的id不是数据库主键时使用
+     *
+     * @param entity
+     * @param storageId
      */
-    protected <T> Collection<T> subtractVo(Collection<T> subjectSet, Collection<T> objectSet) {
-        return CollUtil.subtract(subjectSet, objectSet);
-    }
-
     protected void putEntityStorageId(E entity, Object storageId) {
         entity.putMetaData(META_STORAGE_KEY, storageId);
     }
 
+    /**
+     * 将vo的数据库id隐式的带入实体, 当vo对应数据库的一张表时使用
+     *
+     * @param entity
+     * @param vo
+     * @param storageId
+     */
     protected void putVoStorageId(E entity, ValueObject vo, Object storageId) {
         String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, vo.getClass().getName());
-        List<Object> voIds = entity.getMetaData(voIdsKey, List.class);
+        HashSet<Object> voIds = entity.getMetaData(voIdsKey, HashSet.class);
         if (voIds == null) {
-            voIds = new ArrayList<>();
+            voIds = new HashSet<>();
         }
         entity.putMetaData(voIdsKey, voIds);
         vo.putMetaData(META_STORAGE_KEY, storageId);
     }
 
+    /**
+     * 取出隐式带入的entity的数据库id, 当entity的id不是数据库主键时使用
+     *
+     * @param entity
+     * @param valType
+     * @param <V>
+     * @return
+     */
     protected <V> V restoreEntityStorageId(E entity, Class<V> valType) {
         return entity.getMetaData(META_STORAGE_KEY, valType);
     }
 
+    /**
+     * 取出隐式带入的valueObject的数据库id, 当vo对应数据库的一张表时使用
+     *
+     * @param vo
+     * @param valType
+     * @param <V>
+     * @return
+     */
     protected <V> V restoreVoStorageId(ValueObject vo, Class<V> valType) {
         return vo.getMetaData(META_STORAGE_KEY, valType);
     }
 
-    protected <C extends ValueObject, V> List<V> restoreVoStorageIds(E entity, Class<C> voType, Class<V> valType) {
-        String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, voType.getName());
-        return entity.getMetaData(voIdsKey, List.class);
+    /**
+     * 通过隐式带入id判断valueObject是否是新构建的, 当vo对应数据库的一张表时使用
+     *
+     * @param vo
+     * @return
+     */
+    protected Boolean isNewVo(ValueObject vo) {
+        return vo.getMetaData(META_STORAGE_KEY, Object.class) == null;
     }
+
+    /**
+     * 得到领域操作后背删除的valueObject的对象的数据库id, 当vo对应数据库的一张表时使用
+     *
+     * @param entity
+     * @param vos
+     * @param voType
+     * @param valType
+     * @param <V>
+     * @param <R>
+     * @return
+     */
+    protected <V extends ValueObject, R> Set<R> removedVoStorageId(E entity, Collection<V> vos, Class<V> voType, Class<R> valType) {
+        Set<R> originVoStorageIds = restoreOriginVoStorageIds(entity, voType, valType);
+        Set<R> currentVoStorageIds = vos.stream()
+                .map(v -> restoreVoStorageId(v, valType))
+                .collect(Collectors.toSet());
+        return originVoStorageIds.stream()
+                .filter(r -> !currentVoStorageIds.contains(r))
+                .collect(Collectors.toSet());
+    }
+
+    <V extends ValueObject, R> Set<R> restoreOriginVoStorageIds(E entity, Class<V> voType, Class<R> valType) {
+        String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, voType.getName());
+        return entity.getMetaData(voIdsKey, HashSet.class);
+    }
+
+//    /**
+//     * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
+//     * subtractVo([1,2,3,4],[2,3,4,5]) -》 [1]
+//     */
+//    protected <T> Collection<T> subtractVo(Collection<T> subjectSet, Collection<T> objectSet) {
+//        return CollUtil.subtract(subjectSet, objectSet);
+//    }
 
 //    <K extends MetaKey> void putComponentMetaData(AggregateComponent component, Class<K> key, Object val) {
 //        component.putMetaData(key, val);
