@@ -5,6 +5,7 @@ import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainService;
 import org.xsk.domain.common.EventBus;
 import org.xsk.iam.domain.account.event.SubAcctCreatedEvent;
+import org.xsk.iam.domain.account.exception.AcctNotFoundException;
 import org.xsk.iam.domain.account.exception.OnlyMainAcctCanOperateException;
 import org.xsk.iam.domain.account.exception.OnlyParentAcctCanOperateException;
 import org.xsk.iam.domain.app.AppCode;
@@ -46,7 +47,13 @@ public class SubAcctService extends DomainService {
         return subAccount;
     }
 
-    void deleteSubAcct(Account mainAcct, Account subAcct) {
+    public void deleteSubAcct(Account mainAcct, Account subAcct) {
+        if (mainAcct == null) {
+            throw new AcctNotFoundException();
+        }
+        if (subAcct == null) {
+            throw new AcctNotFoundException();
+        }
         if (!mainAcct.isMainAcct()) {
             throw new OnlyMainAcctCanOperateException();
         }

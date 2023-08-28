@@ -57,10 +57,6 @@ public class Account extends Entity<AppUidUniqueKey> {
         );
     }
 
-    public void deleteSubAcct(Account subAccount, SubAcctService subAcctService) {
-        subAcctService.deleteSubAcct(this, subAccount);
-    }
-
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
