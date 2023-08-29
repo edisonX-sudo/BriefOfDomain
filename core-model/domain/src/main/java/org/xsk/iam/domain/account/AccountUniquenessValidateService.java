@@ -14,7 +14,7 @@ public class AccountUniquenessValidateService extends DomainService {
 
     private AccountRepository accountRepository;
 
-    void validateAccountUniqueness(TenantCode tenantCode, Credential credential, String mainAcctDomain, AppUidUniqueKey mainAcctUniqKey, Uid parentUid) {
+    void validateAccountUniqueness(AppUidUniqueKey mainAcctUniqKey, TenantCode tenantCode, Uid parentUid, String mainAcctDomain, Credential credential) {
         if (accountRepository.existUid(mainAcctUniqKey, tenantCode))
             throw new AcctUidExistException();
         if (StrUtil.isNotEmpty(credential.loginName)

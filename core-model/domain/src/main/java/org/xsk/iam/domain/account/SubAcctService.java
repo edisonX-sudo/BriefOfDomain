@@ -37,7 +37,7 @@ public class SubAcctService extends DomainService {
             throw new SubAcctCountOverLimit();
         TenantCode tenantCode = mainAcct.tenantCode;
         Uid subAcctParentUid = mainAcctAppUidKey.uid();
-        accountUniquenessValidateService.validateAccountUniqueness(tenantCode, credential, subAcctSiteDomain, mainAcctAppUidKey, subAcctParentUid);
+        accountUniquenessValidateService.validateAccountUniqueness(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential);
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
                 mainAcctAppUidKey.appCode(),
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid

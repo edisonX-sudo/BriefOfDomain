@@ -34,7 +34,7 @@ public class AccountFactory extends DomainFactory {
         );
         Uid parentUid = Uid.emptyUid();
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
-        accountUniquenessValidateService.validateAccountUniqueness(tenantCode, credential, mainAcctDomain, mainAcctUniqKey, parentUid);
+        accountUniquenessValidateService.validateAccountUniqueness(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential);
         Account account = new Account(
                 mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NORMAL, nickname, avatar, region,
