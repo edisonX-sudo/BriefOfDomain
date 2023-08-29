@@ -13,9 +13,12 @@ public class AppCode extends Code<String> {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return throwIllegalStateException -> {
-            throwIllegalStateException.accept(StrUtil.isEmpty(value()), "appCode is empty");
-            throwIllegalStateException.accept(value().length() >= 24, "appCode length must be less than 24");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(StrUtil.isEmpty(AppCode.this.value()), "appCode is empty");
+                throwOnCondition(AppCode.this.value().length() >= 24, "appCode length must be less than 24");
+            }
         };
     }
 

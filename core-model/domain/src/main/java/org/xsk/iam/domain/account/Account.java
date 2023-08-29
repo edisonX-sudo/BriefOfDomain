@@ -1,6 +1,5 @@
 package org.xsk.iam.domain.account;
 
-import cn.hutool.core.util.StrUtil;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
@@ -134,14 +133,17 @@ public class Account extends Entity<AppUidUniqueKey> {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return throwIllegalStateException -> {
-            throwIllegalStateException.accept(needResetPassword == null,"illegal");
-            throwIllegalStateException.accept(siteScope == null,"illegal");
-            throwIllegalStateException.accept(extraProps == null,"illegal");
-            throwIllegalStateException.accept(acctSiteProfiles == null,"illegal");
-            throwIllegalStateException.accept(domain == null,"illegal");
-            throwIllegalStateException.accept(StrUtil.length(domain)>32,"illegal");
-            throwIllegalStateException.accept(StrUtil.length(nickname)>32,"illegal");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnNull(needResetPassword, "illegal");
+                throwOnNull(siteScope, "illegal");
+                throwOnNull(extraProps, "illegal");
+                throwOnNull(acctSiteProfiles, "illegal");
+                throwOnNull(domain, "illegal");
+                throwOnGt(domain, 32, "illegal");
+                throwOnGt(nickname, 32, "illegal");
+            }
         };
     }
 

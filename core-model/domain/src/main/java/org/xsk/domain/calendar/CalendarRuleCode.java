@@ -12,8 +12,11 @@ public class CalendarRuleCode extends UniqueKey<String> {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return (throwIllegalStateException) -> {
-            throwIllegalStateException.accept(StrUtil.isEmpty(this.value()), "rule code cant be empty");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(StrUtil.isEmpty(CalendarRuleCode.this.value()), "rule code cant be empty");
+            }
         };
     }
 }

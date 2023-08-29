@@ -29,9 +29,12 @@ public class RuleAppliedDay extends ValueObject {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return (throwIllegalStateException) -> {
-            throwIllegalStateException.accept(this.natureDay == null, "rule applied day natureDay cant be null");
-            throwIllegalStateException.accept(this.type == null, "rule applied day type cant be null");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(RuleAppliedDay.this.natureDay == null, "rule applied day natureDay cant be null");
+                throwOnCondition(RuleAppliedDay.this.type == null, "rule applied day type cant be null");
+            }
         };
     }
 

@@ -37,8 +37,11 @@ public class NatureDay extends ValueObject {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return (throwIllegalStateException) -> {
-            throwIllegalStateException.accept(this.date == null, "nature day date cant be null");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(NatureDay.this.date == null, "nature day date cant be null");
+            }
         };
     }
 }

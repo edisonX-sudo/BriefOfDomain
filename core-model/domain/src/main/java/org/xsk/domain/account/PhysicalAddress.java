@@ -31,13 +31,16 @@ public class PhysicalAddress extends ValueObject {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return throwIllegalStateException -> {
-            throwIllegalStateException.accept(StrUtil.isEmpty(country), "physical address country cant not be empty");
-            throwIllegalStateException.accept(StrUtil.length(country) > 50, "physical address country content over limit");
-            throwIllegalStateException.accept(StrUtil.isEmpty(city), "physical address city cant not be empty");
-            throwIllegalStateException.accept(StrUtil.length(city) > 50, "physical address city content over limit");
-            throwIllegalStateException.accept(StrUtil.isEmpty(street), "physical address street cant not be empty");
-            throwIllegalStateException.accept(StrUtil.length(street) > 50, "physical address street content over limit");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(StrUtil.isEmpty(country), "physical address country cant not be empty");
+                throwOnCondition(StrUtil.length(country) > 50, "physical address country content over limit");
+                throwOnCondition(StrUtil.isEmpty(city), "physical address city cant not be empty");
+                throwOnCondition(StrUtil.length(city) > 50, "physical address city content over limit");
+                throwOnCondition(StrUtil.isEmpty(street), "physical address street cant not be empty");
+                throwOnCondition(StrUtil.length(street) > 50, "physical address street content over limit");
+            }
         };
     }
 }

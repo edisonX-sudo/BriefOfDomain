@@ -33,10 +33,13 @@ public class DaySubRule extends ValueObject {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return throwIllegalStateException -> {
-            throwIllegalStateException.accept(this.date == null, "day sub rule cant be null");
-            throwIllegalStateException.accept(this.ruleType == null, "day rule type cant be null");
-            throwIllegalStateException.accept(StrUtil.length(this.description) > 50, "day rule description length over limit");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(DaySubRule.this.date == null, "day sub rule cant be null");
+                throwOnCondition(DaySubRule.this.ruleType == null, "day rule type cant be null");
+                throwOnCondition(StrUtil.length(DaySubRule.this.description) > 50, "day rule description length over limit");
+            }
         };
     }
 }

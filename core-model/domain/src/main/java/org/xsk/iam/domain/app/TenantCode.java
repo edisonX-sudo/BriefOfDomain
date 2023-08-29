@@ -12,9 +12,12 @@ public class TenantCode extends Code<String> {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return throwIllegalStateException -> {
-            throwIllegalStateException.accept(StrUtil.isEmpty(value()), "appCode is empty");
-            throwIllegalStateException.accept(value().length() >= 24, "appCode length must be less than 24");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(StrUtil.isEmpty(TenantCode.this.value()), "appCode is empty");
+                throwOnCondition(TenantCode.this.value().length() >= 24, "appCode length must be less than 24");
+            }
         };
     }
 }

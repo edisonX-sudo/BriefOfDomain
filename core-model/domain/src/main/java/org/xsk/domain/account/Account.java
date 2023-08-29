@@ -88,9 +88,12 @@ public class Account extends Entity<AccountId> {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return (throwIllegalStateException) -> {
-            throwIllegalStateException.accept(StrUtil.length(this.name) > 50, "account name length cant be greater than 50");
-            throwIllegalStateException.accept(this.status == null, "account status cant be null");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(StrUtil.length(Account.this.name) > 50, "account name length cant be greater than 50");
+                throwOnCondition(Account.this.status == null, "account status cant be null");
+            }
         };
     }
 }

@@ -61,11 +61,11 @@ public abstract class AggregateComponent implements Serializable {
                 throw new IllegalStateDomainException(msg);
             }
         };
-        domainSpecificationValidator.validSpecification(throwIllegalStateException);
+        domainSpecificationValidator.validSpecification();
         if (additionalValidator == null) {
             return;
         }
-        additionalValidator.validSpecification(throwIllegalStateException);
+        additionalValidator.validSpecification();
     }
 
 }

@@ -26,9 +26,12 @@ public class Contact extends ValueObject {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return (throwIllegalStateException) -> {
-            throwIllegalStateException.accept(StrUtil.length(this.email) > 50, "contact email length cant be greater than 50");
-            throwIllegalStateException.accept(StrUtil.length(this.phone) > 50, "contact phone length cant be greater than 50");
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnCondition(StrUtil.length(Contact.this.email) > 50, "contact email length cant be greater than 50");
+                throwOnCondition(StrUtil.length(Contact.this.phone) > 50, "contact phone length cant be greater than 50");
+            }
         };
     }
 }
