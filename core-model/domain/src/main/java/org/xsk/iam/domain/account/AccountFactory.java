@@ -1,5 +1,6 @@
 package org.xsk.iam.domain.account;
 
+import cn.hutool.core.util.StrUtil;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainFactory;
 import org.xsk.domain.common.EventBus;
@@ -28,19 +29,25 @@ public class AccountFactory extends DomainFactory {
     public Account createMainAcct(AppCode appCode, TenantCode tenantCode, SiteCode curSite, Uid mainAcctUid, Credential credential,
                                   String nickname, Avatar avatar, Region region, boolean needResetPassword, Map<String, Object> extraProps,
                                   Set<RoleCode> roles, Lang lang) {
-        String domain = appConfigService.restoreAppDomain(appCode);
+        String mainAcctDomain = appConfigService.restoreAppDomain(appCode);
         AppUidUniqueKey mainAcctUniqKey = new AppUidUniqueKey(
                 appCode,
                 Code.isEmptyVal(mainAcctUid) ? Uid.randomeUid() : mainAcctUid
         );
         Uid parentUid = Uid.emptyUid();
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
-        throwOnCondition(accountRepository.existUid(mainAcctUniqKey, tenantCode), new AcctUidExistException());
-        throwOnCondition(accountRepository.existLoginName(mainAcctUniqKey, tenantCode, parentUid, domain, credential.loginName), new AcctLoginNameExistException());
-        throwOnCondition(accountRepository.existEmail(mainAcctUniqKey, tenantCode, parentUid, domain, credential.email), new AcctEmailExistException());
-        throwOnCondition(accountRepository.existMobile(mainAcctUniqKey, tenantCode, parentUid, domain, credential.mobile), new AcctMobileExistException());
+        if (accountRepository.existUid(mainAcctUniqKey, tenantCode)) throw new AcctUidExistException();
+        if (StrUtil.isNotEmpty(credential.loginName)
+                && accountRepository.existLoginName(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.loginName))
+            throw new AcctLoginNameExistException();
+        if (StrUtil.isNotEmpty(credential.email)
+                && accountRepository.existEmail(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.email))
+            throw new AcctEmailExistException();
+        if (StrUtil.isNotEmpty(credential.mobile)
+                && accountRepository.existMobile(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.mobile))
+            throw new AcctMobileExistException();
         Account account = new Account(
-                mainAcctUniqKey, tenantCode, parentUid, domain, Collections.singleton(curSite),
+                mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NORMAL, nickname, avatar, region,
                 needResetPassword, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))

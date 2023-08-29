@@ -27,22 +27,23 @@ public class SubAcctService extends DomainService {
                           String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
                           Set<RoleCode> roles, Lang lang) {
         //createSubAcct是包级方法,不用检查Account的存在(这个包owner会把控调用的上下文)
-        throwOnCondition(!mainAcct.isMainAcct(), new OnlyMainAcctCanOperateException());
+        if (!mainAcct.isMainAcct()) throw new OnlyMainAcctCanOperateException();
         String subAcctSiteDomain = siteConfigService.restoreSiteDomain(curSite);
         AppUidUniqueKey mainAcctAppUidKey = mainAcct.appUidKey;
-        throwOnCondition(accountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000, new SubAcctCountOverLimit());
+        if (accountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000)
+            throw new SubAcctCountOverLimit();
         TenantCode tenantCode = mainAcct.tenantCode;
         Uid subAcctParentUid = mainAcctAppUidKey.uid();
-        throwOnCondition(accountRepository.existUid(mainAcctAppUidKey, tenantCode), new AcctUidExistException());
-        throwOnCondition(StrUtil.isNotEmpty(credential.loginName)
-                        && accountRepository.existLoginName(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.loginName),
-                new AcctLoginNameExistException());
-        throwOnCondition(StrUtil.isNotEmpty(credential.email)
-                        && accountRepository.existEmail(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.email),
-                new AcctEmailExistException());
-        throwOnCondition(StrUtil.isNotEmpty(credential.mobile)
-                        && accountRepository.existMobile(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.mobile),
-                new AcctMobileExistException());
+        if (accountRepository.existUid(mainAcctAppUidKey, tenantCode)) throw new AcctUidExistException();
+        if (StrUtil.isNotEmpty(credential.loginName)
+                && accountRepository.existLoginName(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.loginName))
+            throw new AcctLoginNameExistException();
+        if (StrUtil.isNotEmpty(credential.email)
+                && accountRepository.existEmail(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.email))
+            throw new AcctEmailExistException();
+        if (StrUtil.isNotEmpty(credential.mobile)
+                && accountRepository.existMobile(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.mobile))
+            throw new AcctMobileExistException();
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
                 mainAcctAppUidKey.appCode(),
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
