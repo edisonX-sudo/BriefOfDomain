@@ -5,10 +5,12 @@ import org.xsk.domain.common.ValueObject;
 import org.xsk.iam.domain.role.RoleCode;
 import org.xsk.iam.domain.site.SiteCode;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class AccountSiteProfile extends ValueObject {
+    private static final String LANGUAGE = "LANGUAGE";
     SiteCode siteCode;
     Set<RoleCode> roleCodes;
     Lang lang;
@@ -20,6 +22,14 @@ public class AccountSiteProfile extends ValueObject {
         this.roleCodes = roleCodes;
         this.lang = lang;
         this.preference = preference;
+        init(lang);
+    }
+
+    private void init(Lang lang) {
+        if (this.preference == null) {
+            this.preference = new HashMap<>();
+        }
+        this.preference.put(LANGUAGE, lang.name());
     }
 
     @Override

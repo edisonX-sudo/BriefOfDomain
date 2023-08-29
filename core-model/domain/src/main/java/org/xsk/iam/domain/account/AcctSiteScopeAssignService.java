@@ -1,6 +1,7 @@
 package org.xsk.iam.domain.account;
 
 import org.xsk.domain.common.DomainService;
+import org.xsk.iam.domain.account.exception.OnlyMainAcctCanOperateException;
 import org.xsk.iam.domain.site.SiteCode;
 import org.xsk.iam.domain.site.SiteConfigService;
 
@@ -11,6 +12,9 @@ public class AcctSiteScopeAssignService extends DomainService {
     SiteConfigService siteConfigService;
 
     void assignSiteScope(Account account, Set<SiteCode> siteCodes, Lang lang) {
+        if(!account.isMainAcct()){
+            throw new OnlyMainAcctCanOperateException();
+        }
         HashSet<SiteCode> siteScope = new HashSet<>(account.siteScope);
         siteScope.addAll(siteCodes);
         account.siteScope = siteScope;
@@ -27,6 +31,9 @@ public class AcctSiteScopeAssignService extends DomainService {
     }
 
     void removeSiteScope(Account account, Set<SiteCode> siteCodes) {
+        if(!account.isMainAcct()){
+            throw new OnlyMainAcctCanOperateException();
+        }
         HashSet<SiteCode> siteScope = new HashSet<>(account.siteScope);
         siteScope.removeAll(siteCodes);
         account.siteScope = siteScope;

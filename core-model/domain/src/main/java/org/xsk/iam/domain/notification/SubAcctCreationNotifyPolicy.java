@@ -6,7 +6,7 @@ import org.xsk.iam.domain.account.event.SubAcctCreatedEvent;
 public class SubAcctCreationNotifyPolicy extends DomainPolicy<SubAcctCreatedEvent> {
     @Override
     public void subscribe(SubAcctCreatedEvent subAcctCreatedEvent) {
-        // TODO: 2023/8/27 notify sub acct owner
+        // TODO: 2023/8/27 notify sub acct owner by sms/email
     }
 
     @Override

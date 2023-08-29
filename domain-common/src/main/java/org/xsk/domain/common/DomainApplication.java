@@ -6,8 +6,15 @@ public abstract class DomainApplication extends DomainAbility {
     public DomainApplication() {
     }
 
-    protected <T> T tx(Callable<T> callable){
+    protected <T> T tx(Callable<T> callable) {
         return FrameworkIntegration.current.tx(callable);
+    }
+
+    protected void tx(Runnable runnable) {
+        tx(() -> {
+            runnable.run();
+            return null;
+        });
     }
 
 }

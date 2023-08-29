@@ -9,6 +9,11 @@ public class AccountRepositoryImpl extends AccountRepository{
     }
 
     @Override
+    Integer countSiteSubAcct(AppUidUniqueKey.AppUid appUidKey, String subAcctSiteDomain) {
+        return false;
+    }
+
+    @Override
     protected Account findInternal(AppUidUniqueKey id) {
         return null;
     }

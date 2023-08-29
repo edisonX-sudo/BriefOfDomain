@@ -8,6 +8,7 @@ import org.xsk.iam.domain.account.event.SubAcctCreatedEvent;
 import org.xsk.iam.domain.account.exception.AcctNotFoundException;
 import org.xsk.iam.domain.account.exception.OnlyMainAcctCanOperateException;
 import org.xsk.iam.domain.account.exception.OnlyParentAcctCanOperateException;
+import org.xsk.iam.domain.account.exception.SubAcctCountOverLimit;
 import org.xsk.iam.domain.app.AppCode;
 import org.xsk.iam.domain.role.RoleCode;
 import org.xsk.iam.domain.site.SiteCode;
@@ -30,16 +31,18 @@ public class SubAcctService extends DomainService {
         if (!mainAcct.isMainAcct()) {
             throw new OnlyMainAcctCanOperateException();
         }
-        AppCode mainAcctAppCode = mainAcct.appUidKey.value().appCode();
+        String subAcctSiteDomain = siteConfigService.restoreSiteDomain(curSite);
+        AppUidUniqueKey.AppUid mainAcctAppUid = mainAcct.appUidKey.value();
+        if (accountRepository.countSiteSubAcct(mainAcctAppUid, subAcctSiteDomain) > 1000) {
+            throw new SubAcctCountOverLimit();
+        }
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
-                mainAcctAppCode,
+                mainAcctAppUid.appCode(),
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
         );
-        Uid mainAcctUid = mainAcct.appUidKey.value().uid();
-        String domain = siteConfigService.restoreSiteDomain(curSite);
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
         Account subAccount = new Account(
-                subAcctUniqKey, mainAcct.tenantCode, mainAcctUid, domain, Collections.singleton(curSite),
+                subAcctUniqKey, mainAcct.tenantCode, mainAcctAppUid.uid(), subAcctSiteDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NOT_ACTIVE, nickname, avatar, region,
                 true, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
