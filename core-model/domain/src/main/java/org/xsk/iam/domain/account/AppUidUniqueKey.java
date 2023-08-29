@@ -15,6 +15,14 @@ public class AppUidUniqueKey extends UniqueKey<AppUidUniqueKey.AppUid> {
         this(new AppUid(appCode, uid));
     }
 
+    public AppCode appCode() {
+        return value().appCode;
+    }
+
+    public Uid uid() {
+        return value().uid;
+    }
+
     @Override
     protected DomainSpecificationValidator specificationValidator() {
         return null;
@@ -32,14 +40,6 @@ public class AppUidUniqueKey extends UniqueKey<AppUidUniqueKey.AppUid> {
         @Override
         protected DomainSpecificationValidator specificationValidator() {
             return null;
-        }
-
-        public AppCode appCode() {
-            return appCode;
-        }
-
-        public Uid uid() {
-            return uid;
         }
     }
 

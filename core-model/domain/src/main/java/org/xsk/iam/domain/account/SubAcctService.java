@@ -36,14 +36,13 @@ public class SubAcctService extends DomainService {
         if (accountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000) {
             throw new SubAcctCountOverLimit();
         }
-        AppUidUniqueKey.AppUid mainAcctAppUid = mainAcctAppUidKey.value();
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
-                mainAcctAppUid.appCode(),
+                mainAcctAppUidKey.appCode(),
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
         );
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
         Account subAccount = new Account(
-                subAcctUniqKey, mainAcct.tenantCode, mainAcctAppUid.uid(), subAcctSiteDomain, Collections.singleton(curSite),
+                subAcctUniqKey, mainAcct.tenantCode, mainAcctAppUidKey.uid(), subAcctSiteDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NOT_ACTIVE, nickname, avatar, region,
                 true, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
@@ -60,9 +59,9 @@ public class SubAcctService extends DomainService {
         if (!mainAcct.isMainAcct()) {
             throw new OnlyMainAcctCanOperateException();
         }
-        AppCode mainAcctAppCode = mainAcct.appUidKey.value().appCode();
-        AppCode subAcctAppCode = subAcct.appUidKey.value().appCode();
-        Uid mainAcctUid = mainAcct.appUidKey.value().uid();
+        AppCode mainAcctAppCode = mainAcct.appUidKey.appCode();
+        AppCode subAcctAppCode = subAcct.appUidKey.appCode();
+        Uid mainAcctUid = mainAcct.appUidKey.uid();
         Uid subAcctParentUid = subAcct.parentUid;
         if (!subAcctAppCode.equals(mainAcctAppCode) || !subAcctParentUid.equals(mainAcctUid)) {
             throw new OnlyParentAcctCanOperateException();
