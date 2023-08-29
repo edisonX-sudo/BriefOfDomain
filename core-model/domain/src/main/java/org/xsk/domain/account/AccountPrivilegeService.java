@@ -11,7 +11,7 @@ import java.util.List;
 public class AccountPrivilegeService extends DomainService {
     AccountRepo accountRepo;
 
-    public void handoverMainPrivilege(Account mainAccount, Account subAccount) {
+    void handoverMainPrivilege(Account mainAccount, Account subAccount) {
         if (!mainAccount.isMainAccount()) {
             throw new OnlyMainAccountOperate();
         }
