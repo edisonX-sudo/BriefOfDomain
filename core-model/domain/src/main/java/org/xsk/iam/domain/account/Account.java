@@ -69,16 +69,16 @@ public class Account extends Entity<AppUidUniqueKey> {
         this.avatar = avatar;
     }
 
-    public void changePassword(String password, String ticket, CredentialValidateModificationService credentialValidateModificationService) {
-        credentialValidateModificationService.changePassword(this, password, ticket);
+    public void changePassword(String password, String ticket, CredentialModificationValidateService credentialModificationValidateService) {
+        credentialModificationValidateService.changePassword(this, password, ticket);
     }
 
-    public void changeEmail(String email, String ticket, CredentialValidateModificationService credentialValidateModificationService) {
-        credentialValidateModificationService.changeEmail(this, email, ticket);
+    public void changeEmail(String email, String ticket, CredentialModificationValidateService credentialModificationValidateService) {
+        credentialModificationValidateService.changeEmail(this, email, ticket);
     }
 
-    public void changeMobile(String mobile, String ticket, CredentialValidateModificationService credentialValidateModificationService) {
-        credentialValidateModificationService.changeMobile(this, mobile, ticket);
+    public void changeMobile(String mobile, String ticket, CredentialModificationValidateService credentialModificationValidateService) {
+        credentialModificationValidateService.changeMobile(this, mobile, ticket);
     }
 
     public void forceLogout() {
