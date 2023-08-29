@@ -5,7 +5,6 @@ import org.xsk.domain.common.ValueObject;
 import org.xsk.iam.domain.role.RoleCode;
 import org.xsk.iam.domain.site.SiteCode;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,9 +26,6 @@ public class AcctSiteProfile extends ValueObject {
     }
 
     private void init(Lang lang) {
-        if (this.preference == null) {
-            this.preference = new HashMap<>();
-        }
         this.preference.put(LANGUAGE, lang.name());
     }
 
