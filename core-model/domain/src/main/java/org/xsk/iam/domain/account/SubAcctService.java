@@ -1,5 +1,6 @@
 package org.xsk.iam.domain.account;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainService;
@@ -33,9 +34,15 @@ public class SubAcctService extends DomainService {
         TenantCode tenantCode = mainAcct.tenantCode;
         Uid subAcctParentUid = mainAcctAppUidKey.uid();
         throwOnCondition(accountRepository.existUid(mainAcctAppUidKey, tenantCode), new AcctUidExistException());
-        throwOnCondition(accountRepository.existLoginName(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.loginName), new AcctLoginNameExistException());
-        throwOnCondition(accountRepository.existEmail(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.email), new AcctEmailExistException());
-        throwOnCondition(accountRepository.existMobile(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.mobile), new AcctMobileExistException());
+        throwOnCondition(StrUtil.isNotEmpty(credential.loginName)
+                        && accountRepository.existLoginName(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.loginName),
+                new AcctLoginNameExistException());
+        throwOnCondition(StrUtil.isNotEmpty(credential.email)
+                        && accountRepository.existEmail(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.email),
+                new AcctEmailExistException());
+        throwOnCondition(StrUtil.isNotEmpty(credential.mobile)
+                        && accountRepository.existMobile(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.mobile),
+                new AcctMobileExistException());
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
                 mainAcctAppUidKey.appCode(),
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
