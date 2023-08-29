@@ -9,6 +9,7 @@ public class AccountApplication extends DomainApplication {
     final AccountFactory accountFactory;
     final AccountRepo accountRepo;
     final AccountPrivilegeService accountPrivilegeService;
+    final AuthService authService;
 
     public AccountId create(AccountStatus status, String name, String loginName, String password, Contact contact, PhysicalAddress address) {
         return tx(() -> {
@@ -30,5 +31,10 @@ public class AccountApplication extends DomainApplication {
         Account mainAccount = accountRepo.findNotNone(mainAccountId);
         Account subAccount = accountRepo.findNotNone(subAccountId);
         mainAccount.handoverMainPrivilege(subAccount, accountPrivilegeService);
+    }
+
+    public void auth(String token){
+        // high rate invocation here
+        authService.validateAuth(token);
     }
 }
