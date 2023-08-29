@@ -11,6 +11,7 @@ import org.xsk.iam.domain.account.exception.SubAcctCountOverLimit;
 import org.xsk.iam.domain.app.AppCode;
 import org.xsk.iam.domain.app.TenantCode;
 import org.xsk.iam.domain.role.RoleCode;
+import org.xsk.iam.domain.role.RoleValidateService;
 import org.xsk.iam.domain.site.SiteCode;
 import org.xsk.iam.domain.site.SiteConfigService;
 
@@ -23,6 +24,7 @@ import java.util.Set;
 public class SubAcctService extends DomainService {
     SiteConfigService siteConfigService;
     AccountRepository accountRepository;
+    RoleValidateService roleValidateService;
     AcctUniquenessValidateService acctUniquenessValidateService;
 
     Account createSubAcct(Account mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
@@ -31,6 +33,7 @@ public class SubAcctService extends DomainService {
         //createSubAcct是包级方法,不用检查Account的存在(这个包owner会把控调用的上下文)
         if (!mainAcct.isMainAcct())
             throw new OnlyMainAcctCanOperateException();
+        roleValidateService.validateCodes(roles);
         String subAcctSiteDomain = siteConfigService.restoreSiteDomain(curSite);
         AppUidUniqueKey mainAcctAppUidKey = mainAcct.appUidKey;
         if (accountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000)

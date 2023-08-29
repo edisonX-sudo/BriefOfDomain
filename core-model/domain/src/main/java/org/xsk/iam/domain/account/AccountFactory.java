@@ -9,6 +9,7 @@ import org.xsk.iam.domain.app.AppCode;
 import org.xsk.iam.domain.app.AppConfigService;
 import org.xsk.iam.domain.app.TenantCode;
 import org.xsk.iam.domain.role.RoleCode;
+import org.xsk.iam.domain.role.RoleValidateService;
 import org.xsk.iam.domain.site.SiteCode;
 import org.xsk.iam.domain.site.SiteConfigService;
 
@@ -23,10 +24,12 @@ public class AccountFactory extends DomainFactory {
     SiteConfigService siteConfigService;
     AccountRepository accountRepository;
     AcctUniquenessValidateService acctUniquenessValidateService;
+    RoleValidateService roleValidateService;
 
     public Account createMainAcct(AppCode appCode, TenantCode tenantCode, SiteCode curSite, Uid mainAcctUid, Credential credential,
                                   String nickname, Avatar avatar, Region region, boolean needResetPassword, Map<String, Object> extraProps,
                                   Set<RoleCode> roles, Lang lang) {
+        roleValidateService.validateCodes(roles);
         String mainAcctDomain = appConfigService.restoreAppDomain(appCode);
         AppUidUniqueKey mainAcctUniqKey = new AppUidUniqueKey(
                 appCode,
