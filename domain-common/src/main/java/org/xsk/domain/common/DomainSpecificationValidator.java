@@ -11,6 +11,10 @@ public interface DomainSpecificationValidator {
 
     void validSpecification();
 
+    default String defaultThrowMsg(String subjectName){
+        return String.format("%s specification validation failed", subjectName);
+    }
+
     default void throwOnCondition(Boolean condition, String msg) {
         if (condition)
             throw new IllegalStateDomainException(msg);

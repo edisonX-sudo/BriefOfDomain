@@ -9,6 +9,7 @@ public class AppUidUniqueKey extends UniqueKey<AppUidUniqueKey.AppUid> {
 
     public AppUidUniqueKey(AppUid id) {
         super(id);
+        validSpecification();
     }
 
     public AppUidUniqueKey(AppCode appCode, Uid uid) {
@@ -39,7 +40,13 @@ public class AppUidUniqueKey extends UniqueKey<AppUidUniqueKey.AppUid> {
 
         @Override
         protected DomainSpecificationValidator specificationValidator() {
-            return null;
+            return new DomainSpecificationValidator() {
+                @Override
+                public void validSpecification() {
+                    throwOnNull(appCode, defaultThrowMsg("appCode"));
+                    throwOnNull(uid, defaultThrowMsg("uid"));
+                }
+            };
         }
     }
 
