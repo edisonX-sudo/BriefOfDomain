@@ -1,6 +1,5 @@
 package org.xsk.iam.domain.account;
 
-import cn.hutool.core.lang.id.NanoId;
 import cn.hutool.crypto.digest.DigestUtil;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
@@ -10,6 +9,7 @@ public class Credential extends ValueObject {
     String mobile;
     String email;
     String cryptPassword;
+    String plainTextPass;
 
     Credential(String loginName, String mobile, String email, String cryptPassword) {
         this.loginName = loginName;
@@ -18,13 +18,14 @@ public class Credential extends ValueObject {
         this.cryptPassword = cryptPassword;
     }
 
-    public static Credential buildRandPassCredential(String loginName, String mobile, String email) {
-        String randPass = NanoId.randomNanoId(10);
-        return buildCredential(loginName, mobile, email, randPass);
+    public static Credential restore(String loginName, String mobile, String email, String cryptPassword) {
+        return new Credential(loginName, mobile, email, cryptPassword);
     }
 
     public static Credential buildCredential(String loginName, String mobile, String email, String plainTextPass) {
-        return new Credential(loginName, mobile, email, DigestUtil.sha1Hex(plainTextPass));
+        Credential credential = new Credential(loginName, mobile, email, DigestUtil.sha1Hex(plainTextPass));
+        credential.plainTextPass = plainTextPass;
+        return credential;
     }
 
     public Credential changePassword(String plaintextPass) {

@@ -30,7 +30,8 @@ public class SubAcctService extends DomainService {
                           String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
                           Set<RoleCode> roles, Lang lang) {
         //createSubAcct是包级方法,不用检查Account的存在(这个包owner会把控调用的上下文)
-        if (!mainAcct.isMainAcct()) throw new OnlyMainAcctCanOperateException();
+        if (!mainAcct.isMainAcct())
+            throw new OnlyMainAcctCanOperateException();
         String subAcctSiteDomain = siteConfigService.restoreSiteDomain(curSite);
         AppUidUniqueKey mainAcctAppUidKey = mainAcct.appUidKey;
         if (accountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000)
@@ -49,7 +50,7 @@ public class SubAcctService extends DomainService {
                 true, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AcctSiteProfile(curSite, roles, lang, preference))
         );
-        EventBus.fire(new SubAcctCreatedEvent(subAcctUniqKey));
+        EventBus.fire(mainAcct, new SubAcctCreatedEvent(subAcctUniqKey, mainAcct.nickname, mainAcctAppUidKey.uid(), credential));
         return subAccount;
     }
 
