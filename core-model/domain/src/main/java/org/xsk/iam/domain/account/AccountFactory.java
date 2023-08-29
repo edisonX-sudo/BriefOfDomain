@@ -22,7 +22,7 @@ public class AccountFactory extends DomainFactory {
     AppConfigService appConfigService;
     SiteConfigService siteConfigService;
     AccountRepository accountRepository;
-    AccountUniquenessValidateService accountUniquenessValidateService;
+    AcctUniquenessValidateService acctUniquenessValidateService;
 
     public Account createMainAcct(AppCode appCode, TenantCode tenantCode, SiteCode curSite, Uid mainAcctUid, Credential credential,
                                   String nickname, Avatar avatar, Region region, boolean needResetPassword, Map<String, Object> extraProps,
@@ -34,12 +34,12 @@ public class AccountFactory extends DomainFactory {
         );
         Uid parentUid = Uid.emptyUid();
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
-        accountUniquenessValidateService.validateAccountUniqueness(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential);
+        acctUniquenessValidateService.validateAccountUniqueness(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential);
         Account account = new Account(
                 mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NORMAL, nickname, avatar, region,
                 needResetPassword, extraProps, new AcctActivityRecord(),
-                Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
+                Collections.singleton(new AcctSiteProfile(curSite, roles, lang, preference))
         );
         EventBus.fire(new MainAcctCreatedEvent(mainAcctUniqKey));
         return account;

@@ -24,7 +24,7 @@ import java.util.Set;
 public class SubAcctService extends DomainService {
     SiteConfigService siteConfigService;
     AccountRepository accountRepository;
-    AccountUniquenessValidateService accountUniquenessValidateService;
+    AcctUniquenessValidateService acctUniquenessValidateService;
 
     Account createSubAcct(Account mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
                           String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
@@ -37,7 +37,7 @@ public class SubAcctService extends DomainService {
             throw new SubAcctCountOverLimit();
         TenantCode tenantCode = mainAcct.tenantCode;
         Uid subAcctParentUid = mainAcctAppUidKey.uid();
-        accountUniquenessValidateService.validateAccountUniqueness(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential);
+        acctUniquenessValidateService.validateAccountUniqueness(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential);
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
                 mainAcctAppUidKey.appCode(),
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
@@ -47,7 +47,7 @@ public class SubAcctService extends DomainService {
                 subAcctUniqKey, tenantCode, subAcctParentUid, subAcctSiteDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NOT_ACTIVE, nickname, avatar, region,
                 true, extraProps, new AcctActivityRecord(),
-                Collections.singleton(new AccountSiteProfile(curSite, roles, lang, preference))
+                Collections.singleton(new AcctSiteProfile(curSite, roles, lang, preference))
         );
         EventBus.fire(new SubAcctCreatedEvent(subAcctUniqKey));
         return subAccount;

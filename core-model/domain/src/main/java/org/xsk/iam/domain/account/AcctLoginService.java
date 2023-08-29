@@ -7,7 +7,7 @@ import org.xsk.iam.domain.validation.ValidationService;
 
 import java.util.function.Predicate;
 
-public class AccountLoginService extends DomainService {
+public class AcctLoginService extends DomainService {
     ValidationService validationService;
 
     void loginViaValidationCode(Account account, String validationCode) {

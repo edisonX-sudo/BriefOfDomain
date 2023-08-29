@@ -10,7 +10,7 @@ import org.xsk.iam.domain.account.exception.AcctUidExistException;
 import org.xsk.iam.domain.app.TenantCode;
 
 @AllArgsConstructor
-public class AccountUniquenessValidateService extends DomainService {
+public class AcctUniquenessValidateService extends DomainService {
 
     private AccountRepository accountRepository;
 

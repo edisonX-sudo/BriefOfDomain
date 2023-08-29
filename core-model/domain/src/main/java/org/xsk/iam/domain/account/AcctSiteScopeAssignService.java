@@ -19,15 +19,15 @@ public class AcctSiteScopeAssignService extends DomainService {
         siteScope.addAll(siteCodes);
         account.siteScope = siteScope;
 
-        Set<AccountSiteProfile> assignedSiteProfile = siteCodes.stream()
+        Set<AcctSiteProfile> assignedSiteProfile = siteCodes.stream()
                 .map(siteCode -> {
                     Map<String, Object> preference = siteConfigService.restoreSiteConfig(siteCode, "default.preference", new HashMap<>());
-                    return new AccountSiteProfile(siteCode, Collections.emptySet(), lang, preference);
+                    return new AcctSiteProfile(siteCode, Collections.emptySet(), lang, preference);
                 })
                 .collect(Collectors.toSet());
-        HashSet<AccountSiteProfile> accountSiteProfiles = new HashSet<>(account.accountSiteProfiles);
-        accountSiteProfiles.addAll(assignedSiteProfile);
-        account.accountSiteProfiles = accountSiteProfiles;
+        HashSet<AcctSiteProfile> acctSiteProfiles = new HashSet<>(account.acctSiteProfiles);
+        acctSiteProfiles.addAll(assignedSiteProfile);
+        account.acctSiteProfiles = acctSiteProfiles;
     }
 
     void removeSiteScope(Account account, Set<SiteCode> siteCodes) {
@@ -38,9 +38,9 @@ public class AcctSiteScopeAssignService extends DomainService {
         siteScope.removeAll(siteCodes);
         account.siteScope = siteScope;
 
-        HashSet<AccountSiteProfile> accountSiteProfiles = new HashSet<>(account.accountSiteProfiles);
-        account.accountSiteProfiles = accountSiteProfiles.stream()
-                .filter(accountSiteProfile -> !siteCodes.contains(accountSiteProfile.siteCode))
+        HashSet<AcctSiteProfile> acctSiteProfiles = new HashSet<>(account.acctSiteProfiles);
+        account.acctSiteProfiles = acctSiteProfiles.stream()
+                .filter(acctSiteProfile -> !siteCodes.contains(acctSiteProfile.siteCode))
                 .collect(Collectors.toSet());
     }
 }

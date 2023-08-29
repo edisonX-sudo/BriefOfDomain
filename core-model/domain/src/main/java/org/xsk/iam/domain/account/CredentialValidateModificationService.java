@@ -3,7 +3,7 @@ package org.xsk.iam.domain.account;
 import org.xsk.domain.common.DomainService;
 import org.xsk.iam.domain.validation.ValidationService;
 
-public class AccountCredentialValidateModificationService extends DomainService {
+public class CredentialValidateModificationService extends DomainService {
     ValidationService validationService;
 
     void changeEmail(Account account, String email, String ticket) {

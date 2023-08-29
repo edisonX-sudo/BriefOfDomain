@@ -26,9 +26,9 @@ public class Account extends Entity<AppUidUniqueKey> {
     Map<String, Object> extraProps;
 
     AcctActivityRecord activityRecord;
-    Set<AccountSiteProfile> accountSiteProfiles;
+    Set<AcctSiteProfile> acctSiteProfiles;
 
-    Account(AppUidUniqueKey appUidKey, TenantCode tenantCode, Uid parentUid, String domain, Set<SiteCode> siteScope, Credential credential, AcctStatus acctStatus, String nickname, Avatar avatar, Region region, Boolean needResetPassword, Map<String, Object> extraProps, AcctActivityRecord activityRecord, Set<AccountSiteProfile> accountSiteProfiles) {
+    Account(AppUidUniqueKey appUidKey, TenantCode tenantCode, Uid parentUid, String domain, Set<SiteCode> siteScope, Credential credential, AcctStatus acctStatus, String nickname, Avatar avatar, Region region, Boolean needResetPassword, Map<String, Object> extraProps, AcctActivityRecord activityRecord, Set<AcctSiteProfile> acctSiteProfiles) {
         this.appUidKey = appUidKey;
         this.tenantCode = tenantCode;
         this.parentUid = parentUid;
@@ -42,7 +42,7 @@ public class Account extends Entity<AppUidUniqueKey> {
         this.needResetPassword = needResetPassword;
         this.extraProps = extraProps;
         this.activityRecord = activityRecord;
-        this.accountSiteProfiles = accountSiteProfiles;
+        this.acctSiteProfiles = acctSiteProfiles;
         validSpecification();
     }
 
@@ -69,28 +69,28 @@ public class Account extends Entity<AppUidUniqueKey> {
         this.avatar = avatar;
     }
 
-    public void changePassword(String password, String ticket, AccountCredentialValidateModificationService accountCredentialValidateModificationService) {
-        accountCredentialValidateModificationService.changePassword(this, password, ticket);
+    public void changePassword(String password, String ticket, CredentialValidateModificationService credentialValidateModificationService) {
+        credentialValidateModificationService.changePassword(this, password, ticket);
     }
 
-    public void changeEmail(String email, String ticket, AccountCredentialValidateModificationService accountCredentialValidateModificationService) {
-        accountCredentialValidateModificationService.changeEmail(this, email, ticket);
+    public void changeEmail(String email, String ticket, CredentialValidateModificationService credentialValidateModificationService) {
+        credentialValidateModificationService.changeEmail(this, email, ticket);
     }
 
-    public void changeMobile(String mobile, String ticket, AccountCredentialValidateModificationService accountCredentialValidateModificationService) {
-        accountCredentialValidateModificationService.changeMobile(this, mobile, ticket);
+    public void changeMobile(String mobile, String ticket, CredentialValidateModificationService credentialValidateModificationService) {
+        credentialValidateModificationService.changeMobile(this, mobile, ticket);
     }
 
     public void forceLogout() {
         activityRecord = activityRecord.recordForceLogout();
     }
 
-    public void loginInByValidationCode(String validationCode, AccountLoginService accountLoginService) {
-        accountLoginService.loginViaValidationCode(this, validationCode);
+    public void loginInByValidationCode(String validationCode, AcctLoginService acctLoginService) {
+        acctLoginService.loginViaValidationCode(this, validationCode);
     }
 
-    public void loginInByPassword(String plaintextPass, AccountLoginService accountLoginService) {
-        accountLoginService.loginInByPassword(this, plaintextPass);
+    public void loginInByPassword(String plaintextPass, AcctLoginService acctLoginService) {
+        acctLoginService.loginInByPassword(this, plaintextPass);
     }
 
     public void cancelAcct() {
