@@ -1,14 +1,10 @@
 package org.xsk.iam.domain.account;
 
-import cn.hutool.core.util.StrUtil;
+import lombok.AllArgsConstructor;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainFactory;
 import org.xsk.domain.common.EventBus;
 import org.xsk.iam.domain.account.event.MainAcctCreatedEvent;
-import org.xsk.iam.domain.account.exception.AcctEmailExistException;
-import org.xsk.iam.domain.account.exception.AcctLoginNameExistException;
-import org.xsk.iam.domain.account.exception.AcctMobileExistException;
-import org.xsk.iam.domain.account.exception.AcctUidExistException;
 import org.xsk.iam.domain.app.AppCode;
 import org.xsk.iam.domain.app.AppConfigService;
 import org.xsk.iam.domain.app.TenantCode;
@@ -21,10 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@AllArgsConstructor
 public class AccountFactory extends DomainFactory {
     AppConfigService appConfigService;
     SiteConfigService siteConfigService;
     AccountRepository accountRepository;
+    AccountUniquenessValidateService accountUniquenessValidateService;
 
     public Account createMainAcct(AppCode appCode, TenantCode tenantCode, SiteCode curSite, Uid mainAcctUid, Credential credential,
                                   String nickname, Avatar avatar, Region region, boolean needResetPassword, Map<String, Object> extraProps,
@@ -36,16 +34,7 @@ public class AccountFactory extends DomainFactory {
         );
         Uid parentUid = Uid.emptyUid();
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
-        if (accountRepository.existUid(mainAcctUniqKey, tenantCode)) throw new AcctUidExistException();
-        if (StrUtil.isNotEmpty(credential.loginName)
-                && accountRepository.existLoginName(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.loginName))
-            throw new AcctLoginNameExistException();
-        if (StrUtil.isNotEmpty(credential.email)
-                && accountRepository.existEmail(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.email))
-            throw new AcctEmailExistException();
-        if (StrUtil.isNotEmpty(credential.mobile)
-                && accountRepository.existMobile(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.mobile))
-            throw new AcctMobileExistException();
+        accountUniquenessValidateService.validateAccountUniqueness(tenantCode, credential, mainAcctDomain, mainAcctUniqKey, parentUid);
         Account account = new Account(
                 mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NORMAL, nickname, avatar, region,
@@ -55,4 +44,6 @@ public class AccountFactory extends DomainFactory {
         EventBus.fire(new MainAcctCreatedEvent(mainAcctUniqKey));
         return account;
     }
+
+
 }

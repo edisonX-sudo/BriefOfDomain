@@ -1,12 +1,14 @@
 package org.xsk.iam.domain.account;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainService;
 import org.xsk.domain.common.EventBus;
 import org.xsk.iam.domain.account.event.SubAcctCreatedEvent;
-import org.xsk.iam.domain.account.exception.*;
+import org.xsk.iam.domain.account.exception.AcctNotFoundException;
+import org.xsk.iam.domain.account.exception.OnlyMainAcctCanOperateException;
+import org.xsk.iam.domain.account.exception.OnlyParentAcctCanOperateException;
+import org.xsk.iam.domain.account.exception.SubAcctCountOverLimit;
 import org.xsk.iam.domain.app.AppCode;
 import org.xsk.iam.domain.app.TenantCode;
 import org.xsk.iam.domain.role.RoleCode;
@@ -22,6 +24,7 @@ import java.util.Set;
 public class SubAcctService extends DomainService {
     SiteConfigService siteConfigService;
     AccountRepository accountRepository;
+    AccountUniquenessValidateService accountUniquenessValidateService;
 
     Account createSubAcct(Account mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
                           String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
@@ -34,16 +37,7 @@ public class SubAcctService extends DomainService {
             throw new SubAcctCountOverLimit();
         TenantCode tenantCode = mainAcct.tenantCode;
         Uid subAcctParentUid = mainAcctAppUidKey.uid();
-        if (accountRepository.existUid(mainAcctAppUidKey, tenantCode)) throw new AcctUidExistException();
-        if (StrUtil.isNotEmpty(credential.loginName)
-                && accountRepository.existLoginName(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.loginName))
-            throw new AcctLoginNameExistException();
-        if (StrUtil.isNotEmpty(credential.email)
-                && accountRepository.existEmail(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.email))
-            throw new AcctEmailExistException();
-        if (StrUtil.isNotEmpty(credential.mobile)
-                && accountRepository.existMobile(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential.mobile))
-            throw new AcctMobileExistException();
+        accountUniquenessValidateService.validateAccountUniqueness(tenantCode, credential, subAcctSiteDomain, mainAcctAppUidKey, subAcctParentUid);
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
                 mainAcctAppUidKey.appCode(),
                 Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
