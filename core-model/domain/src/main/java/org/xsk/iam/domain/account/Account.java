@@ -136,7 +136,10 @@ public class Account extends Entity<AppUidUniqueKey> {
     protected DomainSpecificationValidator specificationValidator() {
         return throwIllegalStateException -> {
             throwIllegalStateException.accept(needResetPassword == null,"illegal");
+            throwIllegalStateException.accept(siteScope == null,"illegal");
+            throwIllegalStateException.accept(extraProps == null,"illegal");
             throwIllegalStateException.accept(acctSiteProfiles == null,"illegal");
+            throwIllegalStateException.accept(domain == null,"illegal");
             throwIllegalStateException.accept(StrUtil.length(domain)>32,"illegal");
             throwIllegalStateException.accept(StrUtil.length(nickname)>32,"illegal");
         };
