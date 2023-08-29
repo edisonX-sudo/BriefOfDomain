@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class AcctSiteProfile extends ValueObject {
-    private static final String LANGUAGE = "LANGUAGE";
+    private static final String LANGUAGE = "language";
     SiteCode siteCode;
     Set<RoleCode> roleCodes;
     Lang lang;
