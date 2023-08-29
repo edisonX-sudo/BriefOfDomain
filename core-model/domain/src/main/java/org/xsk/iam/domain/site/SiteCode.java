@@ -6,10 +6,16 @@ import org.xsk.domain.common.UniqueKey;
 public class SiteCode extends UniqueKey<String> {
     public SiteCode(String id) {
         super(id);
+        validSpecification();
     }
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return null;
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnEmpty(value(),defaultThrowMsg("siteCode"));
+            }
+        };
     }
 }

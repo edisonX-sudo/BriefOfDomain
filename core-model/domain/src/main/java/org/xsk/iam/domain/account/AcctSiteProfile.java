@@ -23,6 +23,7 @@ public class AcctSiteProfile extends ValueObject {
         this.lang = lang;
         this.preference = preference;
         init(lang);
+        validSpecification();
     }
 
     private void init(Lang lang) {
@@ -34,6 +35,14 @@ public class AcctSiteProfile extends ValueObject {
 
     @Override
     protected DomainSpecificationValidator specificationValidator() {
-        return null;
+        return new DomainSpecificationValidator() {
+            @Override
+            public void validSpecification() {
+                throwOnNull(siteCode, defaultThrowMsg("siteCode"));
+                throwOnNull(roleCodes, defaultThrowMsg("roleCodes"));
+                throwOnNull(lang, defaultThrowMsg("lang"));
+                throwOnNull(preference, defaultThrowMsg("preference"));
+            }
+        };
     }
 }
