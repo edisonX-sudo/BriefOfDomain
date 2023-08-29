@@ -21,8 +21,8 @@ public class AcctSiteProfile extends ValueObject {
         this.roleCodes = roleCodes;
         this.lang = lang;
         this.preference = preference;
-        init(lang);
         validSpecification();
+        init(lang);
     }
 
     private void init(Lang lang) {
