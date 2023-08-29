@@ -1,7 +1,6 @@
 package org.xsk.iam.domain.account;
 
 import lombok.AllArgsConstructor;
-import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainService;
 import org.xsk.domain.common.EventBus;
 import org.xsk.iam.domain.account.event.SubAcctCreatedEvent;
@@ -39,10 +38,7 @@ public class SubAcctService extends DomainService {
         TenantCode tenantCode = mainAcct.tenantCode;
         Uid subAcctParentUid = mainAcctAppUidKey.uid();
         acctUniquenessValidateService.validateAccountUniqueness(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential);
-        AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
-                mainAcctAppUidKey.appCode(),
-                Code.isEmptyVal(subAcctUid) ? Uid.randomeUid() : subAcctUid
-        );
+        AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(mainAcctAppUidKey.appCode(), Uid.randomUidOnEmpty(subAcctUid));
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
         Account subAccount = new Account(
                 subAcctUniqKey, tenantCode, subAcctParentUid, subAcctSiteDomain, Collections.singleton(curSite),
@@ -55,7 +51,6 @@ public class SubAcctService extends DomainService {
     }
 
     void deleteSubAcct(Account mainAcct, Account subAcct) {
-        //deleteSubAcct是pub级方法,要检查Account的存在,因为外部会调用它
         if (subAcct == null) {
             throw new AcctNotFoundException();
         }

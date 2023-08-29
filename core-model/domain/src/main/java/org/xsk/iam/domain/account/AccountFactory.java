@@ -30,7 +30,7 @@ public class AccountFactory extends DomainFactory {
         String mainAcctDomain = appConfigService.restoreAppDomain(appCode);
         AppUidUniqueKey mainAcctUniqKey = new AppUidUniqueKey(
                 appCode,
-                Code.isEmptyVal(mainAcctUid) ? Uid.randomeUid() : mainAcctUid
+                Code.isEmptyVal(mainAcctUid) ? Uid.randomUid() : mainAcctUid
         );
         Uid parentUid = Uid.emptyUid();
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());

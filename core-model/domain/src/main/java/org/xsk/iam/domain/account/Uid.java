@@ -21,7 +21,10 @@ public class Uid extends Code<String> {
         };
     }
 
-    public static Uid randomeUid() {
+    public static Uid randomUidOnEmpty(Uid uid) {
+        return Code.isEmptyVal(uid) ? Uid.randomUid() : uid;
+    }
+    public static Uid randomUid() {
         return new Uid(NanoId.randomNanoId(18));
     }
 
