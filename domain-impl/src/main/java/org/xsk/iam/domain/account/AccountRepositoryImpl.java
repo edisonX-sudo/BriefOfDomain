@@ -1,6 +1,7 @@
 package org.xsk.iam.domain.account;
 
 import org.xsk.domain.common.NotFoundEntityDomainException;
+import org.xsk.iam.domain.account.exception.AcctNotFoundException;
 
 public class AccountRepositoryImpl extends AccountRepository{
     @Override
@@ -20,7 +21,7 @@ public class AccountRepositoryImpl extends AccountRepository{
 
     @Override
     protected NotFoundEntityDomainException notFoundException(AppUidUniqueKey id) {
-        return null;
+        return new AcctNotFoundException();
     }
 
     @Override
