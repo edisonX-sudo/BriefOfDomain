@@ -48,11 +48,8 @@ public class SubAcctService extends DomainService {
         return subAccount;
     }
 
-    public void deleteSubAcct(Account mainAcct, Account subAcct) {
+    void deleteSubAcct(Account mainAcct, Account subAcct) {
         //deleteSubAcct是pub级方法,要检查Account的存在,因为外部会调用它
-        if (mainAcct == null) {
-            throw new AcctNotFoundException();
-        }
         if (subAcct == null) {
             throw new AcctNotFoundException();
         }
