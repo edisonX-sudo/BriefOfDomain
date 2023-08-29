@@ -4,13 +4,13 @@ import org.xsk.domain.common.NotFoundEntityDomainException;
 
 public class AccountRepositoryImpl extends AccountRepository{
     @Override
-    void softDelete(AppUidUniqueKey subAcctKey) {
+    void softDelete(AppUidUniqueKey id) {
 
     }
 
     @Override
-    Integer countSiteSubAcct(AppUidUniqueKey.AppUid appUidKey, String subAcctSiteDomain) {
-        return false;
+    Integer countSiteSubAcct(AppUidUniqueKey id, String subAcctSiteDomain) {
+        return 0;
     }
 
     @Override

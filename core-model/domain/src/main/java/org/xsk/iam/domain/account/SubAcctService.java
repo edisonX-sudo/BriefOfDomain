@@ -33,7 +33,7 @@ public class SubAcctService extends DomainService {
         }
         String subAcctSiteDomain = siteConfigService.restoreSiteDomain(curSite);
         AppUidUniqueKey.AppUid mainAcctAppUid = mainAcct.appUidKey.value();
-        if (accountRepository.countSiteSubAcct(mainAcctAppUid, subAcctSiteDomain) > 1000) {
+        if (accountRepository.countSiteSubAcct(mainAcct.appUidKey, subAcctSiteDomain) > 1000) {
             throw new SubAcctCountOverLimit();
         }
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(
