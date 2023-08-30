@@ -28,6 +28,7 @@ public class Activity extends Entity<ActivityId> {
         //更小范围的选择调用
         //复杂度被更合适的划分
         //更便于单测,只要构建Vo便能测试业务相关的领域逻辑
+        //ps: 理论上VO模型不受限制后开发者可以构建出任何更加贴近抽象本质的模型
         return duration.isNowInDuration();
     }
 
