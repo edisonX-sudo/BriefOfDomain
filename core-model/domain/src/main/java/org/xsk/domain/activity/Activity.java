@@ -1,8 +1,11 @@
 package org.xsk.domain.activity;
 
+import org.xsk.domain.common.DomainSpecificationValidator;
+import org.xsk.domain.common.Entity;
+
 import java.time.LocalDateTime;
 
-public class Activity {
+public class Activity extends Entity<ActivityId> {
     // TODO: 2023/8/30 内聚和包的关系&内聚为什么会适合包结构
     //  DDD是一种复杂度分而治之的思想，而包&值对象是提供复杂度分而治之的工具
     LocalDateTime startTime;
@@ -28,4 +31,13 @@ public class Activity {
         return duration.isNowInDuration();
     }
 
+    @Override
+    protected DomainSpecificationValidator specificationValidator() {
+        return null;
+    }
+
+    @Override
+    public ActivityId id() {
+        return null;
+    }
 }
