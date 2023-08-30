@@ -19,16 +19,16 @@ import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
-public class AccountFactory extends DomainFactory {
+public class IamAccountFactory extends DomainFactory {
     AppConfigService appConfigService;
     SiteConfigService siteConfigService;
-    AccountRepository accountRepository;
+    IamAccountRepository iamAccountRepository;
     AcctUniquenessValidateService acctUniquenessValidateService;
     RoleValidateService roleValidateService;
 
-    public Account createMainAcct(AppCode appCode, TenantCode tenantCode, SiteCode curSite, Uid mainAcctUid, Credential credential,
-                                  String nickname, Avatar avatar, Region region, boolean needResetPassword, Map<String, Object> extraProps,
-                                  Set<RoleCode> roles, Lang lang) {
+    public IamAccount createMainAcct(AppCode appCode, TenantCode tenantCode, SiteCode curSite, Uid mainAcctUid, Credential credential,
+                                     String nickname, Avatar avatar, Region region, boolean needResetPassword, Map<String, Object> extraProps,
+                                     Set<RoleCode> roles, Lang lang) {
         roleValidateService.validateCodes(roles);
         String mainAcctDomain = appConfigService.restoreAppDomain(appCode);
         AppUidUniqueKey mainAcctUniqKey = new AppUidUniqueKey(
@@ -38,14 +38,14 @@ public class AccountFactory extends DomainFactory {
         Uid parentUid = Uid.emptyUid();
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
         acctUniquenessValidateService.validateAccountUniqueness(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential);
-        Account account = new Account(
+        IamAccount iamAccount = new IamAccount(
                 mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NORMAL, nickname, avatar, region,
                 needResetPassword, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AcctSiteProfile(curSite, roles, lang, preference))
         );
         EventBus.fire(new MainAcctCreatedEvent(mainAcctUniqKey));
-        return account;
+        return iamAccount;
     }
 
 

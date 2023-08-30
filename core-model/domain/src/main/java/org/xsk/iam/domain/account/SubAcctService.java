@@ -23,37 +23,37 @@ import java.util.Set;
 @AllArgsConstructor
 public class SubAcctService extends DomainService {
     SiteConfigService siteConfigService;
-    AccountRepository accountRepository;
+    IamAccountRepository iamAccountRepository;
     RoleValidateService roleValidateService;
     AcctUniquenessValidateService acctUniquenessValidateService;
 
-    Account createSubAcct(Account mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
-                          String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
-                          Set<RoleCode> roles, Lang lang) {
+    IamAccount createSubAcct(IamAccount mainAcct, SiteCode curSite, Uid subAcctUid, Credential credential,
+                             String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
+                             Set<RoleCode> roles, Lang lang) {
         //createSubAcct是包级方法,不用检查Account的存在(这个包owner会把控调用的上下文)
         if (!mainAcct.isMainAcct())
             throw new OnlyMainAcctCanOperateException();
         roleValidateService.validateCodes(roles);
         String subAcctSiteDomain = siteConfigService.restoreSiteDomain(curSite);
         AppUidUniqueKey mainAcctAppUidKey = mainAcct.appUidKey;
-        if (accountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000)
+        if (iamAccountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000)
             throw new SubAcctCountOverLimit();
         TenantCode tenantCode = mainAcct.tenantCode;
         Uid subAcctParentUid = mainAcctAppUidKey.uid();
         acctUniquenessValidateService.validateAccountUniqueness(mainAcctAppUidKey, tenantCode, subAcctParentUid, subAcctSiteDomain, credential);
         AppUidUniqueKey subAcctUniqKey = new AppUidUniqueKey(mainAcctAppUidKey.appCode(), Uid.randomUidOnEmpty(subAcctUid));
         Map<String, Object> preference = siteConfigService.restoreSiteConfig(curSite, "default.preference", new HashMap<>());
-        Account subAccount = new Account(
+        IamAccount subIamAccount = new IamAccount(
                 subAcctUniqKey, tenantCode, subAcctParentUid, subAcctSiteDomain, Collections.singleton(curSite),
                 credential, AcctStatus.NOT_ACTIVE, nickname, avatar, region,
                 true, extraProps, new AcctActivityRecord(),
                 Collections.singleton(new AcctSiteProfile(curSite, roles, lang, preference))
         );
         EventBus.fire(mainAcct, new SubAcctCreatedEvent(subAcctUniqKey, mainAcct.nickname, mainAcctAppUidKey.uid(), credential));
-        return subAccount;
+        return subIamAccount;
     }
 
-    void deleteSubAcct(Account mainAcct, Account subAcct) {
+    void deleteSubAcct(IamAccount mainAcct, IamAccount subAcct) {
         if (subAcct == null) {
             throw new AcctNotFoundException();
         }
@@ -67,7 +67,7 @@ public class SubAcctService extends DomainService {
         if (!subAcctAppCode.equals(mainAcctAppCode) || !subAcctParentUid.equals(mainAcctUid)) {
             throw new OnlyParentAcctCanOperateException();
         }
-        accountRepository.softDelete(subAcct.appUidKey);
+        iamAccountRepository.softDelete(subAcct.appUidKey);
     }
 
 }

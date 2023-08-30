@@ -4,7 +4,7 @@ import org.xsk.domain.common.NotFoundEntityDomainException;
 import org.xsk.iam.domain.account.exception.AcctNotFoundException;
 import org.xsk.iam.domain.app.TenantCode;
 
-public class AccountRepositoryImpl extends AccountRepository {
+public class IamAccountRepositoryImpl extends IamAccountRepository {
     @Override
     void softDelete(AppUidUniqueKey id) {
 
@@ -36,7 +36,7 @@ public class AccountRepositoryImpl extends AccountRepository {
     }
 
     @Override
-    protected Account findInternal(AppUidUniqueKey id) {
+    protected IamAccount findInternal(AppUidUniqueKey id) {
         return null;
     }
 
@@ -46,7 +46,7 @@ public class AccountRepositoryImpl extends AccountRepository {
     }
 
     @Override
-    protected void saveInternal(Account entity) {
+    protected void saveInternal(IamAccount entity) {
 
     }
 }

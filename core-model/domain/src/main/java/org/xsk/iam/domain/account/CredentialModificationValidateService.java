@@ -6,19 +6,19 @@ import org.xsk.iam.domain.validation.ValidationService;
 public class CredentialModificationValidateService extends DomainService {
     ValidationService validationService;
 
-    void changeEmail(Account account, String email, String ticket) {
+    void changeEmail(IamAccount iamAccount, String email, String ticket) {
         validationService.validateTicket(ticket);
-        account.credential = account.credential.changeEmail(email);
+        iamAccount.credential = iamAccount.credential.changeEmail(email);
     }
 
-    void changeMobile(Account account, String mobile, String ticket) {
+    void changeMobile(IamAccount iamAccount, String mobile, String ticket) {
         validationService.validateTicket(ticket);
-        account.credential = account.credential.changeMobile(mobile);
+        iamAccount.credential = iamAccount.credential.changeMobile(mobile);
     }
 
-    void changePassword(Account account, String plaintextPass, String ticket) {
+    void changePassword(IamAccount iamAccount, String plaintextPass, String ticket) {
         validationService.validateTicket(ticket);
-        account.credential = account.credential.changePassword(plaintextPass);
-        account.activityRecord = account.activityRecord.recordPasswordChange();
+        iamAccount.credential = iamAccount.credential.changePassword(plaintextPass);
+        iamAccount.activityRecord = iamAccount.activityRecord.recordPasswordChange();
     }
 }

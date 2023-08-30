@@ -10,7 +10,7 @@ import org.xsk.iam.domain.site.SiteCode;
 import java.util.Map;
 import java.util.Set;
 
-public class Account extends Entity<AppUidUniqueKey> {
+public class IamAccount extends Entity<AppUidUniqueKey> {
     AppUidUniqueKey appUidKey;
     TenantCode tenantCode;
     Uid parentUid;
@@ -28,7 +28,7 @@ public class Account extends Entity<AppUidUniqueKey> {
     AcctActivityRecord activityRecord;
     Set<AcctSiteProfile> acctSiteProfiles;
 
-    Account(AppUidUniqueKey appUidKey, TenantCode tenantCode, Uid parentUid, String domain, Set<SiteCode> siteScope, Credential credential, AcctStatus acctStatus, String nickname, Avatar avatar, Region region, Boolean needResetPassword, Map<String, Object> extraProps, AcctActivityRecord activityRecord, Set<AcctSiteProfile> acctSiteProfiles) {
+    IamAccount(AppUidUniqueKey appUidKey, TenantCode tenantCode, Uid parentUid, String domain, Set<SiteCode> siteScope, Credential credential, AcctStatus acctStatus, String nickname, Avatar avatar, Region region, Boolean needResetPassword, Map<String, Object> extraProps, AcctActivityRecord activityRecord, Set<AcctSiteProfile> acctSiteProfiles) {
         this.appUidKey = appUidKey;
         this.tenantCode = tenantCode;
         this.parentUid = parentUid;
@@ -46,7 +46,7 @@ public class Account extends Entity<AppUidUniqueKey> {
         validSpecification();
     }
 
-    public Account createSubAcct(
+    public IamAccount createSubAcct(
             SiteCode curSite, Uid subAcctUid, Credential credential,
             String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
             Set<RoleCode> roles, Lang lang, SubAcctService subAcctService
@@ -57,7 +57,7 @@ public class Account extends Entity<AppUidUniqueKey> {
         );
     }
 
-    public void deleteSubAccount(Account subAcct, SubAcctService subAcctService) {
+    public void deleteSubAccount(IamAccount subAcct, SubAcctService subAcctService) {
         subAcctService.deleteSubAcct(this, subAcct);
     }
 

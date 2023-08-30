@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class AccountApplication extends DomainApplication {
-    final AccountRepository accountRepository;
+public class IamAccountApplication extends DomainApplication {
+    final IamAccountRepository iamAccountRepository;
     final SubAcctService subAcctService;
 
     public void createSubAcct(
@@ -20,12 +20,12 @@ public class AccountApplication extends DomainApplication {
             Set<RoleCode> roles, Lang lang
     ) {
         tx(() -> {
-            Account mainAcct = accountRepository.findNotNone(id);
-            Account subAcct = mainAcct.createSubAcct(
+            IamAccount mainAcct = iamAccountRepository.findNotNone(id);
+            IamAccount subAcct = mainAcct.createSubAcct(
                     curSite, subAcctUid, credential, nickname, avatar,
                     region, extraProps, roles, lang, subAcctService
             );
-            accountRepository.save(subAcct);
+            iamAccountRepository.save(subAcct);
         });
     }
 

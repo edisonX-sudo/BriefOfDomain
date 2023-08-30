@@ -12,19 +12,19 @@ import org.xsk.iam.domain.app.TenantCode;
 @AllArgsConstructor
 public class AcctUniquenessValidateService extends DomainService {
 
-    private AccountRepository accountRepository;
+    private IamAccountRepository iamAccountRepository;
 
     void validateAccountUniqueness(AppUidUniqueKey mainAcctUniqKey, TenantCode tenantCode, Uid parentUid, String mainAcctDomain, Credential credential) {
-        if (accountRepository.existUid(mainAcctUniqKey, tenantCode))
+        if (iamAccountRepository.existUid(mainAcctUniqKey, tenantCode))
             throw new AcctUidExistException();
         if (StrUtil.isNotEmpty(credential.loginName)
-                && accountRepository.existLoginName(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.loginName))
+                && iamAccountRepository.existLoginName(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.loginName))
             throw new AcctLoginNameExistException();
         if (StrUtil.isNotEmpty(credential.email)
-                && accountRepository.existEmail(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.email))
+                && iamAccountRepository.existEmail(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.email))
             throw new AcctEmailExistException();
         if (StrUtil.isNotEmpty(credential.mobile)
-                && accountRepository.existMobile(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.mobile))
+                && iamAccountRepository.existMobile(mainAcctUniqKey, tenantCode, parentUid, mainAcctDomain, credential.mobile))
             throw new AcctMobileExistException();
     }
 }

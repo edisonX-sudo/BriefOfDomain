@@ -10,25 +10,25 @@ import java.util.function.Predicate;
 public class AcctLoginService extends DomainService {
     ValidationService validationService;
 
-    void loginViaValidationCode(Account account, String validationCode) {
-        loginIn(account, account1 -> validationService.checkCode(validationCode));
+    void loginViaValidationCode(IamAccount iamAccount, String validationCode) {
+        loginIn(iamAccount, account1 -> validationService.checkCode(validationCode));
     }
 
-    void loginInByPassword(Account account, String plaintextPass) {
-        loginIn(account, account1 -> account1.credential.comparePassword(plaintextPass));
+    void loginInByPassword(IamAccount iamAccount, String plaintextPass) {
+        loginIn(iamAccount, account1 -> account1.credential.comparePassword(plaintextPass));
     }
 
-    void loginIn(Account account, Predicate<Account> loginSuccessCondition) {
-        if (!account.acctStatus.loginAvailable) {
+    void loginIn(IamAccount iamAccount, Predicate<IamAccount> loginSuccessCondition) {
+        if (!iamAccount.acctStatus.loginAvailable) {
             throw new AcctCantLoginException();
         }
-        if (account.activityRecord.isUnavailableDue2LoginFailed()) {
+        if (iamAccount.activityRecord.isUnavailableDue2LoginFailed()) {
             throw new AcctLoginFailedOverTimesException();
         }
-        if (loginSuccessCondition.test(account)) {
-            account.activityRecord = account.activityRecord.recordLoginSuccess();
+        if (loginSuccessCondition.test(iamAccount)) {
+            iamAccount.activityRecord = iamAccount.activityRecord.recordLoginSuccess();
         } else {
-            account.activityRecord = account.activityRecord.recordLoginFailed();
+            iamAccount.activityRecord = iamAccount.activityRecord.recordLoginFailed();
         }
     }
 }

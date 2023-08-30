@@ -3,7 +3,7 @@ package org.xsk.iam.domain.account;
 import org.xsk.domain.common.DomainRepository;
 import org.xsk.iam.domain.app.TenantCode;
 
-public abstract class AccountRepository extends DomainRepository<Account, AppUidUniqueKey> {
+public abstract class IamAccountRepository extends DomainRepository<IamAccount, AppUidUniqueKey> {
     abstract void softDelete(AppUidUniqueKey id);
 
     abstract Integer countSiteSubAcct(AppUidUniqueKey id, String subAcctSiteDomain);

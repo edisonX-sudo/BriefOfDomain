@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 public class AcctSiteScopeAssignService extends DomainService {
     SiteConfigService siteConfigService;
 
-    void assignSiteScope(Account account, Set<SiteCode> siteCodes, Lang lang) {
-        if(!account.isMainAcct()){
+    void assignSiteScope(IamAccount iamAccount, Set<SiteCode> siteCodes, Lang lang) {
+        if(!iamAccount.isMainAcct()){
             throw new OnlyMainAcctCanOperateException();
         }
-        HashSet<SiteCode> siteScope = new HashSet<>(account.siteScope);
+        HashSet<SiteCode> siteScope = new HashSet<>(iamAccount.siteScope);
         siteScope.addAll(siteCodes);
-        account.siteScope = siteScope;
+        iamAccount.siteScope = siteScope;
 
         Set<AcctSiteProfile> assignedSiteProfile = siteCodes.stream()
                 .map(siteCode -> {
@@ -25,21 +25,21 @@ public class AcctSiteScopeAssignService extends DomainService {
                     return new AcctSiteProfile(siteCode, Collections.emptySet(), lang, preference);
                 })
                 .collect(Collectors.toSet());
-        HashSet<AcctSiteProfile> acctSiteProfiles = new HashSet<>(account.acctSiteProfiles);
+        HashSet<AcctSiteProfile> acctSiteProfiles = new HashSet<>(iamAccount.acctSiteProfiles);
         acctSiteProfiles.addAll(assignedSiteProfile);
-        account.acctSiteProfiles = acctSiteProfiles;
+        iamAccount.acctSiteProfiles = acctSiteProfiles;
     }
 
-    void removeSiteScope(Account account, Set<SiteCode> siteCodes) {
-        if(!account.isMainAcct()){
+    void removeSiteScope(IamAccount iamAccount, Set<SiteCode> siteCodes) {
+        if(!iamAccount.isMainAcct()){
             throw new OnlyMainAcctCanOperateException();
         }
-        HashSet<SiteCode> siteScope = new HashSet<>(account.siteScope);
+        HashSet<SiteCode> siteScope = new HashSet<>(iamAccount.siteScope);
         siteScope.removeAll(siteCodes);
-        account.siteScope = siteScope;
+        iamAccount.siteScope = siteScope;
 
-        HashSet<AcctSiteProfile> acctSiteProfiles = new HashSet<>(account.acctSiteProfiles);
-        account.acctSiteProfiles = acctSiteProfiles.stream()
+        HashSet<AcctSiteProfile> acctSiteProfiles = new HashSet<>(iamAccount.acctSiteProfiles);
+        iamAccount.acctSiteProfiles = acctSiteProfiles.stream()
                 .filter(acctSiteProfile -> !siteCodes.contains(acctSiteProfile.siteCode))
                 .collect(Collectors.toSet());
     }
