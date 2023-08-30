@@ -85,11 +85,11 @@ public class IamAccount extends Entity<AppUidUniqueKey> {
         activityRecord = activityRecord.recordForceLogout();
     }
 
-    public void loginInByValidationCode(String validationCode, AcctLoginService acctLoginService) {
+    public void loginByValidationCode(String validationCode, AcctLoginService acctLoginService) {
         acctLoginService.loginViaValidationCode(this, validationCode);
     }
 
-    public void loginInByPassword(String plaintextPass, AcctLoginService acctLoginService) {
+    public void loginByPassword(String plaintextPass, AcctLoginService acctLoginService) {
         acctLoginService.loginInByPassword(this, plaintextPass);
     }
 
