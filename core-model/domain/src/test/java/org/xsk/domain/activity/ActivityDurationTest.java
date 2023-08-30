@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityDurationTest {
-    //不用拉起整个容器就能测试,是可以集成到ci的轻型测试
+    //不用拉起整个容器就能测试,本身也很容易就能达到100%覆盖率,也是可以集成到ci的轻型测试
 
     @org.junit.jupiter.api.Test
     void isNowInDuration() {
@@ -22,5 +22,20 @@ class ActivityDurationTest {
     @org.junit.jupiter.api.Test
     void startEndTimeException() {
         assertThrowsExactly(IllegalStateDomainException.class, () -> new ActivityDuration(LocalDateTime.now(), LocalDateTime.now().plusHours(-2)));
+    }
+
+    @org.junit.jupiter.api.Test
+    void startEndTimeException1() {
+        assertThrowsExactly(IllegalStateDomainException.class, () -> new ActivityDuration(null, LocalDateTime.now().plusHours(-2)));
+    }
+
+    @org.junit.jupiter.api.Test
+    void startEndTimeException2() {
+        assertThrowsExactly(IllegalStateDomainException.class, () -> new ActivityDuration(null, null));
+    }
+
+    @org.junit.jupiter.api.Test
+    void startEndTimeException3() {
+        assertThrowsExactly(IllegalStateDomainException.class, () -> new ActivityDuration(LocalDateTime.now(), null));
     }
 }
