@@ -10,12 +10,12 @@ class ActivityDurationTest {
     //不用拉起整个容器就能测试,本身也很容易就能达到100%覆盖率,也是可以集成到ci的轻型测试
 
     @org.junit.jupiter.api.Test
-    void isNowInDuration() {
+    void isNowInDurationRetTrue() {
         assertTrue(new ActivityDuration(LocalDateTime.now().plusHours(-1), LocalDateTime.now().plusHours(2)).isNowInDuration());
     }
 
     @org.junit.jupiter.api.Test
-    void isNowNotInDuration() {
+    void isNowInDurationRetFalse() {
         assertFalse(new ActivityDuration(LocalDateTime.now().plusHours(-2), LocalDateTime.now().plusHours(-1)).isNowInDuration());
     }
 
