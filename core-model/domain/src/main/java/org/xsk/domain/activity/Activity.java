@@ -16,7 +16,7 @@ public class Activity extends Entity<ActivityId> {
 
     public boolean isNowInDuration(){
         //使用此方法一定要导出整个实体
-        //更大范围的选择调用(isNowInDuration/meth1),调用时会迷茫
+        //更大范围的选择调用(感知isNowInDuration/感知meth1),调用时会迷茫
         //复杂度被相对不合适的划分,因为就和startTime/endTime相关
         //单测也会变得复杂,要构建这个实体
         LocalDateTime now = LocalDateTime.now();
