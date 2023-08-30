@@ -9,7 +9,8 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:h2:/tmp/h2/h2db:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    url: jdbc:h2:/tmp/h2/h2db:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
     username: sa
     password: password
