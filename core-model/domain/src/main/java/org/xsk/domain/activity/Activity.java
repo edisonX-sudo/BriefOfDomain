@@ -6,13 +6,27 @@ import org.xsk.domain.common.Entity;
 import java.time.LocalDateTime;
 
 public class Activity extends Entity<ActivityId> {
-    // TODO: 2023/8/30 内聚和包的关系&内聚为什么会适合包结构
-    //  DDD是一种复杂度分而治之的思想，而包&值对象是提供复杂度分而治之的工具
+
     LocalDateTime startTime;
     LocalDateTime endTime;
     ActivityDuration duration;
 
     public void meth1(){}
+    // TODO: 2023/8/30 内聚和包的关系&内聚为什么会适合包结构
+    //  DDD是一种复杂度分而治之的思想，而包&值对象是提供复杂度分而治之的工具
+    //  理论支持
+    //  An explanation of what it is from Steve McConnell's Code Complete:
+    //      Cohesion refers to how closely all the routines in a class or all the code in a routine support a central purpose.
+    //      Classes that contain strongly related functionality are described as having strong cohesion(所有的在类内的方法应该都围绕着一个单一的内聚职责[vo就很符合]), and the heuristic goal
+    //      is to make cohesion as strong as possible. Cohesion is a useful tool for managing complexity
+    //      because the more code in a class supports a central purpose, the more easily your brain can remember everything the code does.
+    //      Some way of achieving it from Uncle Bob's Clean Code:
+    //  Classes should have a small number of instance variables. Each of the methods of a class should manipulate one or
+    //      more of those variables. In general the more variables a method manipulates the more cohesive that method is to its class.(方法操作的类对象愈多,类越内聚[vo就很符合])
+    //      A class in which each variable is used by each method is maximally cohesive.
+    //      In general it is neither advisable nor possible to create such maximally cohesive classes; on the other hand,
+    //      we would like cohesion to be high. When cohesion is high, it means that the methods and variables of the class are
+    //      co-dependent and hang together as a logical whole.
 
     public boolean isNowInDuration(){
         //使用此方法一定要导出整个实体

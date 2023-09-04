@@ -33,7 +33,7 @@ public class SubAcctService extends DomainService {
         //createSubAcct是包级方法,不用检查Account的存在(这个包owner会把控调用的上下文)
         if (!mainAcct.isMainAcct())
             throw new OnlyMainAcctCanOperateException();
-        roleValidateService.validateCodes(roles);
+        roleValidateService.validateCodes(curSite,roles);
         String subAcctSiteDomain = siteConfigService.restoreSiteDomain(curSite);
         AppUidUniqueKey mainAcctAppUidKey = mainAcct.appUidKey;
         if (iamAccountRepository.countSiteSubAcct(mainAcctAppUidKey, subAcctSiteDomain) > 1000)

@@ -29,7 +29,7 @@ public class IamAccountFactory extends DomainFactory {
     public IamAccount createMainAcct(AppCode appCode, TenantCode tenantCode, SiteCode curSite, Uid mainAcctUid, Credential credential,
                                      String nickname, Avatar avatar, Region region, boolean needResetPassword, Map<String, Object> extraProps,
                                      Set<RoleCode> roles, Lang lang) {
-        roleValidateService.validateCodes(roles);
+        roleValidateService.validateCodes(curSite, roles);
         String mainAcctDomain = appConfigService.restoreAppDomain(appCode);
         AppUidUniqueKey mainAcctUniqKey = new AppUidUniqueKey(
                 appCode,
