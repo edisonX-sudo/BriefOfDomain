@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityDurationTest {
-    //不用拉起整个容器就能测试,本身也很容易就能达到100%覆盖率,也是可以集成到ci的轻型测试
+    //不用拉起整个容器就测试了一个领域逻辑(测试成本低,测试速度快),本身也很容易就能达到100%覆盖率,也是可以集成到ci的轻型测试
 
     @org.junit.jupiter.api.Test
     void isNowInDurationRetTrue() {

@@ -4,6 +4,9 @@ import cn.hutool.crypto.digest.DigestUtil;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
+/**
+ * 认证登录信息
+ */
 public class Credential extends ValueObject {
     String loginName;
     String mobile;

@@ -7,6 +7,9 @@ import org.xsk.domain.common.ValueObject;
 
 import java.util.Date;
 
+/**
+ * 账号活动记录
+ */
 public class AcctActivityRecord extends ValueObject {
     Integer loginFailedTimes;
     Long recentLoginFailedAt;

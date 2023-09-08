@@ -8,6 +8,9 @@ import org.xsk.iam.domain.site.SiteCode;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 账号站点信息
+ */
 public class AcctSiteProfile extends ValueObject {
     private static final String LANGUAGE = "language";
     SiteCode siteCode;

@@ -3,6 +3,9 @@ package org.xsk.iam.domain.account;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
 
+/**
+ * 头像
+ */
 public class Avatar extends ValueObject {
     String avatarKey;
     String avatarUrl;

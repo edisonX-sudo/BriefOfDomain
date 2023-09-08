@@ -5,6 +5,9 @@ import org.xsk.domain.common.UniqueKey;
 import org.xsk.domain.common.ValueObject;
 import org.xsk.iam.domain.app.AppCode;
 
+/**
+ * app, uid 唯一键
+ */
 public class AppUidUniqueKey extends UniqueKey<AppUidUniqueKey.AppUid> {
 
     public AppUidUniqueKey(AppUid id) {

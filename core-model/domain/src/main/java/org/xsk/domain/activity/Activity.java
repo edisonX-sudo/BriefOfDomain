@@ -5,10 +5,14 @@ import org.xsk.domain.common.Entity;
 
 import java.time.LocalDateTime;
 
+/**
+ * 活动
+ */
 public class Activity extends Entity<ActivityId> {
 
     LocalDateTime startTime;
     LocalDateTime endTime;
+    //..
     ActivityDuration duration;
 
     public void meth1(){}
@@ -27,20 +31,21 @@ public class Activity extends Entity<ActivityId> {
     //      In general it is neither advisable nor possible to create such maximally cohesive classes; on the other hand,
     //      we would like cohesion to be high. When cohesion is high, it means that the methods and variables of the class are
     //      co-dependent and hang together as a logical whole.
+    //  使用上述理论都会使得代码更加内聚,内聚带来的直接影响就是约束住复杂度,是的复杂度被束缚住
 
     public boolean isNowInDuration(){
         //使用此方法一定要导出整个实体
         //更大范围的选择调用(感知isNowInDuration/感知meth1),调用时会迷茫
-        //复杂度被相对不合适的划分,因为就和startTime/endTime相关
+        //复杂度被相对不合适的划分,因为方法isNowInDuration()就和startTime/endTime相关
         //单测也会变得复杂,要构建这个实体
         LocalDateTime now = LocalDateTime.now();
         return startTime.isBefore(now) && endTime.isAfter(now);
     }
 
     public boolean isNowInDuration1(){
-        //更细粒度数据导出
-        //更小范围的选择调用
-        //复杂度被更合适的划分
+        //更细粒度数据导出(即仅导出vo对象)
+        //更小范围的选择调用(由于仅仅导出vo对象,调用是用vo,选择的方法范围也更加针对)
+        //复杂度被更合适的划分(startTime/endTime放到ActivityDuration非常概念上和使用上都更加符合人的心智模型)
         //更便于单测,只要构建Vo便能测试业务相关的领域逻辑: 见org.xsk.domain.activity.ActivityDurationTest
         //ps: 理论上VO模型不受限制后开发者可以构建出任何更加贴近抽象本质的模型
         return duration.isNowInDuration();

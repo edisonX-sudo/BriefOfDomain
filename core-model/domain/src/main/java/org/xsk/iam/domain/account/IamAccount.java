@@ -10,6 +10,9 @@ import org.xsk.iam.domain.site.SiteCode;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * iam账号
+ */
 public class IamAccount extends Entity<AppUidUniqueKey> {
     AppUidUniqueKey appUidKey;
     TenantCode tenantCode;
