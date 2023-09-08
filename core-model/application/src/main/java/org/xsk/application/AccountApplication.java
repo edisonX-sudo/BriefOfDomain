@@ -39,7 +39,7 @@ public class AccountApplication extends DomainApplication {
 
     public void auth(String token) {
         tx(() -> {
-            // high rate invocation here
+            // 在ddd中如何优化高性能要求的接口
             authService.validateAuth(token);
         });
     }
