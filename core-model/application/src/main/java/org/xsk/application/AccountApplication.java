@@ -21,19 +21,23 @@ public class AccountApplication extends DomainApplication {
     }
 
     public AccountId createdSubAccount(AccountId accountId, String name, String loginName, String password, Contact contact, PhysicalAddress address) {
-        Account mainAccount = accountRepo.findNotNone(accountId);
-        Account subAccount = mainAccount.createSubAccount(name, loginName, password, contact, address);
-        accountRepo.save(subAccount);
-        return subAccount.id();
+        return tx(() -> {
+            Account mainAccount = accountRepo.findNotNone(accountId);
+            Account subAccount = mainAccount.createSubAccount(name, loginName, password, contact, address);
+            accountRepo.save(subAccount);
+            return subAccount.id();
+        });
     }
 
     public void handoverMainPrivilege(AccountId mainAccountId, AccountId subAccountId) {
-        Account mainAccount = accountRepo.findNotNone(mainAccountId);
-        Account subAccount = accountRepo.findNotNone(subAccountId);
-        mainAccount.handoverMainPrivilege(subAccount, accountPrivilegeService);
+        tx(() -> {
+            Account mainAccount = accountRepo.findNotNone(mainAccountId);
+            Account subAccount = accountRepo.findNotNone(subAccountId);
+            mainAccount.handoverMainPrivilege(subAccount, accountPrivilegeService);
+        });
     }
 
-    public void auth(String token){
+    public void auth(String token) {
         // high rate invocation here
         authService.validateAuth(token);
     }
