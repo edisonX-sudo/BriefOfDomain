@@ -1,6 +1,7 @@
 package org.xsk.domain.account;
 
 import lombok.AllArgsConstructor;
+import org.xsk.domain.account.exception.AccountNotFound;
 import org.xsk.domain.account.exception.OnlyMainAccountOperate;
 import org.xsk.domain.common.DomainService;
 
@@ -14,6 +15,9 @@ public class AccountPrivilegeService extends DomainService {
     void handoverMainPrivilege(Account mainAccount, Account subAccount) {
         if (!mainAccount.isMainAccount()) {
             throw new OnlyMainAccountOperate();
+        }
+        if(subAccount == null){
+            throw new AccountNotFound();
         }
         AccountId mainAccountId = mainAccount.accountId;
         AccountId subAccountId = subAccount.accountId;
