@@ -38,7 +38,9 @@ public class AccountApplication extends DomainApplication {
     }
 
     public void auth(String token) {
-        // high rate invocation here
-        authService.validateAuth(token);
+        tx(() -> {
+            // high rate invocation here
+            authService.validateAuth(token);
+        });
     }
 }
