@@ -29,4 +29,14 @@ public class IamAccountApplication extends DomainApplication {
         });
     }
 
+    public void changeNickname(
+            AppUidUniqueKey id, String nickname
+    ) {
+        tx(() -> {
+            IamAccount mainAcct = iamAccountRepository.findNotNone(id);
+            mainAcct.changeNickname(nickname);
+            iamAccountRepository.save(mainAcct);
+        });
+    }
+
 }
