@@ -54,21 +54,6 @@ public class IamAccount extends Entity<AppUidUniqueKey> {
         validSpecification();
     }
 
-    public IamAccount createSubAcct(
-            SiteCode curSite, Uid subAcctUid, Credential credential,
-            String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
-            Set<RoleCode> roles, Lang lang, SubAcctService subAcctService
-    ) {
-        return subAcctService.createSubAcct(
-                this, curSite, subAcctUid, credential, nickname,
-                avatar, region, extraProps, roles, lang
-        );
-    }
-
-    public void deleteSubAccount(IamAccount subAcct, SubAcctService subAcctService) {
-        subAcctService.deleteSubAcct(this, subAcct);
-    }
-
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -117,12 +102,27 @@ public class IamAccount extends Entity<AppUidUniqueKey> {
         activityRecord = this.activityRecord.recordInterruptCancelAcct();
     }
 
-    public void assignSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
+    public void assignMainAcctSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
         acctSiteScopeAssignService.assignSiteScope(this, siteCodes, lang);
     }
 
-    public void removeSiteScope(Set<SiteCode> siteCodes, AcctSiteScopeAssignService acctSiteScopeAssignService) {
+    public void removeMainAcctSiteScope(Set<SiteCode> siteCodes, AcctSiteScopeAssignService acctSiteScopeAssignService) {
         acctSiteScopeAssignService.removeSiteScope(this, siteCodes);
+    }
+
+    public IamAccount createSubAcct(
+            SiteCode curSite, Uid subAcctUid, Credential credential,
+            String nickname, Avatar avatar, Region region, Map<String, Object> extraProps,
+            Set<RoleCode> roles, Lang lang, SubAcctService subAcctService
+    ) {
+        return subAcctService.createSubAcct(
+                this, curSite, subAcctUid, credential, nickname,
+                avatar, region, extraProps, roles, lang
+        );
+    }
+
+    public void deleteSubAcct(IamAccount subAcct, SubAcctService subAcctService) {
+        subAcctService.deleteSubAcct(this, subAcct);
     }
 
     public void refreshSubAcctPassword() {
