@@ -1,5 +1,6 @@
 package org.xsk.iam.domain.account;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.ValueObject;
@@ -56,5 +57,13 @@ public class Credential extends ValueObject {
 
     public boolean comparePassword(String plaintextPass) {
         return DigestUtil.sha1Hex(plaintextPass).equals(plaintextPass);
+    }
+
+    public Credential resetPassword() {
+        Credential credential = cloneObject(this);
+        String plainPass = RandomUtil.randomString(10);
+        credential.plainTextPass = plainPass;
+        credential.cryptPassword = DigestUtil.sha1Hex(plainPass);
+        return credential;
     }
 }

@@ -3,6 +3,11 @@ package org.xsk.iam.domain.account;
 import org.xsk.domain.common.Code;
 import org.xsk.domain.common.DomainSpecificationValidator;
 import org.xsk.domain.common.Entity;
+import org.xsk.domain.common.EventBus;
+import org.xsk.iam.domain.account.event.SubAcctPasswordRefreshed;
+import org.xsk.iam.domain.account.exception.AcctStatusIllegalException;
+import org.xsk.iam.domain.account.exception.OnlyMainAcctCanOperateException;
+import org.xsk.iam.domain.account.exception.OnlySubAcctCanOperateException;
 import org.xsk.iam.domain.app.TenantCode;
 import org.xsk.iam.domain.role.RoleCode;
 import org.xsk.iam.domain.site.SiteCode;
@@ -96,18 +101,20 @@ public class IamAccount extends Entity<AppUidUniqueKey> {
         acctLoginService.loginInByPassword(this, plaintextPass);
     }
 
-    public void cancelAcct() {
-        if (isMainAcct()) {
-            this.acctStatus = AcctStatus.CLOSING;
-            activityRecord = this.activityRecord.recordCancelAcct();
+    public void cancelMainAcct() {
+        if (!isMainAcct()) {
+            throw new OnlyMainAcctCanOperateException();
         }
+        this.acctStatus = AcctStatus.CLOSING;
+        activityRecord = this.activityRecord.recordCancelAcct();
     }
 
-    public void interruptCancelAcct() {
-        if (isMainAcct()) {
-            this.acctStatus = AcctStatus.NORMAL;
-            activityRecord = this.activityRecord.recordInterruptCancelAcct();
+    public void interruptCancelMainAcct() {
+        if (!isMainAcct()) {
+            throw new OnlyMainAcctCanOperateException();
         }
+        this.acctStatus = AcctStatus.NORMAL;
+        activityRecord = this.activityRecord.recordInterruptCancelAcct();
     }
 
     public void assignSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
@@ -118,16 +125,36 @@ public class IamAccount extends Entity<AppUidUniqueKey> {
         acctSiteScopeAssignService.removeSiteScope(this, siteCodes);
     }
 
-    public void enable() {
-        if (!isMainAcct() && this.acctStatus == AcctStatus.DISABLED) {
-            this.acctStatus = AcctStatus.NORMAL;
+    public void refreshSubAcctPassword() {
+        if (isMainAcct()) {
+            throw new OnlySubAcctCanOperateException();
         }
+        if (this.acctStatus != AcctStatus.NORMAL) {
+            throw new AcctStatusIllegalException();
+        }
+        credential = credential.resetPassword();
+        activityRecord = activityRecord.recordPasswordChange();
+        EventBus.fire(this, new SubAcctPasswordRefreshed(id(), credential));
     }
 
-    public void disable() {
-        if (!isMainAcct() && this.acctStatus == AcctStatus.NORMAL) {
-            this.acctStatus = AcctStatus.DISABLED;
+    public void enableSubAcct() {
+        if (isMainAcct()) {
+            throw new OnlySubAcctCanOperateException();
         }
+        if (this.acctStatus != AcctStatus.DISABLED) {
+            throw new AcctStatusIllegalException();
+        }
+        this.acctStatus = AcctStatus.NORMAL;
+    }
+
+    public void disableSubAcct() {
+        if (isMainAcct()) {
+            throw new OnlySubAcctCanOperateException();
+        }
+        if (this.acctStatus != AcctStatus.NORMAL) {
+            throw new AcctStatusIllegalException();
+        }
+        this.acctStatus = AcctStatus.DISABLED;
     }
 
     boolean isMainAcct() {
