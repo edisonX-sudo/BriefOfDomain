@@ -15,7 +15,7 @@ public abstract class ValueObject extends AggregateComponent {
         super(new ConcurrentHashMap<>(metaDataCap));
     }
 
-    protected <T extends ValueObject> T beginUpdateObject(T obj) {
+    protected <T extends ValueObject> T beginUpdate(T obj) {
         isUpdate = true;
         return ObjectUtil.clone(obj);
     }
