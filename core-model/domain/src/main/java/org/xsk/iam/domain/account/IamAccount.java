@@ -125,11 +125,11 @@ public class IamAccount extends Entity<AppUidUniqueKey> {
         subAcctService.deleteSubAcct(this, subAcct);
     }
 
-    public void refreshSubAcctPassword() {
+    public void refreshPassword4NotActiveSubAcct() {
         if (isMainAcct()) {
             throw new OnlySubAcctCanOperateException();
         }
-        if (this.acctStatus != AcctStatus.NORMAL) {
+        if (this.acctStatus != AcctStatus.NOT_ACTIVE) {
             throw new AcctStatusIllegalException();
         }
         credential = credential.resetPassword();
