@@ -51,7 +51,7 @@ public class Account extends Entity<AccountId> {
             throw new OnlyMainAccountOperate();
         }
         //业务知识: 账号创建默认是disable的
-        Account subAccount = new Account(AccountStatus.DISABLE, name, loginName, password, contact, address, this.id());
+        Account subAccount = new Account(AccountStatus.DISABLE, name, loginName, password, contact, address, accountId);
         EventBus.fire(new AccountCreated(() -> subAccount.accountId, contact));
         return subAccount;
     }
