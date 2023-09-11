@@ -154,6 +154,10 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
         throw new UnsupportedOperationException("this method need 2 be implemented");
     }
 
+    protected boolean isVoUpdated(ValueObject vo) {
+        return vo.isUpdate;
+    }
+
     /**
      * 将entity的数据库id隐式的带入实体, 当entity的id不是数据库主键时使用
      *

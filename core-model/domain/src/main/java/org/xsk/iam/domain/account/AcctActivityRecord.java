@@ -39,31 +39,31 @@ public class AcctActivityRecord extends ValueObject {
     }
 
     public AcctActivityRecord recordForceLogout() {
-        AcctActivityRecord acctActivityRecord = cloneObject(this);
+        AcctActivityRecord acctActivityRecord = beginUpdateObject(this);
         acctActivityRecord.forceLogoutAt = System.currentTimeMillis();
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordPasswordChange() {
-        AcctActivityRecord acctActivityRecord = cloneObject(this);
+        AcctActivityRecord acctActivityRecord = beginUpdateObject(this);
         acctActivityRecord.passwordChangeAt = System.currentTimeMillis();
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordCancelAcct() {
-        AcctActivityRecord acctActivityRecord = cloneObject(this);
+        AcctActivityRecord acctActivityRecord = beginUpdateObject(this);
         acctActivityRecord.cancelAccountAt = System.currentTimeMillis();
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordInterruptCancelAcct() {
-        AcctActivityRecord acctActivityRecord = cloneObject(this);
+        AcctActivityRecord acctActivityRecord = beginUpdateObject(this);
         acctActivityRecord.cancelAccountAt = 0L;
         return acctActivityRecord;
     }
 
     public AcctActivityRecord recordLoginSuccess() {
-        AcctActivityRecord acctActivityRecord = cloneObject(this);
+        AcctActivityRecord acctActivityRecord = beginUpdateObject(this);
         acctActivityRecord.lastLoginAt = System.currentTimeMillis();
         acctActivityRecord.loginFailedTimes = 0;
         acctActivityRecord.recentLoginFailedAt = 0L;
@@ -71,7 +71,7 @@ public class AcctActivityRecord extends ValueObject {
     }
 
     public AcctActivityRecord recordLoginFailed() {
-        AcctActivityRecord acctActivityRecord = cloneObject(this);
+        AcctActivityRecord acctActivityRecord = beginUpdateObject(this);
         acctActivityRecord.loginFailedTimes = this.loginFailedTimes + 1;
         acctActivityRecord.recentLoginFailedAt = System.currentTimeMillis();
         return acctActivityRecord;

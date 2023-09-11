@@ -33,19 +33,19 @@ public class Credential extends ValueObject {
     }
 
     public Credential changePassword(String plaintextPass) {
-        Credential credential = cloneObject(this);
+        Credential credential = beginUpdateObject(this);
         credential.cryptPassword = DigestUtil.sha1Hex(plaintextPass);
         return credential;
     }
 
     public Credential changeEmail(String email) {
-        Credential credential = cloneObject(this);
+        Credential credential = beginUpdateObject(this);
         credential.email = email;
         return credential;
     }
 
     public Credential changeMobile(String mobile) {
-        Credential credential = cloneObject(this);
+        Credential credential = beginUpdateObject(this);
         credential.mobile = mobile;
         return credential;
     }
@@ -60,7 +60,7 @@ public class Credential extends ValueObject {
     }
 
     public Credential resetPassword() {
-        Credential credential = cloneObject(this);
+        Credential credential = beginUpdateObject(this);
         String plainPass = RandomUtil.randomString(10);
         credential.plainTextPass = plainPass;
         credential.cryptPassword = DigestUtil.sha1Hex(plainPass);

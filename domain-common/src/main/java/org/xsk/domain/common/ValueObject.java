@@ -5,6 +5,8 @@ import cn.hutool.core.util.ObjectUtil;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ValueObject extends AggregateComponent {
+    boolean isUpdate = false;
+
     protected ValueObject() {
         this(1);
     }
@@ -13,7 +15,8 @@ public abstract class ValueObject extends AggregateComponent {
         super(new ConcurrentHashMap<>(metaDataCap));
     }
 
-    protected static <T extends ValueObject> T cloneObject(T obj) {
+    protected <T extends ValueObject> T beginUpdateObject(T obj) {
+        isUpdate = true;
         return ObjectUtil.clone(obj);
     }
 }
