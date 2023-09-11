@@ -102,11 +102,11 @@ public class IamAccount extends Entity<AppUidUniqueKey> {
         activityRecord = this.activityRecord.recordInterruptCancelAcct();
     }
 
-    public void assignMainAcctSiteScope(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
+    public void assignSiteScope4MainAcct(Set<SiteCode> siteCodes, Lang lang, AcctSiteScopeAssignService acctSiteScopeAssignService) {
         acctSiteScopeAssignService.assignSiteScope(this, siteCodes, lang);
     }
 
-    public void removeMainAcctSiteScope(Set<SiteCode> siteCodes, AcctSiteScopeAssignService acctSiteScopeAssignService) {
+    public void removeSiteScope4MainAcct(Set<SiteCode> siteCodes, AcctSiteScopeAssignService acctSiteScopeAssignService) {
         acctSiteScopeAssignService.removeSiteScope(this, siteCodes);
     }
 
