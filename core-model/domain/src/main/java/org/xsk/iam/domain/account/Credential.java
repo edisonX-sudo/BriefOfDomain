@@ -22,31 +22,43 @@ public class Credential extends ValueObject {
         this.cryptPassword = cryptPassword;
     }
 
-    public static Credential restore(String loginName, String mobile, String email, String cryptPassword) {
+    static Credential restore(String loginName, String mobile, String email, String cryptPassword) {
         return new Credential(loginName, mobile, email, cryptPassword);
     }
 
-    public static Credential buildCredential(String loginName, String mobile, String email, String plainTextPass) {
+    static Credential buildCredential(String loginName, String mobile, String email, String plainTextPass) {
         Credential credential = new Credential(loginName, mobile, email, DigestUtil.sha1Hex(plainTextPass));
         credential.plainTextPass = plainTextPass;
         return credential;
     }
 
-    public Credential changePassword(String plaintextPass) {
+    Credential changePassword(String plaintextPass) {
         Credential credential = beginUpdate(this);
         credential.cryptPassword = DigestUtil.sha1Hex(plaintextPass);
         return credential;
     }
 
-    public Credential changeEmail(String email) {
+    Credential changeEmail(String email) {
         Credential credential = beginUpdate(this);
         credential.email = email;
         return credential;
     }
 
-    public Credential changeMobile(String mobile) {
+    Credential changeMobile(String mobile) {
         Credential credential = beginUpdate(this);
         credential.mobile = mobile;
+        return credential;
+    }
+
+    boolean comparePassword(String plaintextPass) {
+        return DigestUtil.sha1Hex(plaintextPass).equals(plaintextPass);
+    }
+
+    Credential resetPassword() {
+        Credential credential = beginUpdate(this);
+        String plainPass = RandomUtil.randomString(10);
+        credential.plainTextPass = plainPass;
+        credential.cryptPassword = DigestUtil.sha1Hex(plainPass);
         return credential;
     }
 
@@ -55,15 +67,5 @@ public class Credential extends ValueObject {
         return null;
     }
 
-    public boolean comparePassword(String plaintextPass) {
-        return DigestUtil.sha1Hex(plaintextPass).equals(plaintextPass);
-    }
 
-    public Credential resetPassword() {
-        Credential credential = beginUpdate(this);
-        String plainPass = RandomUtil.randomString(10);
-        credential.plainTextPass = plainPass;
-        credential.cryptPassword = DigestUtil.sha1Hex(plainPass);
-        return credential;
-    }
 }
