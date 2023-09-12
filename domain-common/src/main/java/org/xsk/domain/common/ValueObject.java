@@ -16,7 +16,8 @@ public abstract class ValueObject extends AggregateComponent {
     }
 
     protected <T extends ValueObject> T beginUpdate(T obj) {
-        isUpdate = true;
-        return ObjectUtil.clone(obj);
+        T clone = ObjectUtil.clone(obj);
+        clone.isUpdate = true;
+        return clone;
     }
 }
