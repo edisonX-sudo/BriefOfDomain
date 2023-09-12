@@ -121,7 +121,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
     }
 
     void refreshEntityModifiedTs(E entity) {
-        if (isNewEntity(entity)) {
+        if (isEntityNew(entity)) {
             entity.markAsCreate();
         }
         entity.markAsModified();
@@ -142,7 +142,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @param entity 领域实体
      * @return 是否是新实体
      */
-    protected boolean isNewEntity(E entity) {
+    protected boolean isEntityNew(E entity) {
         return entity.isNew();
     }
 
@@ -153,8 +153,6 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
     protected void deleteInternal(I id) {
         throw new UnsupportedOperationException("this method need 2 be implemented");
     }
-
-
 
     /**
      * 将entity的数据库id隐式的带入实体, 当entity的id不是数据库主键时使用
@@ -197,31 +195,6 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
     }
 
     /**
-     * 取出隐式带入的valueObject的数据库id, 当vo对应数据库的一张表时使用
-     *
-     * @param vo
-     * @param valType
-     * @param <V>
-     * @return
-     */
-    protected <V> V restoreVoStorageId(ValueObject vo, Class<V> valType) {
-        return vo.getMetaData(META_STORAGE_KEY, valType);
-    }
-
-    /**
-     * 通过隐式带入id判断valueObject是否是新构建的, 当vo对应数据库的一张表时使用
-     *
-     * @param vo
-     * @return
-     */
-    protected Boolean isVoNew(ValueObject vo) {
-        return vo.getMetaData(META_STORAGE_KEY, Object.class) == null;
-    }
-    protected boolean isVoUpdated(ValueObject vo) {
-        return vo.isUpdate;
-    }
-
-    /**
      * 得到领域操作后背删除的valueObject的对象的数据库id, 当vo对应数据库的一张表时使用
      *
      * @param entity
@@ -245,6 +218,31 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
     <V extends ValueObject, R> Set<R> restoreOriginVoStorageIds(E entity, Class<V> voType, Class<R> valType) {
         String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, voType.getName());
         return entity.getMetaData(voIdsKey, HashSet.class);
+    }
+
+    /**
+     * 取出隐式带入的valueObject的数据库id, 当vo对应数据库的一张表时使用
+     *
+     * @param vo
+     * @param valType
+     * @param <V>
+     * @return
+     */
+    protected <V> V restoreVoStorageId(ValueObject vo, Class<V> valType) {
+        return vo.getMetaData(META_STORAGE_KEY, valType);
+    }
+
+    /**
+     * 通过隐式带入id判断valueObject是否是新构建的, 当vo对应数据库的一张表时使用
+     *
+     * @param vo
+     * @return
+     */
+    protected Boolean isVoNew(ValueObject vo) {
+        return vo.getMetaData(META_STORAGE_KEY, Object.class) == null;
+    }
+    protected boolean isVoUpdated(ValueObject vo) {
+        return vo.isUpdate;
     }
 
 //    /**

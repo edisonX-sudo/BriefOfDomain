@@ -72,7 +72,7 @@ public class AccountRepoImpl extends AccountRepo {
     public void saveInternal(Account entity) {
         AccountPo accountPo = convert2po(entity);
         accountJpaRepo.save(accountPo);
-        if (isNewEntity(entity)) {
+        if (isEntityNew(entity)) {
             entity.accountId = new AccountId(accountPo.getId());
         }
     }
@@ -99,7 +99,7 @@ public class AccountRepoImpl extends AccountRepo {
 
     private AccountPo convert2po(Account entity) {
         AccountPo po = new AccountPo();
-        po.setId(isNewEntity(entity) ? null : entity.accountId.value());
+        po.setId(isEntityNew(entity) ? null : entity.accountId.value());
         po.setStatus(ACCOUNT_STATUS_2_FILED_MAP.get(entity.status));
         po.setName(entity.name);
         po.setLoginName(entity.loginName);
