@@ -154,9 +154,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
         throw new UnsupportedOperationException("this method need 2 be implemented");
     }
 
-    protected boolean isVoUpdated(ValueObject vo) {
-        return vo.isUpdate;
-    }
+
 
     /**
      * 将entity的数据库id隐式的带入实体, 当entity的id不是数据库主键时使用
@@ -216,8 +214,11 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @param vo
      * @return
      */
-    protected Boolean isNewVo(ValueObject vo) {
+    protected Boolean isVoNew(ValueObject vo) {
         return vo.getMetaData(META_STORAGE_KEY, Object.class) == null;
+    }
+    protected boolean isVoUpdated(ValueObject vo) {
+        return vo.isUpdate;
     }
 
     /**
