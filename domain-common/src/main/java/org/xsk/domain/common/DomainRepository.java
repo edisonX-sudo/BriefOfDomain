@@ -160,7 +160,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @param entity
      * @param storageId
      */
-    protected void putEntityStorageId(E entity, Object storageId) {
+    protected void putEntityDbId(E entity, Object storageId) {
         entity.putMetaData(META_STORAGE_KEY, storageId);
     }
 
@@ -171,7 +171,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @param vo
      * @param storageId
      */
-    protected void putVoStorageId(E entity, ValueObject vo, Object storageId) {
+    protected void putVoDbId(E entity, ValueObject vo, Object storageId) {
         String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, vo.getClass().getName());
         HashSet<Object> voIds = entity.getMetaData(voIdsKey, HashSet.class);
         if (voIds == null) {
@@ -190,7 +190,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @param <V>
      * @return
      */
-    protected <V> V restoreEntityStorageId(E entity, Class<V> valType) {
+    protected <V> V restoreEntityDbId(E entity, Class<V> valType) {
         return entity.getMetaData(META_STORAGE_KEY, valType);
     }
 
@@ -205,17 +205,17 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @param <R>
      * @return
      */
-    protected <V extends ValueObject, R> Set<R> removedVoStorageId(E entity, Collection<V> vos, Class<V> voType, Class<R> valType) {
-        Set<R> originVoStorageIds = restoreOriginVoStorageIds(entity, voType, valType);
+    protected <V extends ValueObject, R> Set<R> removedVoDbId(E entity, Collection<V> vos, Class<V> voType, Class<R> valType) {
+        Set<R> originVoStorageIds = restoreOriginVoDbIds(entity, voType, valType);
         Set<R> currentVoStorageIds = vos.stream()
-                .map(v -> restoreVoStorageId(v, valType))
+                .map(v -> restoreVoDbId(v, valType))
                 .collect(Collectors.toSet());
         return originVoStorageIds.stream()
                 .filter(r -> !currentVoStorageIds.contains(r))
                 .collect(Collectors.toSet());
     }
 
-    <V extends ValueObject, R> Set<R> restoreOriginVoStorageIds(E entity, Class<V> voType, Class<R> valType) {
+    <V extends ValueObject, R> Set<R> restoreOriginVoDbIds(E entity, Class<V> voType, Class<R> valType) {
         String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, voType.getName());
         return entity.getMetaData(voIdsKey, HashSet.class);
     }
@@ -228,7 +228,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @param <V>
      * @return
      */
-    protected <V> V restoreVoStorageId(ValueObject vo, Class<V> valType) {
+    protected <V> V restoreVoDbId(ValueObject vo, Class<V> valType) {
         return vo.getMetaData(META_STORAGE_KEY, valType);
     }
 
