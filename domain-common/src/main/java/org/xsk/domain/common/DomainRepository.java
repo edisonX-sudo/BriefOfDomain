@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> extends DomainAbility {
 
-    private static final String META_STORAGE_KEY = "id";
-    private static final String META_VO_STORAGE_KEYS_TEMPLATE = "%s_ids";
+    private static final String META_DB_KEY = "id";
+    private static final String META_VO_DB_KEYS_TEMPLATE = "%s_ids";
 
     public DomainRepository() {
     }
@@ -158,10 +158,10 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * 将entity的数据库id隐式的带入实体, 当entity的id不是数据库主键时使用
      *
      * @param entity
-     * @param storageId
+     * @param dbId
      */
-    protected void putEntityDbId(E entity, Object storageId) {
-        entity.putMetaData(META_STORAGE_KEY, storageId);
+    protected void putEntityDbId(E entity, Object dbId) {
+        entity.putMetaData(META_DB_KEY, dbId);
     }
 
     /**
@@ -169,17 +169,17 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      *
      * @param entity
      * @param vo
-     * @param storageId
+     * @param dbId
      */
-    protected void putVoDbId(E entity, ValueObject vo, Object storageId) {
-        String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, vo.getClass().getName());
+    protected void putVoDbId(E entity, ValueObject vo, Object dbId) {
+        String voIdsKey = String.format(META_VO_DB_KEYS_TEMPLATE, vo.getClass().getName());
         HashSet<Object> voIds = entity.getMetaData(voIdsKey, HashSet.class);
         if (voIds == null) {
             voIds = new HashSet<>();
         }
-        voIds.add(storageId);
+        voIds.add(dbId);
         entity.putMetaData(voIdsKey, voIds);
-        vo.putMetaData(META_STORAGE_KEY, storageId);
+        vo.putMetaData(META_DB_KEY, dbId);
     }
 
     /**
@@ -191,7 +191,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @return
      */
     protected <V> V restoreEntityDbId(E entity, Class<V> valType) {
-        return entity.getMetaData(META_STORAGE_KEY, valType);
+        return entity.getMetaData(META_DB_KEY, valType);
     }
 
     /**
@@ -206,17 +206,17 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @return
      */
     protected <V extends ValueObject, R> Set<R> removedVoDbId(E entity, Collection<V> vos, Class<V> voType, Class<R> valType) {
-        Set<R> originVoStorageIds = restoreOriginVoDbIds(entity, voType, valType);
-        Set<R> currentVoStorageIds = vos.stream()
+        Set<R> originVoDbIds = restoreOriginVoDbIds(entity, voType, valType);
+        Set<R> currentVoDbIds = vos.stream()
                 .map(v -> restoreVoDbId(v, valType))
                 .collect(Collectors.toSet());
-        return originVoStorageIds.stream()
-                .filter(r -> !currentVoStorageIds.contains(r))
+        return originVoDbIds.stream()
+                .filter(r -> !currentVoDbIds.contains(r))
                 .collect(Collectors.toSet());
     }
 
     <V extends ValueObject, R> Set<R> restoreOriginVoDbIds(E entity, Class<V> voType, Class<R> valType) {
-        String voIdsKey = String.format(META_VO_STORAGE_KEYS_TEMPLATE, voType.getName());
+        String voIdsKey = String.format(META_VO_DB_KEYS_TEMPLATE, voType.getName());
         return entity.getMetaData(voIdsKey, HashSet.class);
     }
 
@@ -229,7 +229,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @return
      */
     protected <V> V restoreVoDbId(ValueObject vo, Class<V> valType) {
-        return vo.getMetaData(META_STORAGE_KEY, valType);
+        return vo.getMetaData(META_DB_KEY, valType);
     }
 
     /**
@@ -239,7 +239,7 @@ public abstract class DomainRepository<E extends Entity<?>, I extends Id<?>> ext
      * @return
      */
     protected Boolean isVoNew(ValueObject vo) {
-        return vo.getMetaData(META_STORAGE_KEY, Object.class) == null;
+        return vo.getMetaData(META_DB_KEY, Object.class) == null;
     }
     protected boolean isVoUpdated(ValueObject vo) {
         return vo.isUpdate;
